@@ -33,6 +33,17 @@
 
 <body>
 {% include 'nav.html' %}
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %} >
+        {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}Important: {% endif %}
+        {{ message }}
+    <a href="#">关闭</a>
+    </li>
+    {% endfor %}
+</ul>
+{% endif %}
 {% block content %}
 
 {% endblock %}

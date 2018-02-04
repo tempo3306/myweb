@@ -2,18 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3efad58c-0ee8-49f8-a431-943a8df9e599" name="Default" comment="">
-      <change beforePath="" afterPath="$PROJECT_DIR$/bid/static/css/base.css" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/bid/test.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/templates/base2.html" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/bid/forms.py" afterPath="$PROJECT_DIR$/bid/forms.py" />
-      <change beforePath="$PROJECT_DIR$/bid/models.py" afterPath="$PROJECT_DIR$/bid/models.py" />
-      <change beforePath="$PROJECT_DIR$/bid/templates/create_bid_action.html" afterPath="$PROJECT_DIR$/bid/templates/create_bid_action.html" />
-      <change beforePath="$PROJECT_DIR$/bid/templates/create_bid_auction.html" afterPath="$PROJECT_DIR$/bid/templates/create_bid_auction.html" />
-      <change beforePath="$PROJECT_DIR$/bid/urls.py" afterPath="$PROJECT_DIR$/bid/urls.py" />
-      <change beforePath="$PROJECT_DIR$/bid/views.py" afterPath="$PROJECT_DIR$/bid/views.py" />
-      <change beforePath="$PROJECT_DIR$/myweb/urls.py" afterPath="$PROJECT_DIR$/myweb/urls.py" />
-      <change beforePath="$PROJECT_DIR$/templates/base.html" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/templates/base.html" afterPath="$PROJECT_DIR$/templates/base.html" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -65,8 +54,8 @@
       <file leaf-file-name="base2.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/templates/base2.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="267">
-              <caret line="43" column="11" lean-forward="true" selection-start-line="43" selection-start-column="11" selection-end-line="43" selection-end-column="11" />
+            <state relative-caret-position="660">
+              <caret line="33" column="0" lean-forward="false" selection-start-line="33" selection-start-column="0" selection-end-line="43" selection-end-column="11" />
               <folding />
             </state>
           </provider>
@@ -75,8 +64,8 @@
       <file leaf-file-name="base.html" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/templates/base.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="260">
-              <caret line="13" column="28" lean-forward="true" selection-start-line="13" selection-start-column="28" selection-end-line="13" selection-end-column="28" />
+            <state relative-caret-position="324">
+              <caret line="45" column="11" lean-forward="true" selection-start-line="45" selection-start-column="11" selection-end-line="45" selection-end-column="11" />
               <folding />
             </state>
           </provider>
@@ -86,7 +75,7 @@
         <entry file="file://$PROJECT_DIR$/bid/urls.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="80">
-              <caret line="5" column="68" lean-forward="true" selection-start-line="5" selection-start-column="68" selection-end-line="5" selection-end-column="68" />
+              <caret line="5" column="68" lean-forward="false" selection-start-line="5" selection-start-column="68" selection-end-line="5" selection-end-column="68" />
               <folding />
             </state>
           </provider>
@@ -118,7 +107,7 @@
         <entry file="file://$PROJECT_DIR$/bid/models.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="349">
-              <caret line="41" column="0" lean-forward="true" selection-start-line="41" selection-start-column="0" selection-end-line="41" selection-end-column="0" />
+              <caret line="41" column="0" lean-forward="false" selection-start-line="41" selection-start-column="0" selection-end-line="41" selection-end-column="0" />
               <folding>
                 <element signature="e#0#28#0" expanded="true" />
               </folding>
@@ -130,7 +119,7 @@
         <entry file="file://$PROJECT_DIR$/bid/templates/create_bid_auction.html">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="40">
-              <caret line="2" column="0" lean-forward="true" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
+              <caret line="2" column="0" lean-forward="false" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -205,8 +194,8 @@
         <option value="$PROJECT_DIR$/bid/templates/create_bid_auction.html" />
         <option value="$PROJECT_DIR$/bid/views.py" />
         <option value="$PROJECT_DIR$/bid/static/base.css" />
-        <option value="$PROJECT_DIR$/templates/base.html" />
         <option value="$PROJECT_DIR$/templates/base2.html" />
+        <option value="$PROJECT_DIR$/templates/base.html" />
       </list>
     </option>
   </component>
@@ -405,7 +394,7 @@
         <state relative-caret-position="560">
           <caret line="31" column="0" lean-forward="false" selection-start-line="31" selection-start-column="0" selection-end-line="31" selection-end-column="0" />
           <folding>
-            <element signature="e#815#856#0" expanded="true" />
+            <element signature="e#815#856#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -662,7 +651,7 @@
         <state relative-caret-position="307">
           <caret line="31" column="52" lean-forward="false" selection-start-line="31" selection-start-column="52" selection-end-line="31" selection-end-column="52" />
           <folding>
-            <element signature="e#815#856#0" expanded="true" />
+            <element signature="e#815#856#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -688,7 +677,7 @@
     <entry file="file://$PROJECT_DIR$/bid/urls.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="80">
-          <caret line="5" column="68" lean-forward="true" selection-start-line="5" selection-start-column="68" selection-end-line="5" selection-end-column="68" />
+          <caret line="5" column="68" lean-forward="false" selection-start-line="5" selection-start-column="68" selection-end-line="5" selection-end-column="68" />
           <folding />
         </state>
       </provider>
@@ -704,7 +693,7 @@
     <entry file="file://$PROJECT_DIR$/bid/templates/create_bid_auction.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="40">
-          <caret line="2" column="0" lean-forward="true" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
+          <caret line="2" column="0" lean-forward="false" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
           <folding />
         </state>
       </provider>
@@ -780,7 +769,7 @@
     <entry file="file://$PROJECT_DIR$/bid/models.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="349">
-          <caret line="41" column="0" lean-forward="true" selection-start-line="41" selection-start-column="0" selection-end-line="41" selection-end-column="0" />
+          <caret line="41" column="0" lean-forward="false" selection-start-line="41" selection-start-column="0" selection-end-line="41" selection-end-column="0" />
           <folding>
             <element signature="e#0#28#0" expanded="true" />
           </folding>
@@ -789,16 +778,16 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/templates/base2.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="267">
-          <caret line="43" column="11" lean-forward="true" selection-start-line="43" selection-start-column="11" selection-end-line="43" selection-end-column="11" />
+        <state relative-caret-position="660">
+          <caret line="33" column="0" lean-forward="false" selection-start-line="33" selection-start-column="0" selection-end-line="43" selection-end-column="11" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/templates/base.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="260">
-          <caret line="13" column="28" lean-forward="true" selection-start-line="13" selection-start-column="28" selection-end-line="13" selection-end-column="28" />
+        <state relative-caret-position="324">
+          <caret line="45" column="11" lean-forward="true" selection-start-line="45" selection-start-column="11" selection-end-line="45" selection-end-column="11" />
           <folding />
         </state>
       </provider>
