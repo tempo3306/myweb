@@ -1,0 +1,46 @@
+<div class="navbar-default navbar-static-top " role="navigation" id="menu">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="">聊个球</a>
+        </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li><a href="/create_post">主版</a></li>
+                <li><a href="/create_post">分类</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown tab">
+                        帮助 <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="" target="_blank">概述</a></li>
+                        <li><a href="" target="_blank">教程</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                {% if request.user.is_authenticated %}
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <img src="">
+                            Account <b class="caret"></b>
+                        </a>
+
+                        <ul class="dropdown-menu">
+                            <li><a href="">修改密码</a></li>
+                            <li><a href="/authapp/logout">注销</a></li>
+                        </ul>
+                    </li>
+                {% else %}
+                    <li><a href="/authapp/login">登录</a></li>
+                    <li><a href="/authapp/register">注册</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</div>

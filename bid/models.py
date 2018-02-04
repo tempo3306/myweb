@@ -34,7 +34,7 @@ class Bid_action(models.Model):
     bid_time = models.FloatField() #截止时间
     delay_time = models.FloatField() #出价延迟时间
     ahead_price = models.FloatField() #出价提前价格
-    hander_id = models.ForeignKey(User, on_delete=models.CASCADE, related_name='bid_actions') #对应拍手
+    hander_id = models.ForeignKey(Bid_hander, on_delete=models.CASCADE, related_name='bid_actions') #对应拍手
     action_date = models.DateTimeField() #拍牌时间
     auction_id = models.ForeignKey(Bid_auction, on_delete=models.CASCADE, related_name='bid_actions')
     action_result = models.CharField(max_length=128) #结果记录

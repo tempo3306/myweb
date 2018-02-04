@@ -1,8 +1,16 @@
 {% extends 'base.html' %}
 {% block content %}
-    <form action="/bid/create_bid_auction/" method="post">{% csrf_token %}
+
+    <form action="{% url 'bid:create_bid_auction' %}" method="post">{% csrf_token %}
         <h2>创建标书</h2>
-        {{ form.as_p }}
-        <input type="submit" value="Submit"/>
+    <table>
+    {% for field in form %}
+        <tr>
+            <td>{{ field.label_tag }}</td>
+            <td>{{ field }}</td>
+            <td>{{ field.errors }}</td>
+        </tr>
+    {% endfor %}
+    </table>        <input type="submit" value="Submit"/>
     </form>
 {% endblock %}
