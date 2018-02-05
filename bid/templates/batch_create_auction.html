@@ -1,8 +1,16 @@
 {% extends 'base.html' %}
 {% block content %}
-    <form action="/bid/batch_create_auction/" method="post" enctype="multipart/form-data">{% csrf_token %}
+    <div class="container">
         <h2>批量创建标书</h2>
-        {{ form.as_p }}
-        <input type="submit" value="Submit"/>
-    </form>
+        <form action="/bid/batch_create_auction/" method="post" enctype="multipart/form-data">{% csrf_token %}
+            {% for field in form %}
+                <div class="form-group">
+                    {{ field.label_tag }}
+                    {{ field }}
+                    {{ field.errors }}
+                </div>
+            {% endfor %}
+            <input type="submit" value="Submit" class="btn-default"/>
+        </form>
+    </div>
 {% endblock %}

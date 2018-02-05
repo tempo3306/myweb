@@ -50,13 +50,13 @@ def register(request):
             # Create the user profile
             profile = Profile.objects.create(user=new_user)
             return render(request,
-                         'account/register_done.html',
-                         {'new_user': new_user})
+                          'account/templates/registration/register_done.html',
+                          {'new_user': new_user})
     else:
         user_form = UserRegistrationForm()
     return render(request,
-                 'account/register.html',
-                 {'user_form': user_form})
+                  'account/templates/registration/register.html',
+                  {'user_form': user_form})
 
 from .forms import LoginForm, UserRegistrationForm, \
 UserEditForm, ProfileEditForm

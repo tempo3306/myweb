@@ -126,7 +126,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
 STATIC_URL = '/static/'
-LOGIN_URL = '/authapp/login'
+LOGIN_URL = '/account/login'
 SITE_ROOT=os.path.join(os.path.abspath(os.path.dirname(__file__)),'..')
 
 #通用静态文件存放位置
