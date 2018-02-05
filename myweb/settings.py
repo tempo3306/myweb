@@ -44,9 +44,9 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -141,6 +141,11 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
 
+APPEND_SLASH=True
+
+#自定义变量
+UPLOAD_URL = '/upload'
+UPLOAD_ROOT = os.path.join(BASE_DIR, 'upload/')
 #设置token过期时间
 # REST_FRAMEWORK_TOKEN_EXPIRE_MINUTES = 60 #60分钟过期
 

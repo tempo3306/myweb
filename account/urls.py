@@ -13,8 +13,6 @@ from django.contrib.auth.views import password_reset_confirm
 from django.contrib.auth.views import password_reset_complete
 from . import views
 
-from django.urls import path
-from django.contrib.auth import views as auth_views
 
 
 urlpatterns = [

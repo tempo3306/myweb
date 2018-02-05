@@ -4,7 +4,9 @@ from .forms import Bid_actionForm, Bid_auctionForm, Batch_bid_actionForm, Batch_
 from .models import Bid_hander, Bid_action, Bid_auction
 from django.db import transaction
 from django.contrib import messages
-
+from django.core.files.storage import default_storage
+from django.conf import settings  #导入setting中的变量
+import os,xlrd
 #创建策略
 def create_bid_action(request):
     if request.method == 'POST':
@@ -21,7 +23,6 @@ def create_bid_action(request):
             action_result = form.cleaned_data['action_result']  # 结果记录
             sid = transaction.savepoint()  # 开启SQL事务
             try:
-
                 action = Bid_action(diff=diff, refer_time=refer_time, bid_time=bid_time, delay_time=delay_time,
                                     ahead_price=ahead_price, hander_id=hander_id, action_date=action_date,
                                     auction_id=auction_id, action_result=action_result)
@@ -53,7 +54,6 @@ def create_bid_auction(request):
             expired_date = form.cleaned_data['expired_date']  # 过期时间
             sid = transaction.savepoint()  # 开启SQL事务
             try:
-                print('sdfsggh')
                 action = Bid_auction(description=description, auction_name=auction_name, ID_number=ID_number,
                                     Bid_number=Bid_number, Bid_password=Bid_password,status=status,
                                     count=count, expired_date=expired_date)
@@ -69,4 +69,161 @@ def create_bid_auction(request):
     else:
         form = Bid_auctionForm()
         return render(request, 'create_bid_auction.html', {'form': form})
-       
+
+#读取EXCEL
+
+# 操作EXCEL
+def open_excel(file):
+    try:
+        data = xlrd.open_workbook(file)
+        return data
+    except Exception as e:
+        print(str(e))
+def excel_table_byindex(file, colnameindex=0, by_index=0):
+    data = open_excel(file)
+    table = data.sheets()[by_index]
+    nrows = table.nrows  # 行数
+    ncols = table.ncols  # 列数
+    colnames = table.row_values(colnameindex)  # 某一行数据
+    list = []
+    for rownum in range(1, nrows):
+
+        row = table.row_values(rownum)
+        if row:
+            app = {}
+            for i in range(len(colnames)):
+                app[colnames[i]] = row[i]
+            list.append(app)
+    return list  # 返回元素为字典的列表
+
+#批量创建策略
+# @transaction.atomic
+def batch_create_action(request):
+    if request.method == "POST":
+        form = Batch_bid_actionForm()
+        file = request.FILES.get('file', None) #获取上传的文件  默认为None
+        if file:
+            fname = file.name #获取文件名
+            #验证文件扩展名
+            filename, extention = os.path.splitext(fname)
+            if extention == '.xls' or extention == '.xlsx':
+                path = settings.UPLOAD_ROOT +fname  #文件存放路径
+                #存储文件
+                with open(path, 'wb+') as fil:
+                    for chunk in file.chunks():  # 分块写入文件
+                        fil.write(chunk)
+                tables = excel_table_byindex(file=path)
+                action_list = []
+                for row in tables:  ## 判断表格式是否对
+                    if '加价时间' not in row or \
+                            '加价幅度' not in row or \
+                            '截止时间' not in row or \
+                            '延迟时间' not in row or \
+                            '提前价格' not in row or \
+                            '日期' not in row or \
+                            '标书' not in row or \
+                            '拍手' not in row:
+                        messages.error(request, "EXCEL格式错误")
+                        return render(request, 'batch_create_action.html', {'form': form})
+                    else:
+                        diff = int(row['加价幅度'])
+                        refer_time = float(row['加价时间'])
+                        bid_time = float(row['截止时间'])
+                        delay_time = float(row['延迟时间'])
+                        ahead_price = int(row['提前价格'])
+                        hander_id = Bid_hander.objects.filter(hander_name=row['拍手'])[0]
+                        auction_id = Bid_auction.objects.filter(auction_name=row['标书'])[0]
+                        action_date = row['日期']
+                        try:
+                            action = Bid_action(diff=diff, refer_time=refer_time, bid_time=bid_time,
+                                                delay_time=delay_time,
+                                                ahead_price=ahead_price, hander_id=hander_id, action_date=action_date,
+                                                auction_id=auction_id)
+                            action_list.append(action)
+                        except:
+                            messages.error(request, '创建失败', extra_tags='bg-warning text-warning')
+                            return render(request, 'create_bid_action.html', {'form': form})
+                        try:
+                            with transaction.atomic():
+                                for action in action_list:
+                                    action.save()
+                        except:
+                            messages.error(request, '创建失败', extra_tags='bg-warning text-warning')
+                            return render(request, 'create_bid_action.html', {'form': form})
+                messages.info(request, '批量创建成功')
+                return render(request, 'create_bid_action.html', {'form': form})
+            else:
+                messages.error(request, "上传文件格式错误")
+                return render(request, 'batch_create_action.html', {'form': form})
+        else:
+            messages.error(request, "上传文件格式错误")
+            return render(request, 'batch_create_action.html', {'form': form})
+    else:
+        form = Batch_bid_actionForm()
+        return render(request, 'batch_create_action.html', {'form': form})
+
+def batch_create_auction(request):
+    if request.method == "POST":
+        form = Batch_bid_auctionForm()
+        file = request.FILES.get('file', None)  # 获取上传的文件  默认为None
+        if file:
+            fname = file.name  # 获取文件名
+            # 验证文件扩展名
+            filename, extention = os.path.splitext(fname)
+            if extention == '.xls' or extention == '.xlsx':
+                path = settings.UPLOAD_ROOT + fname  # 文件存放路径
+                # 存储文件
+                with open(path, 'wb+') as fil:
+                    for chunk in file.chunks():  # 分块写入文件
+                        fil.write(chunk)
+
+                tables = excel_table_byindex(file=path)
+                auction_list = []
+                for row in tables:  ## 判断表格式是否对
+                    if '标书说明' not in row or \
+                            '姓名' not in row or \
+                            '身份证号' not in row or \
+                            '标书号' not in row or \
+                            '标书密码' not in row or \
+                            '状态' not in row or \
+                            '剩余次数' not in row or \
+                            '到期时间' not in row:
+                        messages.error(request, "EXCEL格式错误")
+                        return render(request, 'batch_create_auction.html', {'form': form})
+                    else:
+                        description = row['标书说明']  # 描述来源
+                        auction_name = row['姓名']  # 标书姓名
+                        ID_number = row['身份证号']  # 身份证号
+                        Bid_number = row['标书号']  # 标书号
+                        Bid_password = row['标书密码']  # 密码
+                        status = row['状态']  # 标书状态
+                        count = int(row['剩余次数'])  # 参拍次数
+                        expired_date = row['到期时间']  # 过期时间
+                        sid = transaction.savepoint()  # 开启SQL事务
+                        try:
+                            auction = Bid_auction(description=description, auction_name=auction_name,
+                                                 ID_number=ID_number,
+                                                 Bid_number=Bid_number, Bid_password=Bid_password, status=status,
+                                                 count=count, expired_date=expired_date)
+                            auction_list.append(auction)
+                        except:
+                            messages.error(request, '创建失败', extra_tags='bg-warning text-warning')
+                            return render(request, 'batch_create_auction.html', {'form': form})
+                        try:
+                            with transaction.atomic():
+                                for action in auction_list:
+                                    action.save()
+                        except:
+                            messages.error(request, '创建失败', extra_tags='bg-warning text-warning')
+                            return render(request, 'create_bid_auction.html', {'form': form})
+                messages.info(request, '批量创建成功')
+                return render(request, 'batch_create_auction.html', {'form': form})
+            else:
+                messages.error(request, "上传文件格式错误")
+                return render(request, 'batch_create_auction.html', {'form': form})
+        else:
+            messages.error(request, "上传文件格式错误")
+            return render(request, 'batch_create_auction.html', {'form': form})
+    else:
+        form = Batch_bid_auctionForm()
+        return render(request, 'batch_create_auction.html', {'form': form})

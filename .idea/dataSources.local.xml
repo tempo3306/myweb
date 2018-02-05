@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="dataSourceStorageLocal">
-    <data-source name="Django default" uuid="c361b04b-2457-4f49-9d89-bec6d8102d42">
-      <database-info product="" version="" jdbc-version="" driver-name="" driver-version="" />
-      <auth-required>false</auth-required>
-      <first-sync>true</first-sync>
+    <data-source name="myweb@localhost" uuid="ae823625-c0ed-4a7b-b7bd-485f1122e043">
+      <database-info product="MySQL" version="5.5.28" jdbc-version="4.0" driver-name="MySQL Connector Java" driver-version="mysql-connector-java-5.1.45 ( Revision: 9131eefa398531c7dc98776e8a3fe839e544c5b2 )">
+        <extra-name-characters>#@</extra-name-characters>
+        <identifier-quote-string>`</identifier-quote-string>
+      </database-info>
+      <case-sensitivity plain-identifiers="lower" quoted-identifiers="lower" />
+      <secret-storage>master_key</secret-storage>
+      <user-name>root</user-name>
+      <introspection-schemas>*:myweb</introspection-schemas>
     </data-source>
   </component>
 </project>

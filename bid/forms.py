@@ -49,14 +49,14 @@ class DateSelectorWidget(widgets.MultiWidget):
 
 #创建标书
 class Bid_auctionForm(forms.Form):
-    status_data=[(0,"失效"),(1,"正常"),(4,"已被收回"),(3,"激活中"),(6,"已中标")]
+    status_data=[("失效","失效"),("正常","正常"),("已被收回","已被收回"),("激活中","激活中"),("已中标","已中标")]
     count_num=[(i,"%d次"%i) for i in range(7)]
     description = forms.CharField(label="说明") #描述来源
     auction_name = forms.CharField(label="姓名") #标书姓名
     ID_number = forms.CharField(label="身份证号") #身份证号
     Bid_number = forms.CharField(label="标书号", widget=forms.widgets.NumberInput()) #标书号
     Bid_password = forms.CharField(label="标书密码", widget=forms.widgets.NumberInput()) #密码
-    status = forms.IntegerField(label="标书状态", widget=forms.widgets.Select(choices=status_data), initial=(1,"正常")) #标书状态
+    status = forms.CharField(label="标书状态", widget=forms.widgets.Select(choices=status_data), initial=("正常","正常")) #标书状态
     count = forms.IntegerField(label="剩余次数", widget=forms.widgets.Select(choices=count_num), initial=(6,6)) #参拍次数
     init_date = date(year=2018, month=1, day=1)
     expired_date = forms.DateField(label="过期时间", widget=DateSelectorWidget(), initial=init_date) #过期时间
@@ -95,13 +95,13 @@ class Bid_actionForm(forms.Form):
     date_month.extend(date_month2)
     defaultdate_list=time.strftime("%Y %m",time.localtime(time.time())).split()
     defaultdate="%d年%d月"%(int(defaultdate_list[0]),int(defaultdate_list[1]))
-
     diff = forms.IntegerField(label="加价幅度", widget=forms.widgets.Select(choices=diff_choices)) #加价幅度
     refer_time = forms.FloatField(label="参考时间", widget=forms.widgets.Select(choices=refer_time_choices)) #加价参考时间
     bid_time = forms.FloatField(label="截止时间", widget=forms.widgets.Select(choices=bid_time_choices)) #截止时间
     delay_time = forms.FloatField(label="延迟时间", widget=forms.widgets.Select(choices=delay_time_choices)) #出价延迟时间
     ahead_price = forms.FloatField(label="提前价格", widget=forms.widgets.Select(choices=ahead_price_choices)) #出价提前价格
     hander_id = forms.IntegerField(label="拍手", widget=forms.Select())
+
     # hander_id = forms.IntegerField(widget=forms.widgets.Select(choices=user_type_choice,attrs={'class':'form-control'})) #对应拍手
     init_date = date(year=2018, month=1, day=1)
     action_date = forms.DateTimeField(label="拍牌时期", widget=DateSelectorWidget(), initial=init_date) #拍牌时间
