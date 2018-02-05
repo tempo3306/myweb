@@ -2,33 +2,32 @@
 {% block title %}Log-in{% endblock %}
 {% block content %}
     <h1>Log-in</h1>
-    <p>Please, use the following form to log-in:</p>
-    <form action="{% url 'account:login' %}?next={{request.path}}" method="post">{% csrf_token %}
-        <form method="post" action="./?next={{ redirect_to }}">
-
-        {% for field in form %}
-            {{ form.field}}
-        {% endfor %}
-
-        <p><input type="submit" value="Log-in"></p>
-    </form>
-
-    <form action="." method="post">      {% csrf_token %}
-        <div class="btn-group">
-            <label for="id_username">账号：</label>
-            <input class="form-control" type="text" name="username" autofocus maxlength="254" required
-                   id="id_username"/>
-        </div>
-        <div class="btn-group">
-            <label for="id_password">密码：</label>
-            <input class="form-control" type="password" name="password" required id="id_password"/>
-        </div>
-        <input type="submit" value="Log-in" class="btn-default">
-    </form>
-    {#    添加社交登录#}
-    <div class="social">
-        <ul>
-            <li class="facebook"><a href="{% url "social:begin" "facebook" %}">Sign in with Facebook</a></li>
-        </ul>
+    {% if form.errors %}
+        <p>
+            Your username and password didn't match.
+            Please try again.
+        </p>
+    {% else %}
+        <p>Please, use the following form to log-in:</p>
+    {% endif %}
+    <div class="login-form">
+        <form action="{% url 'login' %}next=/" method="post">
+            <div class="btn-group">
+                <label for="id_username">账号：</label>
+                <input class="form-control" type="text" name="username" autofocus maxlength="254" required
+                       id="id_username"/>
+            </div>
+            <div class="btn-group">
+                <label for="id_password">密码：</label>
+                <input class="form-control" type="password" name="password" required id="id_password"/>
+            </div>
+            {% csrf_token %}
+            {% if next.split %}
+                <input type="hidden" name="next" value="{{ next }}"/>
+            {% else %}
+                <input type="hidden" name="next" value="/login"/>
+            {% endif %}
+            <p><input type="submit" value="Log-in"></p>
+        </form>
     </div>
 {% endblock %}

@@ -50,16 +50,17 @@ def register(request):
             # Create the user profile
             profile = Profile.objects.create(user=new_user)
             return render(request,
-                          'account/templates/registration/register_done.html',
+                          'account/register_done.html',
                           {'new_user': new_user})
     else:
         user_form = UserRegistrationForm()
     return render(request,
-                  'account/templates/registration/register.html',
+                  'account/register.html',
                   {'user_form': user_form})
 
 from .forms import LoginForm, UserRegistrationForm, \
 UserEditForm, ProfileEditForm
+
 @login_required
 def edit(request):
     if request.method == 'POST':

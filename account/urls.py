@@ -14,7 +14,6 @@ from django.contrib.auth.views import password_reset_complete
 from . import views
 
 
-
 urlpatterns = [
     # post views
     # url(r'^login/$', views.user_login, name='login'),

@@ -7,14 +7,24 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="">聊个球</a>
+            <a class="navbar-brand" href="">小鲜肉代拍</a>
         </div>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-                <li><a href="/create_post">主版</a></li>
-                <li><a href="/create_post">分类</a></li>
+                <li><a href="/create_post">查询</a></li>
                 <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown tab">
+                    <a href="" class="dropdown-toggle" data-toggle="dropdown">
+                         创建 <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{% url 'bid:create_bid_action' %}" target="_blank">创建策略</a></li>
+                        <li><a href="{% url 'bid:create_bid_auction' %}" target="_blank">创建标书</a></li>
+                        <li><a href="{% url 'bid:batch_create_action' %}" target="_blank">批量创建策略</a></li>
+                        <li><a href="{% url 'bid:batch_create_auction' %}" target="_blank">批量创建标书</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                         帮助 <b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu">
@@ -28,17 +38,17 @@
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                             <img src="">
-                            Account <b class="caret"></b>
+                            账号 <b class="caret"></b>
                         </a>
 
                         <ul class="dropdown-menu">
-                            <li><a href="">修改密码</a></li>
-                            <li><a href="/authapp/logout">注销</a></li>
+                            <li><a href="{% url 'password_change' %}">修改密码</a></li>
+                            <li><a href="{% url 'logout_then_login' %}">注销</a></li>
                         </ul>
                     </li>
                 {% else %}
-                    <li><a href="/account/login">登录</a></li>
-                    <li><a href="/account/register">注册</a></li>
+                    <li><a href="{% url 'login' %}?next=/">登录</a></li>
+                    <li><a href="{% url 'register' %}">注册</a></li>
                 {% endif %}
             </ul>
         </div>
