@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'images',
     'bbsapp',
     'django_extensions',
+    'django_filters',
 ]
 
 MIDDLEWARE = [
@@ -147,8 +148,12 @@ UPLOAD_ROOT = os.path.join(BASE_DIR, 'upload/')
 REST_FRAMEWORK = {
     # 使用Django的标准`django.contrib.auth`权限管理类,
     # 或者为尚未认证的用户，赋予只读权限.
+    'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',),
+
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
     ],
-    'PAGE_SIZE': 10
+    'PAGE_SIZE': 10,
+    # 'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',)
+
 }
