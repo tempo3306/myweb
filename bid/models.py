@@ -1,17 +1,17 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-# Create your models here.
 
 #拍手
 class Bid_hander(models.Model):
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE, related_name='handers', null=True)
+    user_id = models.OneToOneField(User, on_delete=models.CASCADE, related_name='user_handers', null=True)
     hander_name = models.CharField(max_length=32)
     basic_salary = models.FloatField(default=50) #底薪
     extra_bonus = models.FloatField(default=0) #奖金
     total_income = models.FloatField(default=0) #总收入
     def __str__(self):
         return self.hander_name
+
 
 #标书信息
 class Bid_auction(models.Model):
@@ -27,6 +27,7 @@ class Bid_auction(models.Model):
     def __str__(self):
         return self.description
 
+
 #基础策略
 class Bid_action(models.Model):
     diff = models.IntegerField() #加价幅度
@@ -34,9 +35,9 @@ class Bid_action(models.Model):
     bid_time = models.FloatField() #截止时间
     delay_time = models.FloatField() #出价延迟时间
     ahead_price = models.FloatField() #出价提前价格
-    hander_id = models.ForeignKey(Bid_hander, on_delete=models.CASCADE, related_name='bid_actions') #对应拍手
+    hander_id = models.ForeignKey(Bid_hander, on_delete=models.CASCADE, related_name='hander_actions') #对应拍手
     action_date = models.DateField() #拍牌时间
-    auction_id = models.ForeignKey(Bid_auction, on_delete=models.CASCADE, related_name='bid_actions')
+    auction_id = models.ForeignKey(Bid_auction, on_delete=models.CASCADE, related_name='auction_actions')
     action_result = models.CharField(max_length=128, null=True) #结果记录
 
     def __str__(self):
