@@ -5,7 +5,8 @@ from django.contrib.auth.models import User
 #拍手
 class Bid_hander(models.Model):
     user_id = models.OneToOneField(User, on_delete=models.CASCADE, related_name='user_handers', null=True)
-    hander_name = models.CharField(max_length=32)
+    hander_name = models.CharField(max_length=32, default='a')
+    hander_passwd = models.CharField(max_length=32, default='123456')
     basic_salary = models.FloatField(default=50) #底薪
     extra_bonus = models.FloatField(default=0) #奖金
     total_income = models.FloatField(default=0) #总收入
@@ -43,3 +44,4 @@ class Bid_action(models.Model):
     def __str__(self):
         return '{0}秒加{1}提前{2}延迟{3}秒，截止时间{4}秒'.format(self.refer_time, self.diff, self.ahead_price,
                                                      self.delay_time, self.bid_time)
+

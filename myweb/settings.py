@@ -82,8 +82,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'myweb',
-        'USER': 'root',
-        'PASSWORD': 'Warzxw123;',
+        'USER': 'zs',
+        'PASSWORD': 'Warzxw123;l',
         'HOST': '',
         'PORT': '3306'
     }
@@ -134,6 +134,8 @@ STATICFILES_DIRS = (
     ("js", os.path.join(STATIC_ROOT, 'js')),
     ("images", os.path.join(STATIC_ROOT, 'images')),
 )
+
+
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')

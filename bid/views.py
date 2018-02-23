@@ -6,11 +6,44 @@ from django.db import transaction
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.conf import settings  #导入setting中的变量
-import os,xlrd
-
+import os,xlrd,json
+from django.http import HttpResponse
+from django.contrib.auth import login, authenticate
+from .models import Bid_hander
 
 
 #创建策略
+def bid_login(request):
+    if request.method == 'GET':
+        import time
+        time1 = time.localtime(time.time())
+        time2 = time.strftime("%Y%m%d", time1)
+        today_date = time2 + "01"
+        url_dianxin = "https://paimai2.alltobid.com/bid/%s/login.htm" % today_date
+        url_nodianxin = "https://paimai.alltobid.com/bid/%s/login.htm" % today_date
+
+        # url_dianxin = "https://paimai2.alltobid.com/bid/%s/login.htm" % today_date
+        # url_nodianxin = "https://paimai.alltobid.com/bid/%s/login.htm" % today_date
+
+        username = request.GET.get('username')
+        passwd = request.GET.get('passwd')
+        version = request.GET.get('version')
+        debug = request.GET.get("debug")
+        if version == '5.11s' or debug:
+            result = Bid_hander.objects.filter(hander_name=username, hander_passwd=passwd) #验证登录
+            if result:
+                res = {'result': 'login success',
+                                'url_dianxin': url_dianxin,
+                                'url_nodianxin': url_nodianxin}
+                return HttpResponse(json.dumps(res), content_type="application/json")
+            else:
+                res = {'result': 'wrong'}
+                return HttpResponse(json.dumps(res), content_type="application/json")
+        else:
+            res = {'result': 'wrong version'}
+            return HttpResponse(json.dumps(res), content_type="application/json")
+
+
 @login_required
 def create_bid_action(request):
     if request.method == 'POST':
