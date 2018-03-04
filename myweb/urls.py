@@ -25,7 +25,7 @@ from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import path
-
+from rest_framework_jwt.views import obtain_jwt_token, refresh_jwt_token, verify_jwt_token
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -33,9 +33,13 @@ urlpatterns = [
     url(r'^bid/', include('bid.urls', namespace='bid')),
     url('', include('bbsapp.urls')),  # new
     url('^api/user/', include('account.api.urls')),
-    url('^api/bid/', include('bid.api.urls'))
+    url('^api/bid/', include('bid.api.urls')),
+    url(r'^api-token-auth/', obtain_jwt_token),  #获取token
+    url(r'^api-token-refresh/', refresh_jwt_token), #刷新token
+    url(r'^api-token-verify/', verify_jwt_token), #刷新token
+
 ]
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL,
-                        document_root=settings.MEDIA_ROOT)
+                          document_root=settings.MEDIA_ROOT)

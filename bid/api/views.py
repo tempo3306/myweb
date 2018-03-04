@@ -19,12 +19,13 @@ import django_filters
 class Bid_handerViewSet(viewsets.ModelViewSet):
     queryset = Bid_hander.objects.all()
     serializer_class = Bid_handerSerializer
-    # permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    permission_classes = (permissions.IsAuthenticated,)  #permissions.AllowAny  注册设置为这个
 
 
 class Bid_actionViewSet(viewsets.ModelViewSet):
     queryset = Bid_action.objects.all()
     serializer_class = Bid_actionSerializer
+    permission_classes = (permissions.IsAuthenticated,)
     # permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
     filter_backends = (django_filters.rest_framework.DjangoFilterBackend,)
     filter_fields = ('diff', 'ahead_price')
@@ -35,6 +36,7 @@ class Bid_actionViewSet(viewsets.ModelViewSet):
 class Bid_auctionViewSet(viewsets.ModelViewSet):
     queryset = Bid_auction.objects.all()  #pk = id
     serializer_class = Bid_auctionSerializer
+    permission_classes = (permissions.IsAuthenticated,)
     filter_backends = (django_filters.rest_framework.DjangoFilterBackend,)
     filter_fields = ('auction_name', 'ID_number')
 

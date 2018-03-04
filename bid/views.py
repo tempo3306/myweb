@@ -29,7 +29,7 @@ def bid_login(request):
         passwd = request.GET.get('passwd')
         version = request.GET.get('version')
         debug = request.GET.get("debug")
-        if version == '5.11s' or debug:
+        if version == '5.12s' or debug:
             result = Bid_hander.objects.filter(hander_name=username, hander_passwd=passwd) #验证登录
             if result:
                 res = {'result': 'login success',
