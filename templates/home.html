@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block title %}All boards{% endblock %}
+
+{% block breadcrumb %}
+    <li class="breadcrumb-item active">
+        首页
+    </li>
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <table class="table">
+            <thead class="thead">
+            <tr>
+                <th>版块</th>
+                <th>帖子</th>
+                <th>主题</th>
+                <th>最后发表</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for board in object_list %}
+                <tr>
+                    <td>
+                        <a href="{% url 'board_topics' board.name %}">
+                            {{ board.name }}
+                        </a>
+                        <small class="text-muted d-block" style="font-size:75%">
+                            {{ board.description }}
+                        </small>
+                    </td>
+                    <td class="align-middle">{{ board.get_posts_count }}</td>
+                    <td class="align-middle">{{ board.topics.count }}</td>
+                    <td class="align-middle">
+                        {% with post=board.get_last_post %}
+                            {% if post %}
+                                <small>
+                                    <a href="{% url 'topic_posts' board.name post.topic.pk %}">
+                                        {{ post.created_by.username }} 创建于 {{ post.created_at }}
+                                    </a>
+                                </small>
+                            {% else %}
+                                <small class="text-muted">
+                                    <em>还没有任何帖子</em>
+                                </small>
+                            {% endif %}
+                        {% endwith %}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

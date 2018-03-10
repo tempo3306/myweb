@@ -33,7 +33,7 @@ ALLOWED_HOSTS = ["*"]
 # Application definition
 
 INSTALLED_APPS = [
-    'account',
+
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -44,6 +44,9 @@ INSTALLED_APPS = [
     'bid',
     'images',
     'bbsapp',
+    'forums',  #论坛
+    'account',
+    'crispy_forms',  # 美化form
     'django_extensions',
     'django_filters',
 ]
@@ -246,3 +249,12 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE=False #会话cookie可以在用户浏览器中�
 SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
 
 #在登录函数中可以设置session有效期：request.session.set_expiry(30 * 60)
+
+
+#
+##django-crispy-forms  使用bootstrap
+CRISPY_TEMPLATE_PACK = 'bootstrap3'
+
+##设置时区和语言
+LANGUAGE_CODE = 'zh-Hans'
+TIME_ZONE = 'Asia/Shanghai'

@@ -118,3 +118,7 @@ a:focus,
 a img {
   outline: none;
 }
+
+.d-block {
+    display: block!important;
+}

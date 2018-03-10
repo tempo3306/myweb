@@ -10,29 +10,31 @@
             <a class="navbar-brand" href="">小鲜肉代拍</a>
         </div>
         <div class="navbar-collapse collapse">
-            <ul class="nav navbar-nav">
-                <li><a href="/create_post">查询</a></li>
-                <li class="dropdown">
-                    <a href="" class="dropdown-toggle" data-toggle="dropdown">
-                         创建 <b class="caret"></b>
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li><a href="{% url 'bid:create_bid_action' %}" target="_blank">创建策略</a></li>
-                        <li><a href="{% url 'bid:create_bid_auction' %}" target="_blank">创建标书</a></li>
-                        <li><a href="{% url 'bid:batch_create_action' %}" target="_blank">批量创建策略</a></li>
-                        <li><a href="{% url 'bid:batch_create_auction' %}" target="_blank">批量创建标书</a></li>
-                    </ul>
-                </li>
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                        帮助 <b class="caret"></b>
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li><a href="" target="_blank">概述</a></li>
-                        <li><a href="" target="_blank">教程</a></li>
-                    </ul>
-                </li>
-            </ul>
+            {% if request.user.is_authenticated %}
+                <ul class="nav navbar-nav">
+                    <li><a href="/create_post">查询</a></li>
+                    <li class="dropdown">
+                        <a href="" class="dropdown-toggle" data-toggle="dropdown">
+                            创建 <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="{% url 'bid:create_bid_action' %}" target="_blank">创建策略</a></li>
+                            <li><a href="{% url 'bid:create_bid_auction' %}" target="_blank">创建标书</a></li>
+                            <li><a href="{% url 'bid:batch_create_action' %}" target="_blank">批量创建策略</a></li>
+                            <li><a href="{% url 'bid:batch_create_auction' %}" target="_blank">批量创建标书</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            帮助 <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="" target="_blank">概述</a></li>
+                            <li><a href="" target="_blank">教程</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            {% endif %}
             <ul class="nav navbar-nav navbar-right">
                 {% if request.user.is_authenticated %}
                     <li class="dropdown">

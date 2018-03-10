@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ board.name }} {{ block.super }}{% endblock %}
+
+{% block breadcrumb %}
+    <li class="breadcrumb-item">
+        <a href="{% url 'home' %}">版块</a>
+    </li>
+    <li class="breadcrumb-item active">
+        {{ board.name }}
+    </li>
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="mb-4">
+            <a href="{% url 'new_topic' board.name %}" class="btn btn-primary">
+                发新帖
+            </a>
+        </div>
+        <table class="table">
+            <thead class="thead-blue">
+            <tr>
+                <th>主题</th>
+                <th>楼主</th>
+                <th>回复</th>
+                <th>浏览</th>
+                <th>最后更新</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for topic in article_list %}
+                <tr>
+                    <td>
+                        <a href="{{ topic.get_absolute_url }}">
+                            {{ topic.subject }}
+                        </a>
+                    </td>
+                    <td>{{ topic.starter.username }}</td>
+                    <td class="align-middle">{{ topic.replies }}</td>
+                    <td class="align-middle">{{ topic.views }}</td>
+                    <td>{{ topic.last_updated }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        {% if data %}
+            <ul id="pages" class="pagination pagination-sm pagination-xs">
+                {% if data.first %}
+                    <li><a href="?page=1">1</a></li>
+                {% endif %}
+                {% if data.left %}
+                    {% if data.left_has_more %}
+                        <li><span>...</span></li>
+                    {% endif %}
+                    {% for i in data.left %}
+                        <li><a href="?page={{ i }}">{{ i }}</a></li>
+                    {% endfor %}
+                {% endif %}
+                <li class="active"><a href="?page={{ data.page }}">{{ data.page }}</a></li>
+                {% if data.right %}
+                    {% for i in data.right %}
+                        <li><a href="?page={{ i }}">{{ i }}</a></li>
+                    {% endfor %}
+                    {% if data.right_has_more %}
+                        <li><span>...</span></li>
+                    {% endif %}
+                {% endif %}
+                {% if data.last %}
+                    <li><a href="?page={{ data.total_pages }}">{{ data.total_pages }}</a></li>
+                {% endif %}
+            </ul>
+        {% endif %}
+    </div>
+
+{% endblock %}

@@ -32,6 +32,7 @@ urlpatterns = [
     url(r'^account/', include('account.urls')),
     url(r'^bid/', include('bid.urls', namespace='bid')),
     url('', include('bbsapp.urls')),  # new
+    url('^forums/', include('forums.urls')),
     url('^api/user/', include('account.api.urls')),
     url('^api/bid/', include('bid.api.urls')),
     url(r'^api-token-auth/', obtain_jwt_token),  #获取token
