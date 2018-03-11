@@ -122,3 +122,9 @@ a img {
 .d-block {
     display: block!important;
 }
+
+.breadcrumb {
+    background-color:#00cffa;
+    font-size: 20px;
+}
+

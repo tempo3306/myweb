@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "includes/base.html" %}
 {% block title %}账号注册{% endblock %}
 {% block content %}
     <div class="container">
@@ -10,6 +10,11 @@
                     <label for="id_username">账号：</label>
                     <input class="form-control" type="text" name="username" autofocus maxlength="254" required
                            id="id_username"/>
+                </div>
+                <div class="form-group">
+                    <label for="id_email">邮箱：</label>
+                    <input class="form-control" type="text" name="email" autofocus maxlength="254" required
+                           id="id_email"/>
                 </div>
                 <div class="form-group">
                     <label for="id_password">密码：</label>

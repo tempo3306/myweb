@@ -1,34 +1,39 @@
-{% extends 'base.html' %}
+{% extends 'includes/forum_base.html' %}
 
 {% block title %}Post a reply{% endblock %}
 
 {% block breadcrumb %}
-<li class="breadcrumb-item">
-    <a href="{% url 'home' %}">Boards</a>
-</li>
-<li class="breadcrumb-item">
-    <a href="{% url 'board_topics' topic.board.pk %}">
-        {{ topic.board.name }}
-    </a>
-</li>
-<li class="breadcrumb-item">
-    <a href="{{ topic.get_absolute_url }}">
-        {{ topic.subject }}
-    </a>
-</li>
-<li class="breadcrumb-item active">
-    Reply
-</li>
+    <div class="container">
+        <ol class="breadcrumb">
+            <li>
+                <a href="{% url 'home' %}">Boards</a>
+            </li>
+            <li>
+                <a href="{% url 'board_topics' topic.board.pk %}">
+                    {{ topic.board.name }}
+                </a>
+            </li>
+            <li>
+                <a href="{{ topic.get_absolute_url }}">
+                    {{ topic.subject }}
+                </a>
+            </li>
+            <li class="breadcrumb-item active">
+                Reply
+            </li>
+        </ol>
+    </div>
 {% endblock %}
 
 {% block content %}
-{% load crispy_forms_tags %}
-<form method="post" novalidate>
-    {% csrf_token %}
-    {{ form|crispy }}
-    <button type="submit" class="btn btn-success">Post</button>
-</form>
-
-{% include 'includes/all_topic_posts.html' %}
+    {% load crispy_forms_tags %}
+    <div class="container">
+        <form method="post" novalidate>
+            {% csrf_token %}
+            {{ form|crispy }}
+            <button type="submit" class="btn btn-success">Post</button>
+        </form>
+    </div>
+    {% include 'includes/all_topic_posts.html' %}
 
 {% endblock %}

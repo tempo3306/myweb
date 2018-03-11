@@ -1,0 +1,46 @@
+{% extends "includes/base.html" %}
+{% load form_error %}
+
+{% block title %}账号注册{% endblock %}
+{% block content %}
+    <div class="container">
+        <h1>账号注册</h1>
+        <div class="container col-md-4 col-sm-6 col-lg-6">
+            <form action="" method="post">         {% csrf_token %}
+                <div class="form-group">
+                    <label for="id_username">账号：</label>
+                    <p>{{ user_form.username }}
+                        {% error_msg error.username %}
+                    </p>
+                </div>
+                <div class="form-group">
+                    <label for="id_email">邮箱：</label>
+                    <p>{{ user_form.email }}
+                        {% error_msg error.email %}
+                    </p>
+                </div>
+
+                <div class="form-group">
+                    <label for="id_password">密码：</label>
+                    <p>{{ user_form.password }}
+                        {% error_msg error.password %}
+                    </p>
+                </div>
+
+                <div class="form-group">
+                    <label for="id_password2">确认密码：</label>
+                    <p>{{ user_form.password2 }}
+                        {% error_msg error.password2 %}
+                    </p>
+                </div>
+                {% if next.split %}
+                    <input type="hidden" name="next" value="{{ next }}"/>
+                {% else %}
+                    <input type="hidden" name="next" value="/login"/>
+                {% endif %}
+                <p><input type="submit" value="注册"></p>
+            </form>
+        </div>
+    </div>
+
+{% endblock %}

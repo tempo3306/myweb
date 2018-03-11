@@ -1,28 +1,34 @@
-{% extends 'base.html' %}
+{% extends 'includes/forum_base.html' %}
 
 {% block title %}{{ topic.subject }}{% endblock %}
 
 {% block breadcrumb %}
-<li class="breadcrumb-item">
-    <a href="{% url 'home' %}">Boards</a>
-</li>
-<li class="breadcrumb-item">
-    <a href="{% url 'board_topics' topic.board.name %}">
-        {{ topic.board.name }}
-    </a>
-</li>
-<li class="breadcrumb-item active">
-    {{ topic.subject }}
-</li>
+    <div class="container">
+        <ol class="breadcrumb">
+            <li>
+                <a href="{% url 'home' %}">Boards</a>
+            </li>
+            <li>
+                <a href="{% url 'board_topics' topic.board.name %}">
+                    {{ topic.board.name }}
+                </a>
+            </li>
+            <li class="active">
+                {{ topic.subject }}
+            </li>
+        </ol>
+    </div>
 {% endblock %}
 
 {% block content %}
-<div>
-    <a href="{% url 'reply_topic' topic.board.name topic.pk %}" class="btn btn-primary" role="button">
-        Reply
-    </a>
-</div>
+    <div class="container">
+        <div class="mb-4">
+            <a href="{% url 'reply_topic' topic.board.name topic.pk %}" class="btn btn-primary" role="button">
+                回复
+            </a>
+        </div>
+    </div>
 
-{% include 'includes/all_topic_posts.html' %}
+    {% include 'includes/all_topic_posts.html' %}
 
 {% endblock %}

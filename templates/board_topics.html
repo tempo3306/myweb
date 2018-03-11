@@ -1,14 +1,18 @@
-{% extends 'base.html' %}
+{% extends 'includes/forum_base.html' %}
 
 {% block title %}{{ board.name }} {{ block.super }}{% endblock %}
 
 {% block breadcrumb %}
-    <li class="breadcrumb-item">
-        <a href="{% url 'home' %}">版块</a>
-    </li>
-    <li class="breadcrumb-item active">
-        {{ board.name }}
-    </li>
+    <div class="container">
+        <ol class="breadcrumb container">
+            <li>
+                <a href="{% url 'home' %}">首页</a>
+            </li>
+            <li class="active">
+                {{ board.name }}
+            </li>
+        </ol>
+    </div>
 {% endblock %}
 
 {% block content %}

@@ -6,7 +6,7 @@
         <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
         <meta name="description" content="">
         <meta name="author" content="">
-        <title>聊个球</title>
+        <title>小鲜肉代拍</title>
 
         <!-- Bootstrap core CSS -->
         <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.min.css">
@@ -32,7 +32,7 @@
 </head>
 
 <body>
-{% include 'nav.html' %}
+{% include 'includes/nav.html' %}
 {% if messages %}
 <ul class="messages">
     {% for message in messages %}
@@ -44,6 +44,9 @@
     {% endfor %}
 </ul>
 {% endif %}
+{% block breadcrumb %}
+
+{% endblock %}
 {% block content %}
 
 {% endblock %}
