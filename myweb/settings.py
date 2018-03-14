@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/2.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.0/ref/settings/
 """
+from myweb.config import LOCAL_DEBUG
 
 import os, datetime
 
@@ -22,11 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '_z)80+tr(3b5zp^(y@do46u$ji@y5o=v!=#p72&7#g1cai@xk9'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-debug = os.environ.get('django_debug') or True
-if debug == 'False':
-    DEBUG = False
-else:
-    DEBUG = True
+DEBUG = LOCAL_DEBUG
 
 ALLOWED_HOSTS = ["*"]
 
