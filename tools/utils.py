@@ -31,7 +31,7 @@ def send_register_email(email, send_type="register"):
         # email_title = "你好"
         # email_body = "明天请参会"
         email_title = "沪牌一号注册激活链接"
-        email_body = "您在注册沪牌一号的账号，请点击下面的链接激活你的账号: https://hupai.pro/active/{0}/".format(code)
+        email_body = "您在注册沪牌一号的账号，请点击下面的链接激活你的账号: https://hupai.pro/account/active/{0}/".format(code)
         # 发送邮件
         send_status = send_mail(email_title, email_body, EMAIL_FROM, [email])
         if send_status:

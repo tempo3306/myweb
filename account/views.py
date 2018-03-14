@@ -18,11 +18,11 @@ from tools.tasks import confirm_email
 
 ##登录
 def user_login(request):
-    form = LoginForm(request.POST)
     if request.method == 'GET':
         request.session['login_from'] = request.GET.get('next', '/')
         # request.session['login_from'] = request.META.get('HTTP_REFERER', '/')
     else:
+        form = LoginForm(request.POST)
         if form.is_valid():
             cd = form.cleaned_data
             user = authenticate(username=cd['username'],
@@ -39,6 +39,7 @@ def user_login(request):
                 return render(request,
                               'account/login.html',
                               {'user_form': form, 'error': '账号或密码错误！'})
+    form = LoginForm()
     return render(request, 'account/login.html', {'form': form})
 
 
