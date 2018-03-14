@@ -44,5 +44,6 @@ urlpatterns = [
     url(r'^edit/$', views.edit, name='edit'),
     url(r'^active/(?P<active_code>.*)/$', views.ActiveUserView.as_view(), name="user_active"),  # 提取出active后的所有字符赋给active_code
     url(r'^test_email', views.test_email),
+    url(r'^active_failure', views.ActiveFailView.as_view(), name="active_fail"),
     url(r'^reactive_email/$', views.ReActiveEmailView.as_view(), name="reactive_email"), #重新发邮件
 ]

@@ -112,8 +112,14 @@ class ActiveUserView(View):
                 user.is_active = True
                 user.save()
         else:
-            return render(request, "account/active_fail.html")
-        return render(request, "account/login.html")
+            return HttpResponseRedirect(reverse('active_fail'))
+        return HttpResponseRedirect(reverse('login'))
+
+##激活失败
+class ActiveFailView(View):
+    def get(self, request):
+        return render(request, 'account/active_fail.html')
+
 
 ##用户要求重新发送激活邮件
 class ReActiveEmailView(View):
@@ -129,6 +135,8 @@ class ReActiveEmailView(View):
 
 from .forms import LoginForm, UserRegistrationForm, \
     UserEditForm, ProfileEditForm
+
+
 
 
 @login_required
