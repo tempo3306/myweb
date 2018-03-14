@@ -3,6 +3,12 @@
 {% block content %}
     <div class="container">
         <h1>Welcome {{ new_user.username }}!</h1>
+
+        {% if tip %}
+        <p> 发送成功,请前往邮箱查看。 </p>
+            
+        {% endif %}
+
         <p>你的账号还未激活，请到邮箱查看激活邮件。如果未收到邮件，请点击  <a href="{% url "reactive_email" %}">重新发送激活邮件</a>.</p>
     </div>
 {% endblock %}

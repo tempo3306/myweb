@@ -28,8 +28,9 @@ urlpatterns = [
     # reset password
     ## restore password urls
     url(r'^password-reset/$',
-        password_reset,
+        views.reset_password,
         name='password_reset'),
+    url(r'^reset_getcode/$', views.reset_getcode, name='reset_getcode'),
     url(r'^password-reset/done/$',
         password_reset_done,
         name='password_reset_done'),

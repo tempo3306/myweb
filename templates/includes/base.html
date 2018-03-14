@@ -1,17 +1,19 @@
 <html lang="zh-CN">
 <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
-        <meta name="description" content="">
-        <meta name="author" content="">
-        <title>小鲜肉代拍</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>小鲜肉代拍</title>
 
-        <!-- Bootstrap core CSS -->
-        <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.min.css">
-        <link rel="stylesheet" type="text/css" href="/static/css/styles.css">
-        <link rel="stylesheet" type="text/css" href="/static/css/account.css">
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/styles.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/account.css">
+    <script type="text/javascript" src="/static/js/jquery-1.10.2.js"></script>
+
     {% block head %}
     {% endblock %}
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
@@ -34,15 +36,15 @@
 <body>
 {% include 'includes/nav.html' %}
 {% if messages %}
-<ul class="messages">
-    {% for message in messages %}
-    <li{% if message.tags %} class="{{ message.tags }}"{% endif %} >
-        {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}Important: {% endif %}
-        {{ message }}
-    <a href="#">关闭</a>
-    </li>
-    {% endfor %}
-</ul>
+    <ul class="messages">
+        {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %} >
+                {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}Important: {% endif %}
+                {{ message }}
+                <a href="#">关闭</a>
+            </li>
+        {% endfor %}
+    </ul>
 {% endif %}
 {% block breadcrumb %}
 
@@ -50,6 +52,10 @@
 {% block content %}
 
 {% endblock %}
+
+{% block script %}
+{% endblock %}
+
 
 {% block footer_script %}
     <!-- Bootstrap core JavaScript

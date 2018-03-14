@@ -4,7 +4,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.contrib.auth import login, authenticate
-from .forms import LoginForm, ChangePasswordForm
+from .forms import LoginForm, ChangePasswordForm, ResetPasswordForm, GetcodeForm
 from .models import Profile
 from django.contrib.auth.models import User
 from django.contrib import messages
@@ -14,33 +14,34 @@ from account.models import EmailVerifyRecord
 from django.db import transaction
 from django.urls import reverse
 #导入异步邮件
-from tools.tasks import confirm_email
+from tools.tasks import confirm_email, reset_email
 
 ##登录
 def user_login(request):
     if request.method == 'GET':
         request.session['login_from'] = request.GET.get('next', '/')
+        form = LoginForm()
+        return render(request, 'account/login.html', {'form': form})
         # request.session['login_from'] = request.META.get('HTTP_REFERER', '/')
     else:
         form = LoginForm(request.POST)
         if form.is_valid():
             cd = form.cleaned_data
-            user = authenticate(username=cd['username'],
-                                password=cd['password'])
+            user = User.objects.get(username=cd['username'])
             if user is not None:
-                if user.is_active:
-                    login(request, user)
-                    return HttpResponseRedirect(request.session['login_from'])
-                else:
+                if not user.is_active:
+                    request.session['email'] = user.email #临时存放email
                     return render(request,
-                                  'account/login.html',
-                                  {'user_form': form, 'error': '账号未激活！'})
-            else:
-                return render(request,
-                              'account/login.html',
-                              {'user_form': form, 'error': '账号或密码错误！'})
-    form = LoginForm()
-    return render(request, 'account/login.html', {'form': form})
+                                  'account/active_account.html')
+                else:
+                    result = authenticate(username=cd['username'], password=cd['password'])
+                    if result:
+                        login(request, user)
+                        return HttpResponseRedirect(request.session['login_from'])
+                    else:
+                        return render(request,
+                                      'account/login.html',
+                                      {'form': form, 'errors': '账号或密码错误！'})
 
 
 from django.contrib.auth.decorators import login_required
@@ -128,8 +129,9 @@ class ReActiveEmailView(View):
         if user.is_active:
             return HttpResponseRedirect(request.session['login_from'])
         else:
-            email = user.email
+            email = request.session['email']
             confirm_email.delay(email)  ##异步发邮件
+        return render(request, 'account/active_account.html', {'tip': '发送成功'})
 
 
 
@@ -180,7 +182,8 @@ def change_password(request):
                                   {'change_password_form': change_password_form,
                                    'error': '两次密码不一致'})
                 else:
-                    user.set_password('password')  # 修改密码
+                    user.set_password(password)  # 修改密码
+                    user.save()
                     return render(request,
                                   'registration/password_change_done.html',
                                   )
@@ -201,3 +204,57 @@ def change_password(request):
                       'account/change_password.html',
                       {'change_password_form': change_password_form,
                        })
+
+##重置密码
+def reset_password(request):
+    reset_password_form = ResetPasswordForm(request.POST)
+    getcode_form = GetcodeForm(request.POST)
+    if request.method == 'POST':
+        if reset_password_form.is_valid():
+            email = request.session['email']
+            code = reset_password_form.cleaned_data['code']
+            password = reset_password_form.cleaned_data['password']
+            password2 = reset_password_form.cleaned_data['password2']
+            # 验证code
+            reset_code = EmailVerifyRecord.objects.filter(email=email)[0].code
+            if reset_code:
+                if reset_code != code:
+                    print('reset_code', reset_code)
+                    print('code', code)
+                    return render(request,
+                                  'account/reset_password.html',
+                                  {'form': reset_password_form,
+                                   'errors': '请输入正确的验证码'})
+                else:
+                    user = User.objects.get(email=email)
+                    user.set_password(password)  # 修改密码
+                    user.save()
+                    return render(request,
+                                  'registration/password_change_done.html')
+            else:
+                return render(request,
+                              'account/reset_password.html',
+                              {'form': reset_password_form,
+                               'errors': '该邮箱未注册'})
+        else:
+            error = reset_password_form.errors
+            return render(request,
+                          'account/reset_password.html',
+                          {'form': reset_password_form,
+                           'error': error
+                           })
+    else:
+        return render(request,
+                      'account/reset_password.html',
+                      {'form': reset_password_form,
+                       })
+##发送找回密码的验证码
+def reset_getcode(request):
+    email = request.GET.get('email')
+    result = User.objects.filter(email=email)
+    if result:
+        request.session['email'] = email #保存邮箱
+        reset_email.delay(email)   ##异步发邮件
+        return  HttpResponse('success')
+    else:
+        return HttpResponse('wrong email')
