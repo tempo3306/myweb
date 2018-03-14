@@ -220,8 +220,9 @@ def reset_password(request):
             password = reset_password_form.cleaned_data['password']
             password2 = reset_password_form.cleaned_data['password2']
             # 验证code
-            reset_code = EmailVerifyRecord.objects.filter(email=email)[0].code
-            if reset_code:
+            reset_record = EmailVerifyRecord.objects.filter(email=email)
+            if reset_record:
+                reset_code = reset_record[0].code
                 if reset_code != code:
                     print('reset_code', reset_code)
                     print('code', code)
