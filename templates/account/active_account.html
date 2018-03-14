@@ -3,6 +3,6 @@
 {% block content %}
     <div class="container">
         <h1>Welcome {{ new_user.username }}!</h1>
-        <p>账号创建完成，请到您的邮箱激活账号. 现在你可以 <a href="{% url "login" %}">登录</a>.</p>
+        <p>你的账号还未激活，请到邮箱查看激活邮件。如果未收到邮件，请点击  <a href="{% url "reactive_email" %}">重新发送激活邮件</a>.</p>
     </div>
 {% endblock %}

@@ -44,17 +44,19 @@ INSTALLED_APPS = [
     'bid',
     'images',
     'bbsapp',
-    'forums',  #论坛
+    'forums',  # 论坛
     'account',
     'crispy_forms',  # 美化form
     'django_extensions',
     'django_filters',
+    'django_celery_results',
+
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',   #防跨站伪造请求
+    'django.middleware.csrf.CsrfViewMiddleware',  # 防跨站伪造请求
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -114,12 +116,9 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-# Internationalization
-# https://docs.djangoproject.com/en/2.0/topics/i18n/
-
-LANGUAGE_CODE = 'en-us'
-
-TIME_ZONE = 'UTC'
+##设置时区和语言
+LANGUAGE_CODE = 'zh-Hans'
+TIME_ZONE = 'Asia/Shanghai'
 
 USE_I18N = True
 
@@ -161,7 +160,7 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',  # 需要认证
         # 'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
     ],
-    #分页
+    # 分页
     'PAGE_SIZE': 10,
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     # 权限管理
@@ -215,8 +214,8 @@ JWT_AUTH = {
 
 }
 
-#将SESSION改用Redis存储
-#设置 redis 缓存    key由前缀，版本号，真正的key组成
+# 将SESSION改用Redis存储
+# 设置 redis 缓存    key由前缀，版本号，真正的key组成
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
@@ -241,20 +240,38 @@ CACHES = {
 #                       }
 #           }
 
-#SESSION设置   二选一生效
-SESSION_COOKIE_AGE=30 * 60 #设置session过期时间为30分钟
-SESSION_EXPIRE_AT_BROWSER_CLOSE=False #会话cookie可以在用户浏览器中保持有效期。True：关闭浏览器，则Cookie失效  即过期时间为当前会话
+# SESSION设置   二选一生效
+SESSION_COOKIE_AGE = 30 * 60  # 设置session过期时间为30分钟
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False  # 会话cookie可以在用户浏览器中保持有效期。True：关闭浏览器，则Cookie失效  即过期时间为当前会话
 
 '''配置session引擎SESSION_ENGINE为redis，配置此处session会存储在redis中，不会再去操作数据库了'''
 SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
 
-#在登录函数中可以设置session有效期：request.session.set_expiry(30 * 60)
+# 在登录函数中可以设置session有效期：request.session.set_expiry(30 * 60)
 
 
 #
 ##django-crispy-forms  使用bootstrap
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
 
-##设置时区和语言
-LANGUAGE_CODE = 'zh-Hans'
-TIME_ZONE = 'Asia/Shanghai'
+##--------------------------------------------------
+##celery
+BROKER_URL = 'redis://localhost:6379'
+CELERY_RESULT_BACKEND = 'django-cache'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'Africa/Nairobi'
+BROKER_TRANSPORT_OPTIONS = {'visibility_timeout': 3600}  # 1 hour.超时
+
+##∂
+##--------------------------------------------------
+##配置邮箱
+EMAIL_BACKEND = 'django_smtp_ssl.SSLEmailBackend'
+EMAIL_HOST = "smtp.163.com"   # 服务器
+EMAIL_PORT = 465               # 一般情况下都为25
+EMAIL_HOST_USER = "hupaiyihao@163.com"   # 账号
+EMAIL_HOST_PASSWORD = "warzxw6228009123"  # 密码
+EMAIL_SUBJECT_PREFIX = u'沪牌一号'  ##为邮件Subject-line前缀,默认是'[django]'
+EMAIL_USE_TLS = True
+EMAIL_FROM = "hupaiyihao@163.com"        # 邮箱来自

@@ -9,7 +9,12 @@ from .models import Profile
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.http import HttpResponseRedirect
-
+from django.views.generic.base import View
+from account.models import EmailVerifyRecord
+from django.db import transaction
+from django.urls import reverse
+#导入异步邮件
+from tools.tasks import confirm_email
 
 ##登录
 def user_login(request):
@@ -49,6 +54,10 @@ def dashboard(request):
 
 from .forms import LoginForm, UserRegistrationForm
 
+#测试异步邮件
+def test_email(request):
+    confirm_email.delay('810909753@qq.com')  ##异步发邮件
+    return HttpResponse("发送中")
 
 def register(request):
     user_form = UserRegistrationForm(request.POST)
@@ -63,69 +72,58 @@ def register(request):
             if len(namefilter) > 0:
                 return render(request,
                               'account/register.html',
-                              {'user_form': user_form, 'error': '用户名已经存在！'})
+                              {'user_form': user_form, 'errors': '用户名已经存在！'})
             elif len(emailfilter) > 0:
                 return render(request,
                               'account/register.html',
-                              {'user_form': user_form, 'error': '邮箱已经存在！'})
+                              {'user_form': user_form, 'errors': '邮箱已经存在！'})
             else:
                 try:
-                    new_user = User.objects.create_user(username=username, password=password, email=email)
-                    return render(request,
+                    with transaction.atomic():
+                        new_user = User.objects.create_user(username=username, password=password,
+                                                        email=email, is_active=False)
+                        confirm_email.delay(email) ##异步发邮件
+
+                        return render(request,
                                   'account/register_done.html',
                                   {'new_user': new_user})
                 except:
                     return render(request,
                                   'account/register.html',
-                                  {'user_form': user_form, 'error': '创建失败，请重试'})
+                                  {'user_form': user_form, 'errors': '创建失败，请重试'})
         else:
             error = user_form.errors
             return render(request, 'account/register.html', {'user_form': user_form, 'error': error})
     return render(request, 'account/register.html', {'user_form': user_form})
 
 
-def register2(request):
-    if request.method == 'POST':
-        user_form = UserRegistrationForm(request.POST)
-        if user_form.is_valid():  # 获取表单信息
-            username = user_form.cleaned_data['username']
-            email = user_form.cleaned_data['email']
-            password = user_form.cleaned_data['password']
-            password2 = user_form.cleaned_data['password2']
-            namefilter = User.objects.filter(username=username)
-            emailfilter = User.objects.filter(email=email)
-            if len(namefilter) > 0:
-                return render(request,
-                              'account/register.html',
-                              {'user_form': user_form, 'error': '用户名已经存在！'})
-            elif len(emailfilter) > 0:
-                return render(request,
-                              'account/register.html',
-                              {'user_form': user_form, 'error': '邮箱已经存在！'})
-            elif password != password2:
-                return render(request,
-                              'account/register.html',
-                              {'user_form': user_form, 'error': '两次密码不一致！'})
-            else:
-                try:
-                    new_user = User.objects.create_user(username=username, password=password, email=email)
-                    return render(request,
-                                  'account/register_done.html',
-                                  {'new_user': new_user})
-                except:
-                    return render(request,
-                                  'account/register.html',
-                                  {'user_form': user_form, 'error': '创建失败，请重试'})
+##用户点击该链接激活账号
+class ActiveUserView(View):
+    def get(self, request, active_code):
+    # 用code在数据库中过滤处信息
+        all_records = EmailVerifyRecord.objects.filter(code=active_code)
+        if all_records:
+            for record in all_records:
+                email = record.email
+                # 通过邮箱查找到对应的用户
+                user = User.objects.get(email=email)
+                # 激活用户
+                user.is_active = True
+                user.save()
         else:
-            user_form = UserRegistrationForm()
-            return render(request,
-                          'account/register.html',
-                          {'user_form': user_form})
-    else:
-        user_form = UserRegistrationForm()
-        return render(request,
-                      'account/register.html',
-                      {'user_form': user_form})
+            return render(request, "account/active_fail.html")
+        return render(request, "account/login.html")
+
+##用户要求重新发送激活邮件
+class ReActiveEmailView(View):
+    def get(self, request):
+        user = request.user
+        if user.is_active:
+            return HttpResponseRedirect(request.session['login_from'])
+        else:
+            email = user.email
+            confirm_email.delay(email)  ##异步发邮件
+
 
 
 from .forms import LoginForm, UserRegistrationForm, \

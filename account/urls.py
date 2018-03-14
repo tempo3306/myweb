@@ -13,7 +13,6 @@ from django.contrib.auth.views import password_reset_confirm
 from django.contrib.auth.views import password_reset_complete
 from . import views
 
-
 urlpatterns = [
     # post views
     # url(r'^login/$', views.user_login, name='login'),
@@ -43,4 +42,7 @@ urlpatterns = [
     url(r'^$', views.dashboard, name='dashboard'),  # 登录成功之后的界面
     url(r'^register/$', views.register, name='register'),
     url(r'^edit/$', views.edit, name='edit'),
+    url(r'^active/(?P<active_code>.*)/$', views.ActiveUserView.as_view(), name="user_active"),  # 提取出active后的所有字符赋给active_code
+    url(r'^test_email', views.test_email),
+    url(r'^reactive_email/$', views.ReActiveEmailView.as_view(), name="reactive_email"), #重新发邮件
 ]
