@@ -15,6 +15,7 @@ from django.db import transaction
 from django.urls import reverse
 #导入异步邮件
 from tools.tasks import confirm_email, reset_email
+from django.contrib.auth.decorators import login_required
 
 ##登录
 def user_login(request):
@@ -27,8 +28,9 @@ def user_login(request):
         form = LoginForm(request.POST)
         if form.is_valid():
             cd = form.cleaned_data
-            user = User.objects.get(username=cd['username'])
-            if user is not None:
+            users= User.objects.filter(username=cd['username'])
+            if users:
+                user = users[0]
                 if not user.is_active:
                     request.session['email'] = user.email #临时存放email
                     return render(request,
@@ -42,9 +44,11 @@ def user_login(request):
                         return render(request,
                                       'account/login.html',
                                       {'form': form, 'errors': '账号或密码错误！'})
+            else:
+                return render(request,
+                              'account/login.html',
+                              {'form': form, 'errors': '账号或密码错误！'})
 
-
-from django.contrib.auth.decorators import login_required
 
 
 @login_required
