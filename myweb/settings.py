@@ -59,6 +59,12 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+##权限控制
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',  #django默认的backend
+    'guardian.backends.ObjectPermissionBackend',  #对对象的权限控制
+)
+
 ROOT_URLCONF = 'myweb.urls'
 
 TEMPLATES = [

@@ -8,6 +8,8 @@ from .models import Board, Post, Topic
 
 #导入Paginator,EmptyPage和PageNotAnInteger模块
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.contrib.auth.decorators import permission_required
+
 
 ##主页，显示所有版块
 class BoardListView(ListView):
@@ -75,21 +77,6 @@ def board_topics(request, name):
         'article_list': article_list, 'data': data, 'board': board
     })
 
-    # # 生成paginator对象,定义每页显示20条记录
-    # paginator = Paginator(topics, 20)
-    # # 从前端获取当前的页码数,默认为1
-    # page = request.GET.get('page', 1)
-    # # 把当前的页码数转换成整数类型
-    # currentPage = int(page)
-    # try:
-    #     print(page)
-    #     topic_list = paginator.page(page)  # 获取当前页码的记录
-    # except PageNotAnInteger:
-    #     topic_list = paginator.page(1)  # 如果用户输入的页码不是整数时,显示第1页的内容
-    # except EmptyPage:
-    #     topic_list = paginator.page(paginator.num_pages)  # 如果用户输入的页数不在系统的页码列表中时,显示最后一页的内容
-    # context = {'board': board, 'topics': topic_list}
-    # return render(request, 'board_topics.html', context)
 
 ##创建主题
 @login_required
@@ -125,6 +112,7 @@ def topic_posts(request, name, topic_pk):
     return render(request, 'topic_posts.html', context)
 
 ##帖子回复
+@permission_required('account.post')
 @login_required
 def reply_topic(request, name, topic_pk):
     topic = get_object_or_404(Topic, board__name=name, pk=topic_pk)
@@ -140,3 +128,5 @@ def reply_topic(request, name, topic_pk):
         form = PostForm()
     context = {'topic': topic, 'form': form}
     return render(request, 'reply_topic.html', context)
+
+

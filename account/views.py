@@ -6,7 +6,8 @@ from django.shortcuts import render
 from django.contrib.auth import login, authenticate
 from .forms import LoginForm, ChangePasswordForm, ResetPasswordForm, GetcodeForm
 from .models import Profile
-from django.contrib.auth.models import User
+from forums.models import ForumUser
+from django.contrib.auth.models import User, Group
 from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.views.generic.base import View
@@ -115,10 +116,14 @@ class ActiveUserView(View):
                 user = User.objects.get(email=email)
                 # 激活用户
                 user.is_active = True
+                groups = Group.objects.get(name='normal_user')
+                user.groups.add(groups)
+                form_user = ForumUser(user=user)  #在论坛创建用户
                 user.save()
+                form_user.save()
+                return HttpResponseRedirect(reverse('login'))
         else:
             return HttpResponseRedirect(reverse('active_fail'))
-        return HttpResponseRedirect(reverse('login'))
 
 ##激活失败
 class ActiveFailView(View):
