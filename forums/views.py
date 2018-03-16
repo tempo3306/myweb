@@ -9,7 +9,7 @@ from .models import Board, Post, Topic
 #导入Paginator,EmptyPage和PageNotAnInteger模块
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth.decorators import permission_required
-
+from django.http import HttpResponse
 
 ##主页，显示所有版块
 class BoardListView(ListView):
@@ -112,8 +112,8 @@ def topic_posts(request, name, topic_pk):
     return render(request, 'topic_posts.html', context)
 
 ##帖子回复
-@permission_required('account.post')
 @login_required
+@permission_required('account.post')
 def reply_topic(request, name, topic_pk):
     topic = get_object_or_404(Topic, board__name=name, pk=topic_pk)
     if request.method == 'POST':
@@ -129,4 +129,7 @@ def reply_topic(request, name, topic_pk):
     context = {'topic': topic, 'form': form}
     return render(request, 'reply_topic.html', context)
 
-
+@login_required
+@permission_required('account.post', login_url='/')  #login_url 跳转的页面
+def test(request):
+    return HttpResponse("成功")

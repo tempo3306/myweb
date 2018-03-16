@@ -1,6 +1,7 @@
 from django.urls import path
-
+from django.conf.urls import url
 from . import views
+
 
 urlpatterns = [
     path('', views.BoardListView.as_view(), name='home'),
@@ -8,4 +9,5 @@ urlpatterns = [
     path('boards/<str:name>/new/', views.new_topic, name='new_topic'),
     path('boards/<str:name>/<int:topic_pk>/', views.topic_posts, name='topic_posts'),
     path('boards/<str:name>/<int:topic_pk>/reply/', views.reply_topic, name='reply_topic'),
+    url('^test/$', views.test, name='test')
 ]

@@ -13,6 +13,13 @@ from django.contrib.auth.views import password_reset_confirm
 from django.contrib.auth.views import password_reset_complete
 from . import views
 
+from .views import *
+
+
+handler403 = permission_denied
+handler404 = page_not_found
+handler500 = page_error
+
 urlpatterns = [
     # post views
     # url(r'^login/$', views.user_login, name='login'),

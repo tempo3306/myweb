@@ -65,14 +65,14 @@ def create_bid_action(request):
                                         auction_id=auction_id, action_result=action_result)
                     action.save()
                     messages.info(request, '创建成功')
-                    return render(request, 'create_bid_action.html', {'form': form})
+                    return render(request, 'bid/create_bid_action.html', {'form': form})
             except:
                 messages.error(request, '创建失败', extra_tags='bg-warning text-warning')
         else:
-            return render(request, 'create_bid_action.html', {'form': form, 'error': form.errors})
+            return render(request, 'bid/create_bid_action.html', {'form': form, 'error': form.errors})
     else:
         form = Bid_actionForm()
-    return render(request, 'create_bid_action.html', {'form': form})
+    return render(request, 'bid/create_bid_action.html', {'form': form})
 
 #创建策略
 @login_required
@@ -95,14 +95,14 @@ def create_bid_auction(request):
                                         count=count, expired_date=expired_date)
                     action.save()
                     messages.success(request, '创建成功')
-                    return render(request, 'create_bid_auction.html', {'form': form})
+                    return render(request, 'bid/create_bid_auction.html', {'form': form})
             except:
                 messages.error(request, '创建失败', extra_tags='bg-warning text-warning')
         else:
-            return render(request, 'create_bid_auction.html',{'form': form, "error":form.errors})
+            return render(request, 'bid/create_bid_auction.html', {'form': form, "error":form.errors})
     else:
         form = Bid_auctionForm()
-        return render(request, 'create_bid_auction.html', {'form': form})
+        return render(request, 'bid/create_bid_auction.html', {'form': form})
 
 #读取EXCEL
 
@@ -160,7 +160,7 @@ def batch_create_action(request):
                             '标书' not in row or \
                             '拍手' not in row:
                         messages.error(request, "EXCEL格式错误")
-                        return render(request, 'batch_create_action.html', {'form': form})
+                        return render(request, 'bid/batch_create_action.html', {'form': form})
                     else:
                         diff = int(row['加价幅度'])
                         refer_time = float(row['加价时间'])
@@ -178,24 +178,24 @@ def batch_create_action(request):
                             action_list.append(action)
                         except:
                             messages.error(request, '创建失败', extra_tags='bg-warning text-warning')
-                            return render(request, 'create_bid_action.html', {'form': form})
+                            return render(request, 'bid/create_bid_action.html', {'form': form})
                         try:
                             with transaction.atomic():
                                 Bid_action.objects.bulk_create(action_list)
                         except:
                             messages.error(request, '创建失败', extra_tags='bg-warning text-warning')
-                            return render(request, 'create_bid_action.html', {'form': form})
+                            return render(request, 'bid/create_bid_action.html', {'form': form})
                 messages.info(request, '批量创建成功')
-                return render(request, 'create_bid_action.html', {'form': form})
+                return render(request, 'bid/create_bid_action.html', {'form': form})
             else:
                 messages.error(request, "上传文件格式错误")
-                return render(request, 'batch_create_action.html', {'form': form})
+                return render(request, 'bid/batch_create_action.html', {'form': form})
         else:
             messages.error(request, "上传文件格式错误")
-            return render(request, 'batch_create_action.html', {'form': form})
+            return render(request, 'bid/batch_create_action.html', {'form': form})
     else:
         form = Batch_bid_actionForm()
-        return render(request, 'batch_create_action.html', {'form': form})
+        return render(request, 'bid/batch_create_action.html', {'form': form})
 
 @login_required
 def batch_create_auction(request):
@@ -225,7 +225,7 @@ def batch_create_auction(request):
                             '剩余次数' not in row or \
                             '到期时间' not in row:
                         messages.error(request, "EXCEL格式错误")
-                        return render(request, 'batch_create_auction.html', {'form': form})
+                        return render(request, 'bid/batch_create_auction.html', {'form': form})
                     else:
                         description = row['标书说明']  # 描述来源
                         auction_name = row['姓名']  # 标书姓名
@@ -244,21 +244,25 @@ def batch_create_auction(request):
                             auction_list.append(auction)
                         except:
                             messages.error(request, '创建失败', extra_tags='bg-warning text-warning')
-                            return render(request, 'batch_create_auction.html', {'form': form})
+                            return render(request, 'bid/batch_create_auction.html', {'form': form})
                         try:
                             with transaction.atomic():
                                 Bid_auction.objects.bulk_create(auction_list)
                         except:
                             messages.error(request, '创建失败', extra_tags='bg-warning text-warning')
-                            return render(request, 'create_bid_auction.html', {'form': form})
+                            return render(request, 'bid/create_bid_auction.html', {'form': form})
                 messages.info(request, '批量创建成功')
-                return render(request, 'batch_create_auction.html', {'form': form})
+                return render(request, 'bid/batch_create_auction.html', {'form': form})
             else:
                 messages.error(request, "上传文件格式错误")
-                return render(request, 'batch_create_auction.html', {'form': form})
+                return render(request, 'bid/batch_create_auction.html', {'form': form})
         else:
             messages.error(request, "上传文件格式错误")
-            return render(request, 'batch_create_auction.html', {'form': form})
+            return render(request, 'bid/batch_create_auction.html', {'form': form})
     else:
         form = Batch_bid_auctionForm()
-        return render(request, 'batch_create_auction.html', {'form': form})
+        return render(request, 'bid/batch_create_auction.html', {'form': form})
+
+@login_required
+def bid_manage(request):
+    return render(request, 'bid/bid_manage.html')

@@ -12,7 +12,7 @@
         <div class="navbar-collapse collapse">
             {% if request.user.is_authenticated %}
                 <ul class="nav navbar-nav">
-                    <li><a href="/create_post">查询</a></li>
+                    <li><a href="{% url 'bid:bid_manage' %}">查询</a></li>
                     <li class="dropdown">
                         <a href="" class="dropdown-toggle" data-toggle="dropdown">
                             创建 <b class="caret"></b>

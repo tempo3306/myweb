@@ -62,7 +62,7 @@ MIDDLEWARE = [
 ##权限控制
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',  #django默认的backend
-    'guardian.backends.ObjectPermissionBackend',  #对对象的权限控制
+    # 'guardian.backends.ObjectPermissionBackend',  #对对象的权限控制
 )
 
 ROOT_URLCONF = 'myweb.urls'
@@ -99,6 +99,9 @@ DATABASES = {
         'PORT': '3306'
     }
 }
+
+
+
 
 # Password validation
 # https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators
@@ -277,3 +280,81 @@ EMAIL_HOST_PASSWORD = "tveiryfnsgxibfia"  # 密码
 EMAIL_SUBJECT_PREFIX = u'沪牌一号'  ##为邮件Subject-line前缀,默认是'[django]'
 EMAIL_USE_TLS = True
 EMAIL_FROM = "810909753@qq.com"        # 邮箱来自
+
+
+##--------------------------------------------------
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
+        },
+        'simple': {
+            'format': '%(levelname)s %(message)s'
+        },
+    },
+    # 'filters': {
+    #     'special': {
+    #         '()': 'project.logging.SpecialFilter',
+    #         'foo': 'bar',
+    #     },
+    #     'require_debug_true': {
+    #         '()': 'django.utils.log.RequireDebugTrue',
+    #     },
+    # },
+    'handlers': {
+        'console': {
+            'level': 'DEBUG',
+            # 'filters': ['require_debug_true'],
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose'
+        },
+        # 'file': {
+        #     'level': 'DEBUG',
+        #     'class': 'logging.FileHandler',
+        #     'filename': 'mylog_test.log',
+        #     'formatter': 'verbose'
+        # },
+
+        # 'mail_admins': {
+        #     'level': 'ERROR',
+        #     'class': 'django.utils.log.AdminEmailHandler',
+        #     'filters': ['special']
+        # }
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],  # console or file
+            'propagate': True,
+            'level': 'DEBUG',
+        },
+        'django.request': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+        # For performance reasons, SQL logging is only enabled when settings.DEBUG is set to True
+        # ref. https://docs.djangoproject.com/en/1.11/topics/logging/#django-db-backends
+        'django.db.backends': {
+            'handlers': ['console'],
+            'propagate': False,
+            'level': 'DEBUG',
+        },
+        # 'api.views': {
+        #     'handlers': ['console'],
+        #     'propagate': False,
+        #     'level': 'DEBUG',
+        # },
+        # 'background_task': {
+        #     'handlers': ['console'],
+        #     'level': 'DEBUG',
+        #     'propagate': True,
+        # }
+        # 'myproject.custom': {
+        #     'handlers': ['console', 'mail_admins'],
+        #     'level': 'INFO',
+        #     'filters': ['special']
+        # }
+    }
+}
