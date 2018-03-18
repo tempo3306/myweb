@@ -37,12 +37,12 @@ class Bid_auction(models.Model):
 
 ##设置为undefined可以获取pageNumber，pageSize，searchText，sortName，sortOrder
 def query_auction_by_args(params):
-    pageSize = int(params.get('pageSize', None)) ##每页数量
-    pageNumber = int(params.get('pageNumber'))  #当前页数
-    searchText = str(params.get('searchText',None))
+    pageSize = int(params.get('pageSize', None))  ##每页数量
+    pageNumber = int(params.get('pageNumber'))  # 当前页数
+    searchText = params.get('searchText', None)
     sortName = str(params.get('sortName', 'id'))
     sortOrder = str(params.get('sortOrder'))
-
+    print(searchText)
     # django orm '-' -> desc
     if sortOrder == 'desc':
         sortName = '-' + sortName
@@ -50,20 +50,27 @@ def query_auction_by_args(params):
     queryset = Bid_auction.objects.all()
     total = queryset.count()
     if searchText:
-        queryset = queryset.filter(Q(id__icontains=searchText) |
-                                   Q(song__icontains=searchText) |
-                                   Q(singer__icontains=searchText) |
-                                   Q(last_modify_date__icontains=searchText) |
-                                   Q(created__icontains=searchText))
+        queryset = queryset.filter(
+            Q(id__icontains=searchText) |
+            Q(auction_name__icontains = searchText) |
+            Q(description__icontains=searchText) |
+            Q(ID_number__icontains=searchText) |
+            Q(Bid_number__icontains=searchText) |
+            Q(Bid_password__icontains=searchText) |
+            Q(status__icontains=searchText) |
+            Q(count__icontains=searchText) |
+            Q(expired_date__icontains=searchText))
 
     count = queryset.count()
-    start = (pageNumber-1) * pageSize
+    start = (pageNumber - 1) * pageSize
     queryset = queryset.order_by(sortName)[start:start + pageSize]
     return {
         'items': queryset,
         'count': count,
         'total': total,
     }
+
+
 ##根据url参数获取query结果
 def query_auction_by_url(params):
     id_list = params.get('id')

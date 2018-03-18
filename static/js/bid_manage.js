@@ -4,7 +4,7 @@
 var tempdata = []; //当前选中行数据
 var tempid = [];
 var type = 'add';
-var manage_url = "../bid/bid_auction_manage/"
+var manage_url = "../bid/bid_auction_manage/";
 
 function initTable() {
     //先销毁表格
@@ -14,6 +14,7 @@ function initTable() {
         method: "get",  //使用get请求到服务器获取数据
         url: manage_url, //获取数据的地址
         striped: true,  //表格显示条纹
+        height: 800,
         toolbar: "#toolbar",                   //工具按钮用哪个容器
         pagination: true, //启动分页
         pageSize: 10,  //每页显示的记录数
@@ -28,6 +29,9 @@ function initTable() {
         queryParamsType: "undefined",
         clickToSelect: true, //设置 true 将在点击行时，自动选择 rediobox 和 checkbox。
         uniqueId: "id",                     //每一行的唯一标识，一般为主键列
+        exportDataType: 'all',
+        showExport: true,
+        export: 'glyphicon-export icon-share',  //导出
         columns: [
             {checkbox: true},  //选择器
             {

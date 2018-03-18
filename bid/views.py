@@ -280,6 +280,7 @@ def Bid_auction_manage(request):
     """
     Retrieve, update or delete a code snippet. """
     if request.method == 'GET':
+        query_auction_by_args(request.GET)
         try:
             auctions = query_auction_by_args(request.GET)
             serializer = Bid_auctionSerializer(auctions['items'], many=True)
