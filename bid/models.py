@@ -35,10 +35,6 @@ class Bid_auction(models.Model):
         db_table = "bid_auction"
 
 
-Bid_auction_ORDER_COLUMN_CHOICES = Choices(
-    ('0', 'id'),
-)
-
 ##设置为undefined可以获取pageNumber，pageSize，searchText，sortName，sortOrder
 def query_auction_by_args(params):
     pageSize = int(params.get('pageSize', None)) ##每页数量
@@ -68,6 +64,13 @@ def query_auction_by_args(params):
         'count': count,
         'total': total,
     }
+##根据url参数获取query结果
+def query_auction_by_url(params):
+    id_list = params.get('id')
+    print(id_list)
+    queryset = Bid_auction.objects.filter(id__in=id_list)
+    print("queryset", queryset)
+    return queryset
 
 
 # 基础策略

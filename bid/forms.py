@@ -58,7 +58,7 @@ class Bid_auctionForm(forms.Form):
     Bid_password = forms.CharField(label="标书密码", widget=forms.widgets.NumberInput(attrs={'class': 'form-control'})) #密码
     status = forms.CharField(label="标书状态", widget=forms.widgets.Select(choices=status_data, attrs={'class': 'form-control'}), initial=("正常","正常")
                              ) #标书状态
-    count = forms.IntegerField(label="剩余次数", widget=forms.widgets.Select(choices=count_num, attrs={'class': 'form-control'}), initial=(6,6)) #参拍次数
+    count = forms.IntegerField(label="参拍次数", widget=forms.widgets.Select(choices=count_num, attrs={'class': 'form-control'}), initial=(6,6)) #参拍次数
     init_date = date(year=2018, month=1, day=1)
     expired_date = forms.DateField(label="过期时间", widget=DateSelectorWidget(), initial=init_date) #过期时间
 

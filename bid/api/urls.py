@@ -7,7 +7,7 @@
 from django.conf.urls import url, include
 from rest_framework import routers
 from .views import Bid_handerViewSet, Bid_actionViewSet, Bid_auctionViewSet, Bid_auction_serversideViewSet
-
+import bid.api.views as views
 hander_router =  routers.DefaultRouter()
 hander_router.register(r'', Bid_handerViewSet)
 action_router =  routers.DefaultRouter()
@@ -21,5 +21,6 @@ urlpatterns = [
     url('^hander', include(hander_router.urls)),
     url('^action', include(action_router.urls)),
     url('^auction', include(auction_router.urls)),
-    url('^auction_serverside', include(auction_serverside_router.urls))
+    url('^auction_serverside', include(auction_serverside_router.urls)),
+    url('^bid_auction_manage/$', views.Bid_auction_manage, name='api_bid_auction_manage'),
 ]

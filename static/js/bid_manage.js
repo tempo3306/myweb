@@ -1,15 +1,24 @@
+/**
+ * 初始化主表格的事件绑定
+ */
+var tempdata = []; //当前选中行数据
+var tempid = [];
+var type = 'add';
+var manage_url = "../bid/bid_auction_manage/"
+
 function initTable() {
     //先销毁表格
     $('#table').bootstrapTable('destroy');
     //初始化表格,动态从服务器加载数据
     $("#table").bootstrapTable({
         method: "get",  //使用get请求到服务器获取数据
-        url: "../api/bid/auction_serverside", //获取数据的Servlet地址
+        url: manage_url, //获取数据的地址
         striped: true,  //表格显示条纹
+        toolbar: "#toolbar",                   //工具按钮用哪个容器
         pagination: true, //启动分页
         pageSize: 10,  //每页显示的记录数
         pageNumber: 1, //当前第几页
-        pageList: [5, 10, 15, 20, 25],  //记录数可选列表
+        pageList: [10, 25, 50, 100],        //可供选择的每页的行数（*）
         search: true,  //是否启用查询
         showColumns: true,  //显示下拉框勾选要显示的列
         showRefresh: true,  //显示刷新按钮
@@ -17,18 +26,49 @@ function initTable() {
         //设置为undefined可以获取pageNumber，pageSize，searchText，sortName，sortOrder
         //设置为limit可以获取limit, offset, search, sort, order
         queryParamsType: "undefined",
-        // columns: createCols(queryParams, ['id','name','price'], hasCheckbox),
+        clickToSelect: true, //设置 true 将在点击行时，自动选择 rediobox 和 checkbox。
+        uniqueId: "id",                     //每一行的唯一标识，一般为主键列
+        columns: [
+            {checkbox: true},  //选择器
+            {
+                field: 'id',
+                title: 'ID',
+                sortable: true,
+            },
+            {
+                field: 'description',
+                title: '描述'
+            },
+            {
+                field: 'auction_name',
+                title: '标书姓名'
+            },
+            {
+                field: 'ID_number',
+                title: '身份证号'
+            },
+            {
+                field: 'Bid_number',
+                title: '标书号'
+            },
+            {
+                field: 'Bid_password',
+                title: '标书密码'
+            },
+            {
+                field: 'status',
+                title: '状态'
+            },
+            {
+                field: 'count',
+                title: '参拍次数'
+            },
+            {
+                field: 'expired_date',
+                title: '过期时间'
+            },
 
-        columns: [{
-            field: 'id',
-            title: 'Item ID'
-        }, {
-            field: 'description',
-            title: '描述'
-        }, {
-            field: 'auction_name',
-            title: '姓名'
-        },]
+        ]
 
         // queryParams: function queryParams(params) {   //设置查询参数
         //     var param = {
@@ -47,87 +87,130 @@ function initTable() {
     });
 }
 
+
+//调用函数，初始化表格
 $(document).ready(function () {
     //调用函数，初始化表格
     initTable();
-
     //当点击查询按钮的时候执行
     $("#search").bind("click", initTable);
 });
 
 
-function createBootstrapTable() {
-    function init(table, url, params, titles, hasCheckbox, toolbar) {
-        $(table).bootstrapTable({
-            url: url,                           //请求后台的URL（*）
-            method: 'get',                     //请求方式（*）
-            toolbar: toolbar,                   //工具按钮用哪个容器
-            striped: true,                      //是否显示行间隔色
-            cache: false,                       //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
-            pagination: true,                   //是否显示分页（*）
-            sortable: false,                    //是否启用排序
-            sortOrder: "asc",                   //排序方式
-            queryParams: queryParams,           //传递参数（*），这里应该返回一个object，即形如{param1:val1,param2:val2}
-            sidePagination: "server",           //分页方式：client客户端分页，server服务端分页（*）
-            pageNumber: 1,                       //初始化加载第一页，默认第一页
-            pageSize: 20,                       //每页的记录行数（*）
-            pageList: [20, 50, 100],            //可供选择的每页的行数（*）
-            search: true,                       //是否显示表格搜索，此搜索是客户端搜索，不会进服务端，所以，个人感觉意义不大
-            strictSearch: true,
-            showColumns: true,                  //是否显示所有的列
-            showRefresh: true,                  //是否显示刷新按钮
-            minimumCountColumns: 2,             //最少允许的列数
-            clickToSelect: true,                //是否启用点击选中行
-            //height: 500,                      //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
-            uniqueId: "ID",                     //每一行的唯一标识，一般为主键列
-            showToggle: true,                    //是否显示详细视图和列表视图的切换按钮
-            cardView: false,                    //是否显示详细视图
-            detailView: false,                  //是否显示父子表
+//实现增删改查
+$('#btn_add').on('click', function () {
+    // $('#description').val('');
+    // $('#auction_name').val('');
+    // $('#ID_number').val('');
+    // $('#Bid_number').val('');
+    // $('#Bid_password').val('');
+    // $('#status').val('');
+    // $('#count').val('');
+    // $('#expired_date').val('');
+    $('#auctionModal').modal();
+    type = 'add'; //添加窗口
+});
 
-            columns: createCols(params, titles, hasCheckbox),
-            data: [{
-                id: 1,
-                name: 'Item 1',
-                price: '$1'
-            }, {
-                id: 2,
-                name: 'Item 2',
-                price: '$2'
-            }]
+$('#btn_edit').on('click', function () {
+    tempdata = $('#table').bootstrapTable('getSelections'); //获取获取删除的表单
+    if (tempdata === undefined || tempdata.length == 0) {  //未选择
+        $('#noselection_warning').modal();
+    }
+    else if (tempdata.length > 1) {
+        $('#toomuch_selection_warning').modal();
+    }
+    else {
+        tempdata = tempdata[0];
+        $('#description').val(tempdata['description']);
+        $('#auction_name').val(tempdata['auction_name']);
+        $('#ID_number').val(tempdata['ID_number']);
+        $('#Bid_number').val(tempdata['Bid_number']);
+        $('#Bid_password').val(tempdata['Bid_password']);
+        $('#status').val(tempdata['status']);
+        $('#count').val(tempdata['count']);
+        $('#expired_date').val(tempdata['expired_date']);
+        type = 'edit'; //添加窗口
+        $('#auctionModal').modal();
+    }
+});
+
+$('#btn_delete').on('click', function () {
+    tempdata = $('#table').bootstrapTable('getSelections'); //获取获取删除的表单
+    console.log(tempdata);
+    if (tempdata === undefined || tempdata.length == 0) {  //未选择
+        $('#noselection_warning').modal();
+    }
+    else {
+        $('#delete_confirm').modal();
+        tempid = [];
+        for (j = 0, len = tempdata.length; j < len; j++) {
+            tempid.push(tempdata[j]['id']);
+        }
+        tempdata = {'id': tempid};
+    }
+});
+
+$('#delete_confirm').on('click', '#delete', function () {
+    tempdata = JSON.stringify(tempdata);
+    $.ajax({
+        url: manage_url + '?data=' + tempdata, //获取数据的地址
+        method: 'DELETE',
+    }).success(function (data, textStatus, jqXHR) {
+        $('#auctionModal').close;
+        initTable();
+        // location.reload();
+    }).error(function (jqXHR, textStatus, errorThrown) {
+        console.log(jqXHR)
+    });
+});
+
+
+$('#auctionModal').on('click', '#confirm', function () {
+    var id = tempdata['id'];
+    if (type == 'edit') {
+        tempdata = $('#auction_form').serialize();
+        $.ajax({
+            url: manage_url + "?id=" + id + '&' + tempdata + '/',
+            method: 'put',
+        }).success(function (data, textStatus, jqXHR) {
+            initTable();
+        }).error(function (jqXHR, textStatus, errorThrown) {
+            console.log(jqXHR)
         });
     }
-
-    function createCols(params, titles, hasCheckbox) {
-        if (params.length != titles.length)
-            return null;
-        var arr = [];
-        if (hasCheckbox) {
-            var objc = {};
-            objc.checkbox = true;
-            arr.push(objc);
-        }
-        for (var i = 0; i < params.length; i++) {
-            var obj = {};
-            obj.field = params[i];
-            obj.title = titles[i];
-            arr.push(obj);
-        }
-        return arr;
+    else if (type == 'add') {
+        tempdata = $('#auction_form').serialize();
+        $.ajax({
+            url: manage_url,
+            method: 'post',
+            data: tempdata,
+        }).success(function (data, textStatus, jqXHR) {
+            initTable();
+        }).error(function (jqXHR, textStatus, errorThrown) {
+            console.log(jqXHR)
+        });
     }
+});
 
-    //可发送给服务端的参数：limit->pageSize,offset->pageNumber,search->searchText,sort->sortName(字段),order->sortOrder('asc'或'desc')
-    function queryParams(params) {
-        return {   //这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
-            limit: params.limit,   //页面大小
-            offset: params.offset  //页码
-            //name: $("#txt_name").val()//关键字查询
-        };
-    }
+//csrf
+$(function () {
+    $.ajaxSetup({
+        headers: {"X-CSRFToken": getCookie("csrftoken")}
+    });
+});
 
-    // 传'#table'
-    createBootstrapTable = function (table, url, params, titles, hasCheckbox, toolbar) {
-        init(table, url, params, titles, hasCheckbox, toolbar);
-    }
+//获取cookie
+function getCookie(name) {
+    var arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+
+    if (arr = document.cookie.match(reg))
+
+        return unescape(arr[2]);
+    else
+        return null;
 }
 
-// createBootstrapTable('#table','',['id','name','price'],['Item ID','Item Name!','Item Price!'],true,'#toolbar');
+
+
+
+

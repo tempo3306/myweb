@@ -10,6 +10,11 @@ import os,xlrd,json
 from django.http import HttpResponse
 from django.contrib.auth import login, authenticate
 from .models import Bid_hander
+from django.http import HttpResponse, Http404
+from bid.models import query_auction_by_url, query_auction_by_args
+from bid.api.serializers import Bid_auctionSerializer, Bid_actionSerializer
+from django import template
+from django.template import RequestContext
 
 
 #创建策略
@@ -222,7 +227,7 @@ def batch_create_auction(request):
                             '标书号' not in row or \
                             '标书密码' not in row or \
                             '状态' not in row or \
-                            '剩余次数' not in row or \
+                            '参拍次数' not in row or \
                             '到期时间' not in row:
                         messages.error(request, "EXCEL格式错误")
                         return render(request, 'bid/batch_create_auction.html', {'form': form})
@@ -233,7 +238,7 @@ def batch_create_auction(request):
                         Bid_number = row['标书号']  # 标书号
                         Bid_password = row['标书密码']  # 密码
                         status = row['状态']  # 标书状态
-                        count = int(row['剩余次数'])  # 参拍次数
+                        count = int(row['参拍次数'])  # 参拍次数
                         expired_date = row['到期时间']  # 过期时间
                         sid = transaction.savepoint()  # 开启SQL事务
                         try:
@@ -265,4 +270,53 @@ def batch_create_auction(request):
 
 @login_required
 def bid_manage(request):
+
     return render(request, 'bid/bid_manage.html')
+
+
+
+@login_required
+def Bid_auction_manage(request):
+    """
+    Retrieve, update or delete a code snippet. """
+    if request.method == 'GET':
+        try:
+            auctions = query_auction_by_args(request.GET)
+            serializer = Bid_auctionSerializer(auctions['items'], many=True)
+            result = dict()
+            result['rows'] = serializer.data
+            result['total'] = auctions['total']
+            return HttpResponse(json.dumps(result), content_type="application/json")
+        except:
+            return HttpResponse(status=404)
+    elif request.method == 'PUT':
+        data = request.GET
+        print(data)
+        try:
+            pk = data.get('id')
+            serializer = Bid_auction.objects.get(pk=pk)
+            serializer = Bid_auctionSerializer(serializer, data=data)
+            if serializer.is_valid():
+                serializer.save()
+            return HttpResponse(status=204)
+        except :
+            return HttpResponse(status=404)
+    elif request.method == 'DELETE':
+        print(request.GET)
+        try:
+            data = request.GET.get('data')
+            data = json.loads(data)  ##转json
+            print(data)
+            auctions = query_auction_by_url(data)
+            auctions.delete()
+            return HttpResponse(status=204)
+        except:
+            return HttpResponse(status=404)
+    elif request.method == 'POST':
+        data = request.POST
+        serializer = Bid_auctionSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+        return HttpResponse(status=204)
+    else:
+        return HttpResponse(status=404)
