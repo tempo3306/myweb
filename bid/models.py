@@ -74,9 +74,7 @@ def query_auction_by_args(params):
 ##根据url参数获取query结果
 def query_auction_by_url(params):
     id_list = params.get('id')
-    print(id_list)
     queryset = Bid_auction.objects.filter(id__in=id_list)
-    print("queryset", queryset)
     return queryset
 
 
@@ -95,3 +93,47 @@ class Bid_action(models.Model):
     def __str__(self):
         return '{0}秒加{1}提前{2}延迟{3}秒，截止时间{4}秒'.format(self.refer_time, self.diff, self.ahead_price,
                                                      self.delay_time, self.bid_time)
+
+
+
+##设置为undefined可以获取pageNumber，pageSize，searchText，sortName，sortOrder
+def query_action_by_args(params):
+    pageSize = int(params.get('pageSize', None))  ##每页数量
+    pageNumber = int(params.get('pageNumber'))  # 当前页数
+    searchText = params.get('searchText', None)
+    sortName = str(params.get('sortName', 'id'))
+    sortOrder = str(params.get('sortOrder'))
+    print(params)
+    # django orm '-' -> desc
+    if sortOrder == 'desc':
+        sortName = '-' + sortName
+
+    queryset = Bid_action.objects.all()
+    total = queryset.count()
+    if searchText:
+        queryset = queryset.filter(
+            Q(id__icontains=searchText) |
+            Q(refer_time__icontains = searchText) |
+            Q(bid_time__icontains=searchText) |
+            Q(delay_time__icontains=searchText) |
+            Q(ahead_price__icontains=searchText) |
+            Q(hander_id__icontains=searchText) |
+            Q(action_date__icontains=searchText) |
+            Q(auction_id__icontains=searchText) |
+            Q(action_result__icontains=searchText))
+
+    count = queryset.count()
+    start = (pageNumber - 1) * pageSize
+    queryset = queryset.order_by(sortName)[start:start + pageSize]
+    return {
+        'items': queryset,
+        'count': count,
+        'total': total,
+    }
+
+
+##根据url参数获取query结果
+def query_action_by_url(params):
+    id_list = params.get('id')
+    queryset = Bid_action.objects.filter(id__in=id_list)
+    return queryset

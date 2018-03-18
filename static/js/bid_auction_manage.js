@@ -29,9 +29,12 @@ function initTable() {
         queryParamsType: "undefined",
         clickToSelect: true, //设置 true 将在点击行时，自动选择 rediobox 和 checkbox。
         uniqueId: "id",                     //每一行的唯一标识，一般为主键列
-        exportDataType: 'all',
-        showExport: true,
-        export: 'glyphicon-export icon-share',  //导出
+        detailView: 'true',
+
+
+        // exportDataType: 'all',
+        // showExport: true,
+        // export: 'glyphicon-export icon-share',  //导出
         columns: [
             {checkbox: true},  //选择器
             {

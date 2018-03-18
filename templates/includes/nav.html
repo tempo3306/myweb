@@ -12,7 +12,17 @@
         <div class="navbar-collapse collapse">
             {% if request.user.is_authenticated %}
                 <ul class="nav navbar-nav">
-                    <li><a href="{% url 'bid:bid_manage' %}">查询</a></li>
+                    <li class="dropdown">
+                        <a href="" class="dropdown-toggle" data-toggle="dropdown">
+                            管理 <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="{% url 'bid:manage_bid_auction' %}" target="_self">标书</a></li>
+                            <li><a href="{% url 'bid:manage_bid_action' %}" target="_self">策略</a></li>
+                            <li><a href="{% url 'bid:manage_bid_hander' %}" target="_self">拍手</a></li>
+                        </ul>
+                    </li>
+
                     <li class="dropdown">
                         <a href="" class="dropdown-toggle" data-toggle="dropdown">
                             创建 <b class="caret"></b>

@@ -11,7 +11,7 @@ from django.http import HttpResponse
 from django.contrib.auth import login, authenticate
 from .models import Bid_hander
 from django.http import HttpResponse, Http404
-from bid.models import query_auction_by_url, query_auction_by_args
+from bid.models import query_auction_by_url, query_auction_by_args, query_action_by_args, query_action_by_url
 from bid.api.serializers import Bid_auctionSerializer, Bid_actionSerializer
 from django import template
 from django.template import RequestContext
@@ -269,9 +269,16 @@ def batch_create_auction(request):
         return render(request, 'bid/batch_create_auction.html', {'form': form})
 
 @login_required
-def bid_manage(request):
+def manage_bid_auction(request):
+    return render(request, 'bid/manage_bid_auction.html')
 
-    return render(request, 'bid/bid_manage.html')
+@login_required
+def manage_bid_action(request):
+    return render(request, 'bid/manage_bid_action.html')
+
+@login_required
+def manage_bid_hander(request):
+    return render(request, 'bid/manage_bid_hander.html')
 
 
 
@@ -280,7 +287,6 @@ def Bid_auction_manage(request):
     """
     Retrieve, update or delete a code snippet. """
     if request.method == 'GET':
-        query_auction_by_args(request.GET)
         try:
             auctions = query_auction_by_args(request.GET)
             serializer = Bid_auctionSerializer(auctions['items'], many=True)
@@ -316,6 +322,61 @@ def Bid_auction_manage(request):
     elif request.method == 'POST':
         data = request.POST
         serializer = Bid_auctionSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+        return HttpResponse(status=204)
+    else:
+        return HttpResponse(status=404)
+
+
+@login_required
+def Bid_action_manage(request):
+    """
+    Retrieve, update or delete a code snippet. """
+    if request.method == 'GET':
+        actions = query_action_by_args(request.GET)
+        print(actions)
+        serializer = Bid_actionSerializer(actions['items'], many=True)
+        result = dict()
+        result['rows'] = serializer.data
+        result['total'] = actions['total']
+        return HttpResponse(json.dumps(result), content_type="application/json")
+        try:
+            actions = query_action_by_args(request.GET)
+            serializer = Bid_actionSerializer(actions['items'], many=True)
+            result = dict()
+            result['rows'] = serializer.data
+            result['total'] = actions['total']
+            return HttpResponse(json.dumps(result), content_type="application/json")
+        except:
+            return HttpResponse(status=404)
+
+
+    elif request.method == 'PUT':
+        data = request.GET
+        print(data)
+        try:
+            pk = data.get('id')
+            serializer = Bid_action.objects.get(pk=pk)
+            serializer = Bid_actionSerializer(serializer, data=data)
+            if serializer.is_valid():
+                serializer.save()
+            return HttpResponse(status=204)
+        except :
+            return HttpResponse(status=404)
+    elif request.method == 'DELETE':
+        try:
+            data = request.GET.get('data')
+            data = json.loads(data)  ##转json
+            print(data)
+            actions = query_action_by_url(data)
+            actions.delete()
+            return HttpResponse(status=204)
+        except:
+            return HttpResponse(status=404)
+    elif request.method == 'POST':
+        data = request.POST
+        serializer = Bid_actionSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
         return HttpResponse(status=204)
