@@ -22,113 +22,120 @@
 
         <table id="table"></table>
 
-        <!-- NEW and EDIT Modal -->
-        <div class="modal fade" id="auctionModal" role="dialog">
-            <div class="modal-dialog">
-                <!-- Modal content-->
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title" id="modal_title"></h4>
-                    </div>
-                    <div class="modal-body">
-                        <form id="auction_form"> {% csrf_token %}
-                            <div class="form-group">
-                                <label for="song"><span class="glyphicon glyphicon-pencil"></span> 说明 </label>
-                                <input type="text" class="form-control" id="description" name="description"
-                                       placeholder="输入描述"
-                                       required="true">
-                            </div>
-                            <div class="form-group">
-                                <label for="singer"><span class="glyphicon glyphicon-file"></span> 姓名 </label>
-                                <input type="text" class="form-control" id="auction_name" name="auction_name"
-                                       placeholder="输入标书姓名" required="true">
-                            </div>
-                            <div class="form-group">
-                                <label for="singer"><span class="glyphicon glyphicon-file"></span> 身份证号 </label>
-                                <input type="text" class="form-control" id="ID_number" name="ID_number"
-                                       placeholder="输入18位身份证号" required="true">
-                            </div>
-
-                            <div class="form-group">
-                                <label for="singer"><span class="glyphicon glyphicon-file"></span> 标书号 </label>
-                                <input type="text" class="form-control" id="Bid_number" name="Bid_number"
-                                       placeholder="输入8位标书号" required="true">
-                            </div>
-                            <div class="form-group">
-                                <label for="singer"><span class="glyphicon glyphicon-file"></span> 标书密码</label>
-                                <input type="text" class="form-control" id="Bid_password" name="Bid_password"
-                                       placeholder="输入标书密码" required="true">
-                            </div>
-                            <div class="form-group">
-                                <label for="singer"><span class="glyphicon glyphicon-file"></span> 状态 </label>
-                                <input type="text" class="form-control" id="status" name="status"
-                                       placeholder="输入当前标书状态" required="true">
-                            </div>
-                            <div class="form-group">
-                                <label for="singer"><span class="glyphicon glyphicon-file"></span> 参拍次数 </label>
-                                <input type="text" class="form-control" id="count" name="count"
-                                       placeholder="输入参拍次数 " required="true">
-                            </div>
-                            <div class="form-group">
-                                <label for="singer"><span class="glyphicon glyphicon-file"></span> 过期时间 </label>
-                                <input type="text" class="form-control" id="expired_date" name="expired_date"
-                                       placeholder="输入过期时间" required="true">
-                            </div>
-                            <input type="hidden" id="type" name="type" value="">
-                            <button type="button" data-dismiss="modal" class="btn btn-success btn-block" id="confirm">
-                                提交
-                            </button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Delete Modal -->
-        <div class="modal fade" id="delete_confirm" role="dialog">
-            <div class="modal-dialog">
-                <!-- Modal content-->
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title">Are you sure?</h4>
-                    </div>
-                    <div class="modal-body">
-                        <button type="button" data-dismiss="modal" class="btn btn-primary" id="delete">Delete</button>
-                        <button type="button" data-dismiss="modal" class="btn">Cancel</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="modal fade" id="noselection_warning" role="dialog">
-            <div class="modal-dialog">
-                <!-- Modal content-->
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title">你还没选中任何目标</h4>
-                    </div>
-                    <div class="modal-body">
-                        <button type="button" data-dismiss="modal" class="btn">确认</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="modal fade" id="toomuch_selection_warning" role="dialog">
-            <div class="modal-dialog">
-                <!-- Modal content-->
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title">你选中了多个操作目标</h4>
-                    </div>
-                    <div class="modal-body">
-                        <button type="button" data-dismiss="modal" class="btn">确认</button>
-                    </div>
-                </div>
-            </div>
-        </div>
 
     </div>
 
+
+    <!-- NEW and EDIT Modal -->
+    <div class="modal fade" id="auctionModal" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="modal_title"></h4>
+                </div>
+                <div class="modal-body">
+                    <form id="auction_form"> {% csrf_token %}
+                        <div class="form-group">
+                            <label for="description"><span class="glyphicon glyphicon-pencil"></span> 说明 </label>
+                            <input type="text" class="form-control" id="description" name="description"
+                                   placeholder="输入描述"
+                                   required="true">
+                        </div>
+                        <div class="form-group">
+                            <label for="auction_name"><span class="glyphicon glyphicon-file"></span> 姓名 </label>
+                            <input type="text" class="form-control" id="auction_name" name="auction_name"
+                                   placeholder="输入标书姓名" required="true">
+                        </div>
+                        <div class="form-group">
+                            <label for="ID_number"><span class="glyphicon glyphicon-file"></span> 身份证号 </label>
+                            <input type="text" class="form-control" id="ID_number" name="ID_number"
+                                   placeholder="输入18位身份证号" required="true">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="Bid_number"><span class="glyphicon glyphicon-file"></span> 标书号 </label>
+                            <input type="text" class="form-control" id="Bid_number" name="Bid_number"
+                                   placeholder="输入8位标书号" required="true">
+                        </div>
+                        <div class="form-group">
+                            <label for="Bid_password"><span class="glyphicon glyphicon-file"></span> 标书密码</label>
+                            <input type="text" class="form-control" id="Bid_password" name="Bid_password"
+                                   placeholder="输入标书密码" required="true">
+                        </div>
+                        <div class="form-group">
+                            <label for="status"><span class="glyphicon glyphicon-file"></span> 状态 </label>
+                            <input type="text" class="form-control" id="status" name="status"
+                                   placeholder="输入当前标书状态" required="true">
+                        </div>
+                        <div class="form-group">
+                            <label for="count"><span class="glyphicon glyphicon-file"></span> 参拍次数 </label>
+                            <select id="count" size="20" class="selectpicker" data-live-search="true" value="0">
+                                <option>0</option>
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                                <option>5</option>
+                                <option>6</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="expired_date"><span class="glyphicon glyphicon-file"></span> 过期时间 </label>
+                            <input size="20" type="text" value="2018-07-31" class="form_datetime" name="expired_date" readonly>
+                        </div>
+                        <input type="hidden" id="type" name="type" value="">
+                        <button type="button" data-dismiss="modal" class="btn btn-success btn-block" id="confirm">
+                            提交
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Modal -->
+    <div class="modal fade" id="delete_confirm" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Are you sure?</h4>
+                </div>
+                <div class="modal-body">
+                    <button type="button" data-dismiss="modal" class="btn btn-primary" id="delete">Delete</button>
+                    <button type="button" data-dismiss="modal" class="btn">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="noselection_warning" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">你还没选中任何目标</h4>
+                </div>
+                <div class="modal-body">
+                    <button type="button" data-dismiss="modal" class="btn">确认</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="toomuch_selection_warning" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">你选中了多个操作目标</h4>
+                </div>
+                <div class="modal-body">
+                    <button type="button" data-dismiss="modal" class="btn">确认</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 {% endblock %}
 

@@ -12,6 +12,7 @@ from uuslug import slugify
 class Board(models.Model):
     name = models.CharField(max_length=30, unique=True)
     description = models.CharField(max_length=100)
+    board_headimage = models.ImageField(upload_to='user_image', default='user_image/normal.jpg') #论坛版块头像
 
     def __str__(self):
         return self.name
@@ -110,6 +111,7 @@ class ForumUser(models.Model):
     nickname = models.CharField(max_length=30, unique=True)
     photo = models.ImageField(upload_to='users/%Y/%m/%d', blank=True, verbose_name='头像')
     signature = models.CharField(max_length=30, blank=True, verbose_name='个性签名')
+    gender = models.IntegerField(default=-1) ##0代表男性， 1代表女性， -1代表未设定
     #论坛活动数据
     total_topic = models.PositiveIntegerField(default=0, verbose_name='总帖子')
     total_post = models.PositiveIntegerField(default=0, verbose_name='总回复')

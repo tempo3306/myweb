@@ -104,6 +104,101 @@ $(document).ready(function () {
 });
 
 
+//验证表单
+$(document).ready(function () {
+    /**
+     * 下面是进行插件初始化
+     * 你只需传入相应的键值对
+     * */
+    $('#auction_form').bootstrapValidator({
+        message: 'This value is not valid',
+        feedbackIcons: {
+            /*输入框不同状态，显示图片的样式*/
+            valid: 'glyphicon glyphicon-ok',
+            invalid: 'glyphicon glyphicon-remove',
+            validating: 'glyphicon glyphicon-refresh'
+        },
+        fields: {
+            /*验证*/
+            description: {
+                /*键名username和input name值对应*/
+                message: '无效的说明',
+                validators: {
+                    notEmpty: {
+                        /*非空提示*/
+                        message: '标书说明不能为空'
+                    },
+                    stringLength: {
+                        /*长度提示*/
+                        min: 2,
+                        max: 30,
+                        message: '用户名长度必须在2到30之间'
+                    }/*最后一个没有逗号*/
+                }
+            },
+            auction_name: {
+                /*键名username和input name值对应*/
+                message: '无效的标书姓名',
+                validators: {
+                    notEmpty: {
+                        /*非空提示*/
+                        message: '标书说明不能为空'
+                    },
+                    stringLength: {
+                        /*长度提示*/
+                        min: 2,
+                        max: 4,
+                        message: '用户名长度必须在2到4之间'
+                    }/*最后一个没有逗号*/
+                }
+            },
+            ID_number: {
+                /*键名username和input name值对应*/
+                message: '无效的身份证号',
+                validators: {
+                    notEmpty: {
+                        /*非空提示*/
+                        message: '身份证号不能为空'
+                    },
+                    regexp: {//正则验证
+                        regexp: /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/,  //身份证号15位，18位
+                        message: '所输入的身份证号不符要求'
+                    },
+                }
+            },
+            Bid_number: {
+                /*键名username和input name值对应*/
+                message: '无效的标书号',
+                validators: {
+                    notEmpty: {
+                        /*非空提示*/
+                        message: '标书号不能为空'
+                    },
+                    regexp: {//正则验证
+                        regexp: /^\d{8}$/,  //8位数字
+                        message: '所输入的标书号不符要求'
+                    },
+                }
+            },
+            Bid_password: {
+                /*键名username和input name值对应*/
+                message: '无效的标书密码',
+                validators: {
+                    notEmpty: {
+                        /*非空提示*/
+                        message: '标书密码不能为空'
+                    },
+                    regexp: {//正则验证
+                        regexp: /^\d{4}$/,  //8位数字
+                        message: '所输入的标书密码不符要求'
+                    },
+                }
+            },
+        },
+    });
+});
+
+
 //实现增删改查
 $('#btn_add').on('click', function () {
     // $('#description').val('');
@@ -172,30 +267,36 @@ $('#delete_confirm').on('click', '#delete', function () {
 });
 
 
-$('#auctionModal').on('click', '#confirm', function () {
-    var id = tempdata['id'];
-    if (type == 'edit') {
-        tempdata = $('#auction_form').serialize();
-        $.ajax({
-            url: manage_url + "?id=" + id + '&' + tempdata + '/',
-            method: 'put',
-        }).success(function (data, textStatus, jqXHR) {
-            initTable();
-        }).error(function (jqXHR, textStatus, errorThrown) {
-            console.log(jqXHR)
-        });
-    }
-    else if (type == 'add') {
-        tempdata = $('#auction_form').serialize();
-        $.ajax({
-            url: manage_url,
-            method: 'post',
-            data: tempdata,
-        }).success(function (data, textStatus, jqXHR) {
-            initTable();
-        }).error(function (jqXHR, textStatus, errorThrown) {
-            console.log(jqXHR)
-        });
+$("#confirm").click(function () {
+    var bv = $("#auction_form").data('bootstrapValidator');
+    bv.validate();
+    if (bv.isValid()) {
+        var id = tempdata['id'];
+        alert("yes");//验证成功后的操作，如ajax
+        if (type == 'edit') {
+            tempdata = $('#auction_form').serialize();
+            count = $('#count').val();
+            $.ajax({
+                url: manage_url + "?id=" + id + '&' + tempdata + '&count=' + count,
+                method: 'put',
+            }).success(function (data, textStatus, jqXHR) {
+                initTable();
+            }).error(function (jqXHR, textStatus, errorThrown) {
+                console.log(jqXHR)
+            });
+        }
+        else if (type == 'add') {
+            tempdata = $('#auction_form').serialize();
+            $.ajax({
+                url: manage_url,
+                method: 'post',
+                data: tempdata,
+            }).success(function (data, textStatus, jqXHR) {
+                initTable();
+            }).error(function (jqXHR, textStatus, errorThrown) {
+                console.log(jqXHR)
+            });
+        }
     }
 });
 
@@ -217,6 +318,116 @@ function getCookie(name) {
         return null;
 }
 
+
+function getschoolList() {//获取下拉学校列表
+    $.ajax({
+        url: "/eschool/viewEschoolList",//写你自己的方法，返回map，我返回的map包含了两个属性：data：集合，total：集合记录数量，所以后边会有data.data的写法。。。
+// 数据发送方式
+        type: "get",
+// 接受数据格式
+        dataType: "json",
+// 要传递的数据
+        data: 'data',
+// 回调函数，接受服务器端返回给客户端的值，即result值
+        success: function (data) {
+//alert(data.data);
+
+            $.each(data.data, function (i) {
+//                    alert(i);
+//                    $("<option value='" + data.data[i].schoolno + "'>" + data.data[i].schoolname + "</option>")
+//                        .appendTo("#schoolno.selectpicker");
+                $('#schoolno.selectpicker').append("<option value=" + data.data[i].schoolno + ">" + data.data[i].schoolname + "</option>");
+            });
+            $('#schoolno').selectpicker('refresh');
+
+        },
+
+        error: function (data) {
+
+            alert("查询学校失败" + data);
+
+        }
+    })
+
+}
+
+
+///日期
+$(".form_datetime").datetimepicker({
+    format: 'yyyy-mm-dd',//显示格式
+    todayHighlight: 1,//今天高亮
+    minView: "month",//设置只显示到月份
+    startView: 2,
+    forceParse: 0,
+    showMeridian: 1,
+    autoclose: 1//选择后自动关闭
+});
+
+
+/////参考
+
+
+$(function () {
+    $("#form-test").bootstrapValidator({
+        live: 'disabled',//验证时机，enabled是内容有变化就验证（默认），disabled和submitted是提交再验证
+        excluded: [':disabled', ':hidden', ':not(:visible)'],//排除无需验证的控件，比如被禁用的或者被隐藏的
+        submitButtons: '#btn-test',//指定提交按钮，如果验证失败则变成disabled，但我没试成功，反而加了这句话非submit按钮也会提交到action指定页面
+        message: '通用的验证失败消息',//好像从来没出现过
+        feedbackIcons: {//根据验证结果显示的各种图标
+            valid: 'glyphicon glyphicon-ok',
+            invalid: 'glyphicon glyphicon-remove',
+            validating: 'glyphicon glyphicon-refresh'
+        },
+        fields: {
+            text: {
+                validators: {
+                    notEmpty: {//检测非空,radio也可用
+                        message: '文本框必须输入'
+                    },
+                    stringLength: {//检测长度
+                        min: 6,
+                        max: 30,
+                        message: '长度必须在6-30之间'
+                    },
+                    regexp: {//正则验证
+                        regexp: /^[a-zA-Z0-9_\.]+$/,
+                        message: '所输入的字符不符要求'
+                    },
+                    remote: {//将内容发送至指定页面验证，返回验证结果，比如查询用户名是否存在
+                        url: '指定页面',
+                        message: 'The username is not available'
+                    },
+                    different: {//与指定文本框比较内容相同
+                        field: '指定文本框name',
+                        message: '不能与指定文本框内容相同'
+                    },
+                    emailAddress: {//验证email地址
+                        message: '不是正确的email地址'
+                    },
+                    identical: {//与指定控件内容比较是否相同，比如两次密码不一致
+                        field: 'confirmPassword',//指定控件name
+                        message: '输入的内容不一致'
+                    },
+                    date: {//验证指定的日期格式
+                        format: 'YYYY/MM/DD',
+                        message: '日期格式不正确'
+                    },
+                    choice: {//check控件选择的数量
+                        min: 2,
+                        max: 4,
+                        message: '必须选择2-4个选项'
+                    }
+                }
+            }
+        }
+    });
+    $("#btn-test").click(function () {//非submit按钮点击后进行验证，如果是submit则无需此句直接验证
+        $("#form-test").bootstrapValidator('validate');//提交验证
+        if ($("#form-test").data('bootstrapValidator').isValid()) {//获取验证结果，如果成功，执行下面代码
+            alert("yes");//验证成功后的操作，如ajax
+        }
+    });
+});
 
 
 

@@ -5,8 +5,8 @@ from .models import Bid_hander, Bid_action, Bid_auction
 from django.db import transaction
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.conf import settings  #导入setting中的变量
-import os,xlrd,json
+from django.conf import settings  # 导入setting中的变量
+import os, xlrd, json
 from django.http import HttpResponse
 from django.contrib.auth import login, authenticate
 from .models import Bid_hander
@@ -15,9 +15,9 @@ from bid.models import query_auction_by_url, query_auction_by_args, query_action
 from bid.api.serializers import Bid_auctionSerializer, Bid_actionSerializer
 from django import template
 from django.template import RequestContext
+from rest_framework.parsers import JSONParser
 
-
-#创建策略
+# 创建策略
 def bid_login(request):
     if request.method == 'GET':
         import time
@@ -35,11 +35,11 @@ def bid_login(request):
         version = request.GET.get('version')
         debug = request.GET.get("debug")
         if version == '5.12s' or debug:
-            result = Bid_hander.objects.filter(hander_name=username, hander_passwd=passwd) #验证登录
+            result = Bid_hander.objects.filter(hander_name=username, hander_passwd=passwd)  # 验证登录
             if result:
                 res = {'result': 'login success',
-                                'url_dianxin': url_dianxin,
-                                'url_nodianxin': url_nodianxin}
+                       'url_dianxin': url_dianxin,
+                       'url_nodianxin': url_nodianxin}
                 return HttpResponse(json.dumps(res), content_type="application/json")
             else:
                 res = {'result': 'wrong'}
@@ -79,11 +79,12 @@ def create_bid_action(request):
         form = Bid_actionForm()
     return render(request, 'bid/create_bid_action.html', {'form': form})
 
-#创建策略
+
+# 创建策略
 @login_required
 def create_bid_auction(request):
     if request.method == 'POST':
-        form = Bid_auctionForm(request.POST) #验证数据
+        form = Bid_auctionForm(request.POST)  # 验证数据
         if form.is_valid():
             description = form.cleaned_data['description']  # 描述来源
             auction_name = form.cleaned_data['auction_name']  # 标书姓名
@@ -96,20 +97,21 @@ def create_bid_auction(request):
             try:
                 with transaction.atomic():
                     action = Bid_auction(description=description, auction_name=auction_name, ID_number=ID_number,
-                                        Bid_number=Bid_number, Bid_password=Bid_password,status=status,
-                                        count=count, expired_date=expired_date)
+                                         Bid_number=Bid_number, Bid_password=Bid_password, status=status,
+                                         count=count, expired_date=expired_date)
                     action.save()
                     messages.success(request, '创建成功')
                     return render(request, 'bid/create_bid_auction.html', {'form': form})
             except:
                 messages.error(request, '创建失败', extra_tags='bg-warning text-warning')
         else:
-            return render(request, 'bid/create_bid_auction.html', {'form': form, "error":form.errors})
+            return render(request, 'bid/create_bid_auction.html', {'form': form, "error": form.errors})
     else:
         form = Bid_auctionForm()
         return render(request, 'bid/create_bid_auction.html', {'form': form})
 
-#读取EXCEL
+
+# 读取EXCEL
 
 # 操作EXCEL
 @login_required
@@ -119,6 +121,8 @@ def open_excel(file):
         return data
     except Exception as e:
         print(str(e))
+
+
 def excel_table_byindex(file, colnameindex=0, by_index=0):
     data = open_excel(file)
     table = data.sheets()[by_index]
@@ -136,20 +140,21 @@ def excel_table_byindex(file, colnameindex=0, by_index=0):
             list.append(app)
     return list  # 返回元素为字典的列表
 
-#批量创建策略
+
+# 批量创建策略
 # @transaction.atomic
 @login_required
 def batch_create_action(request):
     if request.method == "POST":
         form = Batch_bid_actionForm()
-        file = request.FILES.get('file', None) #获取上传的文件  默认为None
+        file = request.FILES.get('file', None)  # 获取上传的文件  默认为None
         if file:
-            fname = file.name #获取文件名
-            #验证文件扩展名
+            fname = file.name  # 获取文件名
+            # 验证文件扩展名
             filename, extention = os.path.splitext(fname)
             if extention == '.xls' or extention == '.xlsx':
-                path = settings.UPLOAD_ROOT +fname  #文件存放路径
-                #存储文件
+                path = settings.UPLOAD_ROOT + fname  # 文件存放路径
+                # 存储文件
                 with open(path, 'wb+') as fil:
                     for chunk in file.chunks():  # 分块写入文件
                         fil.write(chunk)
@@ -202,6 +207,7 @@ def batch_create_action(request):
         form = Batch_bid_actionForm()
         return render(request, 'bid/batch_create_action.html', {'form': form})
 
+
 @login_required
 def batch_create_auction(request):
     if request.method == "POST":
@@ -243,9 +249,9 @@ def batch_create_auction(request):
                         sid = transaction.savepoint()  # 开启SQL事务
                         try:
                             auction = Bid_auction(description=description, auction_name=auction_name,
-                                                 ID_number=ID_number,
-                                                 Bid_number=Bid_number, Bid_password=Bid_password, status=status,
-                                                 count=count, expired_date=expired_date)
+                                                  ID_number=ID_number,
+                                                  Bid_number=Bid_number, Bid_password=Bid_password, status=status,
+                                                  count=count, expired_date=expired_date)
                             auction_list.append(auction)
                         except:
                             messages.error(request, '创建失败', extra_tags='bg-warning text-warning')
@@ -268,18 +274,21 @@ def batch_create_auction(request):
         form = Batch_bid_auctionForm()
         return render(request, 'bid/batch_create_auction.html', {'form': form})
 
+
 @login_required
 def manage_bid_auction(request):
     return render(request, 'bid/manage_bid_auction.html')
+
 
 @login_required
 def manage_bid_action(request):
     return render(request, 'bid/manage_bid_action.html')
 
+
 @login_required
 def manage_bid_hander(request):
-    return render(request, 'bid/manage_bid_hander.html')
-
+    return render(request, 'bid/test.html')
+    # return render(request, 'bid/manage_bid_hander.html')
 
 
 @login_required
@@ -297,19 +306,17 @@ def Bid_auction_manage(request):
         except:
             return HttpResponse(status=404)
     elif request.method == 'PUT':
-        data = request.GET
-        print(data)
         try:
+            data = request.GET
             pk = data.get('id')
             serializer = Bid_auction.objects.get(pk=pk)
             serializer = Bid_auctionSerializer(serializer, data=data)
-            if serializer.is_valid():
+            if serializer.is_valid(raise_exception=True):
                 serializer.save()
             return HttpResponse(status=204)
-        except :
+        except:
             return HttpResponse(status=404)
     elif request.method == 'DELETE':
-        print(request.GET)
         try:
             data = request.GET.get('data')
             data = json.loads(data)  ##转json
@@ -322,7 +329,7 @@ def Bid_auction_manage(request):
     elif request.method == 'POST':
         data = request.POST
         serializer = Bid_auctionSerializer(data=data)
-        if serializer.is_valid():
+        if serializer.is_valid(raise_exception=True):
             serializer.save()
         return HttpResponse(status=204)
     else:
@@ -334,13 +341,6 @@ def Bid_action_manage(request):
     """
     Retrieve, update or delete a code snippet. """
     if request.method == 'GET':
-        actions = query_action_by_args(request.GET)
-        print(actions)
-        serializer = Bid_actionSerializer(actions['items'], many=True)
-        result = dict()
-        result['rows'] = serializer.data
-        result['total'] = actions['total']
-        return HttpResponse(json.dumps(result), content_type="application/json")
         try:
             actions = query_action_by_args(request.GET)
             serializer = Bid_actionSerializer(actions['items'], many=True)
@@ -350,8 +350,6 @@ def Bid_action_manage(request):
             return HttpResponse(json.dumps(result), content_type="application/json")
         except:
             return HttpResponse(status=404)
-
-
     elif request.method == 'PUT':
         data = request.GET
         print(data)
@@ -359,10 +357,10 @@ def Bid_action_manage(request):
             pk = data.get('id')
             serializer = Bid_action.objects.get(pk=pk)
             serializer = Bid_actionSerializer(serializer, data=data)
-            if serializer.is_valid():
+            if serializer.is_valid(raise_exception=True):
                 serializer.save()
             return HttpResponse(status=204)
-        except :
+        except:
             return HttpResponse(status=404)
     elif request.method == 'DELETE':
         try:
@@ -377,7 +375,7 @@ def Bid_action_manage(request):
     elif request.method == 'POST':
         data = request.POST
         serializer = Bid_actionSerializer(data=data)
-        if serializer.is_valid():
+        if serializer.is_valid(raise_exception=True):
             serializer.save()
         return HttpResponse(status=204)
     else:
