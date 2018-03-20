@@ -1,3 +1,6 @@
 /.idea/
 myweb/config.py
 *.pyc
+/static/media/user_image/
+/__pycache__/
+*/migrations/

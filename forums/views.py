@@ -20,6 +20,9 @@ class BoardListView(ListView):
 def home(request):
     boards = Board.objects.all()
     topics = Topic.objects.all()
+    count = topics.count()
+    if count > 15:
+        topics = Topic.objects.order_by('last_updated')[:15]
     context = {'boards': boards, 'topics': topics}
     return render(request=request, template_name='forums/home.html', context=context)
 
