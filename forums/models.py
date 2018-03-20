@@ -118,7 +118,7 @@ class ForumUser(models.Model):
     total_topic = models.PositiveIntegerField(default=0, verbose_name='总帖子')
     total_post = models.PositiveIntegerField(default=0, verbose_name='总回复')
     total_agree = models.PositiveIntegerField(default=0, verbose_name='总赞数积分')
-    collection = models.ManyToManyField(Topic, verbose_name="收藏", related_name='collection_users')
+    collection = models.ManyToManyField(Topic, verbose_name="收藏", related_name='collection_users', blank=True)
 
     # 设置5个权限字段，拥有权限者可操作此表(在admin中授权用户)
     class Meta:
