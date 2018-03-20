@@ -10,7 +10,7 @@
         <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
             <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
                 <li class="nav-item active">
-                    <a class="nav-link" href="#">首页 <span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="{% url 'home' %}">首页 <span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link disabled" href="#">测试</a>
@@ -26,6 +26,7 @@
                         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                             <a class="dropdown-item" href="{% url 'password_change' %}?next=/forums/">修改密码</a>
                             <a class="dropdown-item" href="{% url 'logout_then_login' %}?next=/forums/">注销</a>
+                            <a class="dropdown-item" href="{% url 'change_profile' %}?next=/forums/">修改资料</a>
                         </div>
                     </li>
                 {% else %}

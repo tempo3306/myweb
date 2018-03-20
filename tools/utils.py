@@ -63,3 +63,39 @@ def send_control_email(email, send_type="register"):
         send_status = send_mail(email_title, email_body, EMAIL_FROM, [email])
         if send_status:
             pass
+
+##上传文件控制
+def handle_uploaded_file(f):
+    file_name = ""
+    import os, time
+    try:
+        path = "media/editor" + time.strftime('/%Y/%m/%d/%H/%M/%S/')
+        if not os.path.exists(path):
+            os.makedirs(path)
+            file_name = path + f.name
+            destination = open(file_name, 'wb+')
+            for chunk in f.chunks():
+                destination.write(chunk)
+            destination.close()
+    except Exception as e:
+        print (e)
+
+    return file_name
+
+
+def handle_fileupload(file, p):  ##file: request.FILES['file']    p: MEDIA下的文件夹名
+    import os
+    from myweb.settings import MEDIA_ROOT
+    try:
+        fname = file.name  # 获取文件名
+        # 验证文件扩展名
+        filename, extention = os.path.splitext(fname)
+        rand_str = random_str(8)
+        newname = r'{0}/{1}{2}'.format(p, rand_str, extention)
+        path = '{0}{1}'.format(MEDIA_ROOT, newname)
+        with open(path, 'wb+') as fil:
+            for chunk in file.chunks():  # 分块写入文件
+                fil.write(chunk)
+        return newname
+    except:
+        return None

@@ -1,5 +1,5 @@
 from django.contrib import admin
 
-from .models import Board, Topic, Post
+from .models import Board, Topic, Post, ForumUser
 
-admin.site.register((Board, Topic, Post))
+admin.site.register((Board, Topic, Post, ForumUser))

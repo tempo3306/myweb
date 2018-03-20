@@ -1,3 +1,37 @@
+from django import template
+
+from django.utils.html import format_html
+register = template.Library()   # 注册到tempate库里面
+
+
+@register.simple_tag()     # simple_tag能够对传入多个参数有效
+def flash_infomation(type, information):
+    '''
+
+    :param current_page:  当前页
+    :param loop_num:     页数范围
+    :return:
+    '''
+    if type:
+        page_element = """
+                    <div class="alert alert-{0} alert-dismissible fade show" role="alert">
+                    {1}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+        """.format(type, information)
+
+        return format_html(page_element)
+    else:
+        return ''                 # 必须写一个return 空字符串，这样就不会在前端页面显示None
+
+
+
+
+
+
+
 # import datetime
 # from django import template
 #

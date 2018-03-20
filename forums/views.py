@@ -3,18 +3,28 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import ListView
 from django.db.models import Count
 
-from .forms import NewTopicForm, PostForm
-from .models import Board, Post, Topic
+from .forms import NewTopicForm, PostForm, Change_profileForm
+from .models import Board, Post, Topic, ForumUser
 
-#导入Paginator,EmptyPage和PageNotAnInteger模块
+# 导入Paginator,EmptyPage和PageNotAnInteger模块
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth.decorators import permission_required
 from django.http import HttpResponse
+from tools.utils import handle_fileupload
 
 ##主页，显示所有版块
 class BoardListView(ListView):
-    template_name = 'home.html'
+    template_name = 'forums/home.html'
     model = Board
+
+def home(request):
+    boards = Board.objects.all()
+    topics = Topic.objects.all()
+    context = {'boards': boards, 'topics': topics}
+    return render(request=request, template_name='forums/home.html', context=context)
+
+
+
 
 ##查看版块帖子
 def board_topics(request, name):
@@ -73,7 +83,7 @@ def board_topics(request, name):
             'total_pages': total_pages,
             'page': page
         }
-    return render(request, 'board_topics.html', context={
+    return render(request, 'forums/board_topics.html', context={
         'article_list': article_list, 'data': data, 'board': board
     })
 
@@ -101,7 +111,8 @@ def new_topic(request, name):
         form = NewTopicForm()
 
     context = {'board': board, 'form': form}
-    return render(request, 'new_topic.html', context)
+    return render(request, 'forums/new_topic.html', context)
+
 
 ##查看帖子
 def topic_posts(request, name, topic_pk):
@@ -109,7 +120,8 @@ def topic_posts(request, name, topic_pk):
     topic.views += 1
     topic.save()
     context = {'topic': topic}
-    return render(request, 'topic_posts.html', context)
+    return render(request, 'forums/topic_posts.html', context)
+
 
 ##帖子回复
 @login_required
@@ -127,9 +139,39 @@ def reply_topic(request, name, topic_pk):
     else:
         form = PostForm()
     context = {'topic': topic, 'form': form}
-    return render(request, 'reply_topic.html', context)
+    return render(request, 'forums/reply_topic.html', context)
+
 
 @login_required
-@permission_required('account.post', login_url='/')  #login_url 跳转的页面
+@permission_required('account.post', login_url='/')  # login_url 跳转的页面
 def test(request):
     return HttpResponse("成功")
+
+
+
+@login_required
+def change_profile(request):
+    if request.method == 'POST':
+        form = Change_profileForm(request.POST, request.FILES)
+        if form.is_valid():
+            cd = form.cleaned_data
+            nickname = cd['nickname']  ##昵称
+            signature = cd['signature']  ##签名
+            gender = cd['gender']  ##性别
+            photo = request.FILES['photo']
+            p = 'user_image'
+            newname = handle_fileupload(photo, p)  ##处理上传文件
+            ForumUser.objects.filter(user=request.user).update(nickname=nickname, gender=gender,
+                                                                       photo=newname, signature=signature)
+
+            context = {'form': form, 'type': 'info', 'information': '修改资料成功'}
+
+            return render(request, 'forums/change_profile.html', context=context )
+        else:
+            context = {'form': form, 'type': 'error', 'information': '修改资料失败'}
+            return render(request, 'forums/change_profile.html', context=context)
+    else:
+        forum_user = ForumUser.objects.get(user=request.user)
+        form = Change_profileForm(
+            data={'signature': forum_user.signature, 'gender': forum_user.gender, 'nickname': forum_user.nickname})
+        return render(request, 'forums/change_profile.html', context={'form': form})
