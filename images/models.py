@@ -1,7 +1,7 @@
 from django.db import models
 from django.conf import settings
 from django.utils.text import slugify
-
+from tools.utils import random_str
 
 class Image(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL,
@@ -22,7 +22,8 @@ class Image(models.Model):
     # 自动生成slug
     def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = slugify(self.title)
+            rand_str = random_str(4)
+            self.slug = slugify(self.title) + rand_str
             super(Image, self).save(*args, **kwargs)
 
     def __str__(self):

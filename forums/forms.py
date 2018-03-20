@@ -12,9 +12,8 @@ from django.utils.translation import ugettext_lazy
 from django.conf import settings
 
 
-
-
-class NewTopicForm(forms.ModelForm):
+class NewTopicForm(forms.Form):
+    subject = forms.CharField(label='主题')
     message = forms.CharField(
         widget=forms.Textarea(),
         max_length=4000,
@@ -22,10 +21,7 @@ class NewTopicForm(forms.ModelForm):
         label="内容"
     )
 
-    class Meta:
-        model = Topic
-        fields = ['subject', 'message']
-        labels = {'subject': '主题'}
+
 
 
 class PostForm(forms.ModelForm):

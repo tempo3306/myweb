@@ -97,26 +97,24 @@ def new_topic(request, name):
     if request.method == 'POST':
         form = NewTopicForm(request.POST)
         if form.is_valid():
-            topic = form.save(commit=False)
-            topic.board = board
-            topic.starter = user
+            cd = form.cleaned_data
+            topic = Topic(subject=cd['subject'],  board=board, starter=user)
             topic.save()
             Post.objects.create(
-                message=form.cleaned_data.get('message'),
+                message=cd['message'],
                 topic=topic,
                 created_by=user,
             )
-            return redirect('topic_posts', name=name, topic_pk=topic.pk)
+            return redirect('topic_posts', name=name, topic_slug=topic.slug)
     else:
         form = NewTopicForm()
 
     context = {'board': board, 'form': form}
     return render(request, 'forums/new_topic.html', context)
 
-
 ##查看帖子
-def topic_posts(request, name, topic_pk):
-    topic = get_object_or_404(Topic, board__name=name, pk=topic_pk)
+def topic_posts(request, name, topic_slug):
+    topic = get_object_or_404(Topic, board__name=name, slug=topic_slug)
     topic.views += 1
     topic.save()
     context = {'topic': topic}
@@ -126,8 +124,8 @@ def topic_posts(request, name, topic_pk):
 ##帖子回复
 @login_required
 @permission_required('account.post')
-def reply_topic(request, name, topic_pk):
-    topic = get_object_or_404(Topic, board__name=name, pk=topic_pk)
+def reply_topic(request, name, topic_slug):
+    topic = get_object_or_404(Topic, board__name=name, pk=topic_slug)
     if request.method == 'POST':
         form = PostForm(request.POST)
         if form.is_valid():
@@ -135,7 +133,7 @@ def reply_topic(request, name, topic_pk):
             post.topic = topic
             post.created_by = request.user
             post.save()
-            return redirect('topic_posts', pk=name, topic_pk=topic_pk)
+            return redirect('topic_posts', pk=name, topic_slug=topic_slug)
     else:
         form = PostForm()
     context = {'topic': topic, 'form': form}

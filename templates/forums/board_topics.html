@@ -4,14 +4,12 @@
 
 {% block breadcrumb %}
     <div class="container">
-        <ol class="breadcrumb container">
-            <li>
-                <a href="{% url 'home' %}">首页</a>
-            </li>
-            <li class="active">
-                {{ board.name }}
-            </li>
-        </ol>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'home' %}">首页</a></li>
+                <li class="breadcrumb-item active" aria-current="page">{{ board.name }}</li>
+            </ol>
+        </nav>
     </div>
 {% endblock %}
 

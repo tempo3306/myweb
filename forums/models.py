@@ -4,7 +4,7 @@ from django.urls import reverse
 from django.utils.text import Truncator
 from django.contrib.auth.models import User
 from uuslug import slugify
-
+from tools.utils import random_str
 
 ##版块
 class Board(models.Model):
@@ -16,7 +16,7 @@ class Board(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        return reverse('board_topics', args=[self.pk])
+        return reverse('board_topics', args=[self.name])
 
     def get_posts_count(self):
         return Post.objects.filter(topic__board=self).count()
@@ -47,7 +47,7 @@ class Topic(models.Model):
     ##slug
     slug = models.SlugField(editable=False, unique=True, max_length=40)
     ######状态管理######
-    state = models.CharField(max_length=10, choices=(('hot', '热帖'), ('normal', ' 普通'), ('water', '刷屏'),
+    state = models.CharField(max_length=20, choices=(('hot', '热帖'), ('normal', ' 普通'), ('water', '刷屏'),
                                                      ('attack', '攻击'), ('ad', '广告'), ('illegal', '违规')),
                              default=('normal', '普通'))
     report = models.CharField(max_length=10, null=True, blank=True,
@@ -61,13 +61,14 @@ class Topic(models.Model):
     def get_absolute_url(self):
         return reverse('topic_posts', kwargs={
             'name': self.board.name,
-            'topic_pk': self.pk
+            'topic_slug': self.slug
         })
 
     ##自动生成slug
     def save(self, *args, **kwargs):
         truncated = Truncator(self.subject)
-        self.slug = slugify(truncated.chars(10))
+        rand_str = random_str(4)
+        self.slug = slugify(truncated.chars(10)) + rand_str
         super(Topic, self).save(*args, **kwargs)
 
 
@@ -101,7 +102,8 @@ class Post(models.Model):
 
     def save(self, *args, **kwargs):
         truncated = Truncator(self.message)
-        self.slug = slugify(truncated.chars(10))
+        rand_str = random_str(4)
+        self.slug = slugify(truncated.chars(10)) + rand_str
         super(Post, self).save(*args, **kwargs)
 
 

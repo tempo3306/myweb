@@ -5,29 +5,52 @@
 {% block breadcrumb %}
     <div class="container">
         <ol class="breadcrumb">
-            <li>
-                <a href="{% url 'home' %}">版块</a>
-            </li>
-            <li>
-                <a href="{% url 'board_topics' board.name %}">{{ board.name }}</a>
-            </li>
-            <li class="active">
-                发新帖
-            </li>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a href="{% url 'home' %}">主页
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">
+                        <a href="{{ board.get_absolute_url }}">
+                            {{ board.name }}
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">
+                        发新帖
+                    </li>
+                </ol>
+            </nav>
         </ol>
+
+
     </div>
 {% endblock %}
 
 {% block content %}
     <div class="container">
         {% load crispy_forms_tags %}
-        <form method="post" novalidate>
+        <form method="post" action="">
             {% csrf_token %}
             {{ form|crispy }}
+            <div class="container">
+                <button type="submit" id="new_topic" class="btn btn-success">提交</button>
+            </div>
         </form>
     </div>
-    <div class="container">
-        <button type="submit" class="btn btn-success">提交</button>
-    </div>
+
 
 {% endblock %}
+
+{% block script %}
+    <script>
+        $(window).read(function () {
+            $('#new_topic').on('click', function () {
+
+
+            })
+        })
+
+    </script>
+
+{% endblock script %}
