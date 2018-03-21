@@ -12,7 +12,7 @@
                         </a>
                     </li>
                     <li class="breadcrumb-item">
-                        <a href="{% url 'board_topics' topic.board.name %}">
+                        <a href="{% url 'board_topics' topic.board.slug %}">
                             {{ topic.board.name }}
                         </a>
                     </li>
@@ -28,7 +28,7 @@
 {% block content %}
     <div class="container">
         <div class="mb-4">
-            <a href="{% url 'reply_topic' topic.board.name topic.slug %}" class="btn btn-primary" role="button">
+            <a href="{% url 'reply_topic' topic.board.slug topic.slug %}" class="btn btn-primary" role="button">
                 回复
             </a>
         </div>

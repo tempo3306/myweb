@@ -72,8 +72,9 @@ def board_init():
 
 
 if __name__ == '__main__':
-    bid_auction_test()
+    # bid_auction_test()
     # main1()
     # main2()
+    board_init()
     # init_post()
     print("Done!")

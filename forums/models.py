@@ -11,18 +11,26 @@ class Board(models.Model):
     name = models.CharField(max_length=30, unique=True)
     description = models.CharField(max_length=100)
     board_headimage = models.ImageField(upload_to='user_image', default='user_image/user0.jpg')  # 论坛版块头像
+    slug = models.SlugField(max_length=30, unique=True, editable=False)
+
 
     def __str__(self):
         return self.name
 
     def get_absolute_url(self):
-        return reverse('board_topics', args=[self.name])
+        return reverse('board_topics', args=[self.slug])
 
     def get_posts_count(self):
         return Post.objects.filter(topic__board=self).count()
 
     def get_last_post(self):
         return Post.objects.filter(topic__board=self).order_by('-created_at').first()
+
+    def save(self, *args, **kwargs):
+        truncated = Truncator(self.name)
+        rand_str = random_str(3)
+        self.slug = slugify(truncated.chars(10)) + rand_str
+        super(Board,self).save(*args, **kwargs)
 
 
 ##主题
@@ -60,7 +68,7 @@ class Topic(models.Model):
     ##获取绝对路径
     def get_absolute_url(self):
         return reverse('topic_posts', kwargs={
-            'name': self.board.name,
+            'slug': self.board.slug,
             'topic_slug': self.slug
         })
 

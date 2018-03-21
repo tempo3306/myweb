@@ -30,8 +30,8 @@ def home(request):
 
 
 ##查看版块帖子
-def board_topics(request, name):
-    board = get_object_or_404(Board, name=name)
+def board_topics(request, slug):
+    board = get_object_or_404(Board, slug=slug)
     topics = board.topics.order_by('-last_updated').annotate(replies=Count('posts') - 1)
     p = Paginator(topics, 20)  # 分页，20篇文章一页
     if p.num_pages <= 1:  # 如果文章不足一页
@@ -93,8 +93,8 @@ def board_topics(request, name):
 
 ##创建主题
 @login_required
-def new_topic(request, name):
-    board = get_object_or_404(Board, name=name)
+def new_topic(request, slug):
+    board = get_object_or_404(Board, slug=slug)
     user = request.user
 
     if request.method == 'POST':
@@ -108,7 +108,7 @@ def new_topic(request, name):
                 topic=topic,
                 created_by=user,
             )
-            return redirect('topic_posts', name=name, topic_slug=topic.slug)
+            return redirect('topic_posts', slug=slug, topic_slug=topic.slug)
     else:
         form = NewTopicForm()
 
@@ -116,8 +116,8 @@ def new_topic(request, name):
     return render(request, 'forums/new_topic.html', context)
 
 ##查看帖子
-def topic_posts(request, name, topic_slug):
-    topic = get_object_or_404(Topic, board__name=name, slug=topic_slug)
+def topic_posts(request, slug, topic_slug):
+    topic = get_object_or_404(Topic, board__slug=slug, slug=topic_slug)
     topic.views += 1
     topic.save()
     context = {'topic': topic}
@@ -127,8 +127,8 @@ def topic_posts(request, name, topic_slug):
 ##帖子回复
 @login_required
 @permission_required('account.post')
-def reply_topic(request, name, topic_slug):
-    topic = get_object_or_404(Topic, board__name=name, pk=topic_slug)
+def reply_topic(request, slug, topic_slug):
+    topic = get_object_or_404(Topic, board__slug=slug, slug=topic_slug)
     if request.method == 'POST':
         form = PostForm(request.POST)
         if form.is_valid():
@@ -136,7 +136,7 @@ def reply_topic(request, name, topic_slug):
             post.topic = topic
             post.created_by = request.user
             post.save()
-            return redirect('topic_posts', pk=name, topic_slug=topic_slug)
+            return redirect('topic_posts', slug=slug, topic_slug=topic_slug)
     else:
         form = PostForm()
     context = {'topic': topic, 'form': form}
