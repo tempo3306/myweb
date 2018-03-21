@@ -4,24 +4,31 @@
 
 {% block breadcrumb %}
     <div class="container">
+    <div class="container">
         <ol class="breadcrumb">
-            <li>
-                <a href="{% url 'home' %}">Boards</a>
-            </li>
-            <li>
-                <a href="{% url 'board_topics' topic.board.slug %}">
-                    {{ topic.board.name }}
-                </a>
-            </li>
-            <li>
-                <a href="{{ topic.get_absolute_url }}">
-                    {{ topic.subject }}
-                </a>
-            </li>
-            <li class="breadcrumb-item active">
-                Reply
-            </li>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a href="{% url 'home' %}">主页
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">
+                        <a href="{{ board.get_absolute_url }}">
+                            {{ topic.board.name }}
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">
+                        <a href="{{ topic.get_absolute_url }}">
+                            {{ topic.subject }}
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">
+                        回复
+                    </li>
+                </ol>
+            </nav>
         </ol>
+
     </div>
 {% endblock %}
 
