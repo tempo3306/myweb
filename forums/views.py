@@ -126,7 +126,7 @@ def topic_posts(request, slug, topic_slug):
 
 ##帖子回复
 @login_required
-@permission_required('account.post')
+# @permission_required('account.post')
 def reply_topic(request, slug, topic_slug):
     topic = get_object_or_404(Topic, board__slug=slug, slug=topic_slug)
     if request.method == 'POST':
@@ -144,7 +144,7 @@ def reply_topic(request, slug, topic_slug):
 
 
 @login_required
-@permission_required('account.post', login_url='/')  # login_url 跳转的页面
+# @permission_required('account.post', login_url='/')  # login_url 跳转的页面
 def test(request):
     return HttpResponse("成功")
 

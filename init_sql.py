@@ -5,7 +5,7 @@
 @time: 2018/2/5 9:23
 '''
 from myweb.wsgi import *
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from bid.models import Bid_hander, Bid_auction
 from forums.models import Topic, Board
 
@@ -54,6 +54,9 @@ def bid_auction_test():
             count=count,  # 参拍次数
             expired_date=expired_date,  # 过期时间
         )
+
+def group_init():
+    a = Group
 
 
 def board_init():

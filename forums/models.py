@@ -28,8 +28,7 @@ class Board(models.Model):
 
     def save(self, *args, **kwargs):
         truncated = Truncator(self.name)
-        rand_str = random_str(3)
-        self.slug = slugify(truncated.chars(10)) + rand_str
+        self.slug = slugify(truncated.chars(10))
         super(Board,self).save(*args, **kwargs)
 
 
@@ -75,8 +74,7 @@ class Topic(models.Model):
     ##自动生成slug
     def save(self, *args, **kwargs):
         truncated = Truncator(self.subject)
-        rand_str = random_str(4)
-        self.slug = slugify(truncated.chars(10)) + rand_str
+        self.slug = slugify(truncated.chars(10))
         super(Topic, self).save(*args, **kwargs)
 
 
@@ -110,8 +108,7 @@ class Post(models.Model):
 
     def save(self, *args, **kwargs):
         truncated = Truncator(self.message)
-        rand_str = random_str(4)
-        self.slug = slugify(truncated.chars(10)) + rand_str
+        self.slug = slugify(truncated.chars(10))
         super(Post, self).save(*args, **kwargs)
 
 
@@ -121,7 +118,7 @@ class ForumUser(models.Model):
     nickname = models.CharField(max_length=30, unique=True, null=True, blank=True)
     photo = models.ImageField(upload_to='user_image', blank=True, verbose_name='头像')
     signature = models.CharField(max_length=30, blank=True, verbose_name='个性签名', default='这家伙很懒')
-    gender = models.CharField(max_length=2, default=('-1', '保密'), choices=(('1', '男性'), ('0', '女性'), ('-1', '保密')))  ##1代表男性， 0代表女性， -1代表未设定
+    gender = models.SmallIntegerField(max_length=8, default=-1) # choices=(('1', '男性'), ('0', '女性'), ('-1', '保密')), blank=True)  ##1代表男性， 0代表女性， -1代表未设定
     # 论坛活动数据
     total_topic = models.PositiveIntegerField(default=0, verbose_name='总帖子')
     total_post = models.PositiveIntegerField(default=0, verbose_name='总回复')

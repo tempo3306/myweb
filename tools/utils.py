@@ -2,7 +2,7 @@ from random import Random  # 用于生成随机码
 from django.core.mail import send_mail  # 发送邮件模块
 from account.models import EmailVerifyRecord  # 邮箱验证model
 from myweb.settings import EMAIL_FROM  # setting.py添加的的配置信息
-
+from myweb.settings import DEBUG
 
 # 生成随机字符串
 def random_str(randomlength=12):
@@ -43,7 +43,10 @@ def send_control_email(email, send_type="register"):
         # email_title = "你好"
         # email_body = "明天请参会"
         email_title = "沪牌一号注册激活链接"
-        email_body = "您在注册沪牌一号的账号，请点击下面的链接激活你的账号: https://hupai.pro/account/active/{0}/".format(code)
+        if DEBUG:
+            email_body = "您在注册沪牌一号的账号，请点击下面的链接激活你的账号: http://127.0.0.1:8000/account/active/{0}/".format(code)
+        else:
+            email_body = "您在注册沪牌一号的账号，请点击下面的链接激活你的账号: https://hupai.pro/account/active/{0}/".format(code)
         # 发送邮件
         send_status = send_mail(email_title, email_body, EMAIL_FROM, [email])
         if send_status:

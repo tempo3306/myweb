@@ -108,7 +108,8 @@ def register(request):
 class ActiveUserView(View):
     def get(self, request, active_code):
     # 用code在数据库中过滤处信息
-        all_records = EmailVerifyRecord.objects.filter(code=active_code)
+        print(active_code)
+        all_records = EmailVerifyRecord.objects.filter(code=str(active_code))
         if all_records:
             for record in all_records:
                 email = record.email
