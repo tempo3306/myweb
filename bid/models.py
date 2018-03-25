@@ -137,3 +137,12 @@ def query_action_by_url(params):
     id_list = params.get('id')
     queryset = Bid_action.objects.filter(id__in=id_list)
     return queryset
+
+
+
+#验证码库
+class Yanzhengma(models.Model):
+    picture=models.CharField(max_length=30)  #文件名 始终位于media/code下
+    question=models.CharField(max_length=15)  #问题
+    answer=models.CharField(max_length=4)   #答案
+    type=models.CharField(max_length=20)  #类别s    51拿来的类别1

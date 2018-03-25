@@ -91,12 +91,13 @@ def board_topics(request, slug):
     })
 
 
+
 ##创建主题
 @login_required
+@permission_required('forums.post')
 def new_topic(request, slug):
     board = get_object_or_404(Board, slug=slug)
     user = request.user
-
     if request.method == 'POST':
         form = NewTopicForm(request.POST)
         if form.is_valid():
@@ -126,7 +127,7 @@ def topic_posts(request, slug, topic_slug):
 
 ##帖子回复
 @login_required
-# @permission_required('account.post')
+@permission_required('forums.post')
 def reply_topic(request, slug, topic_slug):
     topic = get_object_or_404(Topic, board__slug=slug, slug=topic_slug)
     if request.method == 'POST':

@@ -7,11 +7,40 @@
 from myweb.wsgi import *
 from django.contrib.auth.models import User, Group
 from bid.models import Bid_hander, Bid_auction
-from forums.models import Topic, Board
+from forums.models import Topic, Board, ForumUser
+from django.contrib.auth.models import Group, Permission
 
+
+def init_group(role_name):
+    try:
+        Group.objects.get(name=role_name)
+        print("角色组已经存在")
+    except Group.DoesNotExist:
+        groups = Group.objects.create(name=role_name)
+        pers = role_permissions[role_name]
+        for per  in pers:
+            print(per)
+            permission = Permission.objects.get(codename=per)
+            groups.permissions.add(permission)
+
+
+
+'''
+        permissions = (('read', '阅读'),
+                       ('reply', '回复'),
+                       ('post', '发帖'),
+                       ('delete', '删除'),
+                       ('control', '控制'))
+'''
+###定义角色对应的权限
+role_permissions = {'forbidden_user': ['read'],
+                    'normal_user': ['read', 'reply', 'post'],
+                    'core_user': ['read', 'reply', 'post'],
+                    'moderator': ['read', 'reply', 'post', 'delete'],
+                    'admin': ['read', 'reply', 'post', 'delete', 'control']}
 
 #
-def main1():
+def shooter_init():
     name = ['shooter{0}'.format(i) for i in range(1, 100)]
     password = ['xcvbnm{0}'.format(i) for i in range(1, 100)]
     np = zip(name, password)
@@ -21,12 +50,31 @@ def main1():
         nplist.append(a)
     for i in range(len(nplist)):
         nplist[i].save()
-
-
-def main2():
     name = ['shooter{0}'.format(i) for i in range(1, 100)]
     for n in name:
         Bid_hander.objects.get_or_create(hander_name=n, user_id=User.objects.filter(username=n)[0])
+
+
+
+def admin_init():
+    ##管理员初始化
+    groups = Group.objects.get(name='admin')
+
+
+    name = 'helong'
+    email = 'hlcw2619@126.com'
+    password = 'helong19890103'
+    helong = User.objects.create_user(username=name, password=password, email=email)
+    helong.groups.add(groups)
+    ForumUser.objects.create(user=helong)
+
+    name = 'yuanjunkai'
+    email = '120953430@qq.com'
+    password = 'yuanjunkai1988'
+    yuanjunkai = User.objects.create_user(username=name, password=password, email=email)
+    yuanjunkai.groups.add(groups)
+    ForumUser.objects.create(user=yuanjunkai)
+
 
 
 # def init_post():
@@ -55,9 +103,6 @@ def bid_auction_test():
             expired_date=expired_date,  # 过期时间
         )
 
-def group_init():
-    a = Group
-
 
 def board_init():
     a = Board(name='斯诺克', description="斯诺克（Snooker）的意思是“阻碍、障碍”，所以斯诺克台球有时也被称为障碍台球。",
@@ -75,9 +120,9 @@ def board_init():
 
 
 if __name__ == '__main__':
-    # bid_auction_test()
-    # main1()
-    # main2()
+    for role, per in role_permissions.items():
+        init_group(role)
+    shooter_init()
+    admin_init()
     board_init()
-    # init_post()
     print("Done!")

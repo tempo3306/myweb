@@ -25,15 +25,19 @@
 
             {% for board in boards %}
 
-                <div class="media text-muted pt-3">
+                <div class="media text-muted pt-3" style="align-items: flex-start">
                     <img src="/media/{{ board.board_headimage }}" alt="图像" class="mr-2 rounded" width="42" height="42">
 
                     <p class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
                         <strong class="d-block text-gray-dark"><a
                                 href="{{ board.get_absolute_url }}"> {{ board.name }}</a></strong>
                         {{ board.description }}
-                        {{ board.get_posts_count }} &nbsp; <span class="badge badge-secondary">New</span>
                     </p>
+                    <button type="button" class="btn btn-primary">
+                        Profile <span class="badge badge-light">{{ board.get_posts_count }}</span>
+                        <span class="sr-only">New</span>
+                    </button>
+
                 </div>
 
 

@@ -25,7 +25,7 @@ def init_group(role_name):
 '''
 ###定义角色对应的权限
 role_permissions = {'forbidden_user': ['read'],
-                    'normal_user': ['read', 'reply'],
+                    'normal_user': ['read', 'reply', 'post'],
                     'core_user': ['read', 'reply', 'post'],
                     'moderator': ['read', 'reply', 'post', 'delete'],
                     'admin': ['read', 'reply', 'post', 'delete', 'control']}

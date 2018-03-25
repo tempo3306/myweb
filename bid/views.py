@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from .forms import Bid_actionForm, Bid_auctionForm, Batch_bid_actionForm, Batch_bid_auctionForm
-from .models import Bid_hander, Bid_action, Bid_auction
+from .models import Bid_hander, Bid_action, Bid_auction, Yanzhengma
 from django.db import transaction
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -13,9 +13,41 @@ from .models import Bid_hander
 from django.http import HttpResponse, Http404
 from bid.models import query_auction_by_url, query_auction_by_args, query_action_by_args, query_action_by_url
 from bid.api.serializers import Bid_auctionSerializer, Bid_actionSerializer
-from django import template
-from django.template import RequestContext
-from rest_framework.parsers import JSONParser
+
+import json
+from django.http import HttpResponse
+
+##模拟系统
+def moni(request):
+    yan = "code/yan0.jpg"
+    answer = 1356
+    context = {'yan': yan, 'answer': answer}
+    return render(request, 'bid/Moni.html', context=context)
+
+
+def yanzhengma(request, pk):
+    yanzhengma = Yanzhengma.objects.get(pk=pk)
+    yan = yanzhengma.picture
+    return render(request, 'bid/yanzhengma.html', context={'yan': yan})
+
+
+def answer(request, pk):
+    yanzhengma = Yanzhengma.objects.get(pk=pk)
+    answer = yanzhengma.answer
+    answer = str(int(float(answer)))
+    question = yanzhengma.question
+    resp = {'question': question, 'answer': answer}
+    return HttpResponse(json.dumps(resp), content_type="application/json")
+
+
+def yanzhengma_refresh(request):
+    yan = 'moni_fresh.png'
+    return render(request, "bid/yanzhengma.html", context={'yan': yan})
+
+
+def practice(request):
+    return render(request, "bid/practice.html")
+
 
 # 创建策略
 def bid_login(request):

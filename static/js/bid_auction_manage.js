@@ -96,12 +96,6 @@ function initTable() {
 
 
 //调用函数，初始化表格
-$(document).ready(function () {
-    //调用函数，初始化表格
-    initTable();
-    //当点击查询按钮的时候执行
-    $("#search").bind("click", initTable);
-});
 
 
 //验证表单

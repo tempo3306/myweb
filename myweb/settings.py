@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'bbsapp',
     'forums',  # 论坛
     'account',
+    'news',
     'crispy_forms',  # 美化form
     'django_extensions',
     'django_filters',
@@ -143,7 +144,7 @@ STATIC_ROOT = os.path.join(SITE_ROOT, 'static')
 STATICFILES_DIRS = (
     ("css", os.path.join(STATIC_ROOT, 'css')),
     ("js", os.path.join(STATIC_ROOT, 'js')),
-    ("images", os.path.join(STATIC_ROOT, 'media/images')),
+    ("assets", os.path.join(STATIC_ROOT, 'assets'))
 )
 
 MEDIA_URL = '/media/'

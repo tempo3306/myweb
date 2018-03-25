@@ -31,7 +31,7 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^account/', include('account.urls')),
     url(r'^bid/', include('bid.urls', namespace='bid')),
-    url('', include('bbsapp.urls')),  # new
+    url('', include('news.urls')),  # new
     url('^forums/', include('forums.urls')),
     url('^api/user/', include('account.api.urls')),
     url('^api/bid/', include('bid.api.urls')),
