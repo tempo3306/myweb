@@ -34,6 +34,11 @@ var pt2 = [];
 
 var xp = window.screen.width;
 var yp = window.screen.height;
+
+var question;
+var answer;
+
+
 $(document).ready(function () {
     $('body').css({"postion": "relative", "left": "15px", "top": 0})
 });
@@ -58,6 +63,27 @@ var time_need2 = time_torrent    //52到time_cut之间
 var time_need3 = 2      //time_cut之后  + time_torrent*n   n为当前时间与时间种子差值
 //随机显示状态
 var view_torrent = Math.random() * 10
+
+
+//-----------------------------------------------------------------------------------------------
+if (!Array.prototype.indexOf) {
+    Array.prototype.indexOf = function (elt /*, from*/) {
+        var len = this.length >>> 0;
+        var from = Number(arguments[1]) || 0;
+        from = (from < 0)
+            ? Math.ceil(from)
+            : Math.floor(from);
+        if (from < 0)
+            from += len;
+
+        for (; from < len; from++) {
+            if (from in this &&
+                this[from] === elt)
+                return from;
+        }
+        return -1;
+    };
+}
 
 
 //-----------------------------------------------------------------------------------------------
@@ -96,6 +122,17 @@ $(document).keydown(function (event) {
 //    if (window.clipboardData) {
 //        return window.clipboardData.getData("Text");
 //    }
+
+//创建一个刷新按钮
+function create_refresh() {
+    $("#refresh").html('<button class="refresh"></button>');
+    $(".refresh").button().click(function () {
+        GetYanzhengma();
+        $("#refresh").html('');
+    });
+}
+
+
 
 //执行功能
 setInterval("Calculate_time()", 100);
@@ -318,7 +355,7 @@ function Interval() {
 
 //判定价格正确
 function Price_confirm() {
-    userprice = parseInt($('.userwriteprice').val());
+    var userprice = parseInt($('.userwriteprice').val());
     if (userprice % 100 == 0) {
         return true
     } else {
@@ -407,258 +444,258 @@ $(document).ready(function () {
 //绑定出价按纽功能，弹出对话框
 $(function () {
 //验证码框实现
-    $("#dialog-form").dialog({
-        open: function (event, ui) {
-            closeOnEscape: false, //取消esc键
-                $(".ui-dialog-titlebar").hide();
-        },
-        draggable: false,
-        resizable: false,
-        autoOpen: false,
-        height: 306,
-        width: 439,
-        modal: true,
-        position: {
-            using: function () {
-                $(this).css({
-                    "position": "absolute",
-                    "top": "237px", //设置弹出框距离是页面顶端下的200px
-                    "left": "428px" //设置弹出框距离是页面顶端下的200px
+        $("#dialog-form").dialog({
+            open: function (event, ui) {
+                closeOnEscape: false, //取消esc键
+                    $(".ui-dialog-titlebar").hide();
+            },
+            draggable: false,
+            resizable: false,
+            autoOpen: false,
+            height: 306,
+            width: 439,
+            modal: true,
+            position: {
+                using: function () {
+                    $(this).css({
+                        "position": "absolute",
+                        "top": "237px", //设置弹出框距离是页面顶端下的200px
+                        "left": "428px" //设置弹出框距离是页面顶端下的200px
 
-                });
+                    });
+                }
             }
-        }
-    });
+        });
 //系统提示请求验证码过于频繁
-    $("#info-quick").dialog({
-        open: function (event, ui) {
-            closeOnEscape: false, //取消esc键
-                $(".ui-dialog-titlebar").hide();
-        },
-        draggable: false,
-        resizable: false,
-        autoOpen: false,
-        height: 306,
-        width: 439,
-        modal: true,
-        position: {
-            using: function () {
-                $(this).css({
-                    "position": "absolute",
-                    "top": "237px", //设置弹出框距离是页面顶端下的200px
-                    "left": "428px" //设置弹出框距离是页面顶端下的200px
+        $("#info-quick").dialog({
+            open: function (event, ui) {
+                closeOnEscape: false, //取消esc键
+                    $(".ui-dialog-titlebar").hide();
+            },
+            draggable: false,
+            resizable: false,
+            autoOpen: false,
+            height: 306,
+            width: 439,
+            modal: true,
+            position: {
+                using: function () {
+                    $(this).css({
+                        "position": "absolute",
+                        "top": "237px", //设置弹出框距离是页面顶端下的200px
+                        "left": "428px" //设置弹出框距离是页面顶端下的200px
 
-                });
+                    });
+                }
             }
-        }
-    });
+        });
 //系统提示出价过快
-    $("#info-tooquick").dialog({
-        open: function (event, ui) {
-            closeOnEscape: false, //取消esc键
-                $(".ui-dialog-titlebar").hide();
-        },
-        draggable: false,
-        resizable: false,
-        autoOpen: false,
-        height: 306,
-        width: 439,
-        modal: true,
-        position: {
-            using: function () {
-                $(this).css({
-                    "position": "absolute",
-                    "top": "237px", //设置弹出框距离是页面顶端下的200px
-                    "left": "428px" //设置弹出框距离是页面顶端下的200px
+        $("#info-tooquick").dialog({
+            open: function (event, ui) {
+                closeOnEscape: false, //取消esc键
+                    $(".ui-dialog-titlebar").hide();
+            },
+            draggable: false,
+            resizable: false,
+            autoOpen: false,
+            height: 306,
+            width: 439,
+            modal: true,
+            position: {
+                using: function () {
+                    $(this).css({
+                        "position": "absolute",
+                        "top": "237px", //设置弹出框距离是页面顶端下的200px
+                        "left": "428px" //设置弹出框距离是页面顶端下的200px
 
-                });
+                    });
+                }
             }
-        }
-    });
+        });
 //系统提示验证证码错误
-    $("#info-wrongcode").dialog({
-        open: function (event, ui) {
-            closeOnEscape: false, //取消esc键
-                $(".ui-dialog-titlebar").hide();
-        },
-        draggable: false,
-        resizable: false,
-        autoOpen: false,
-        height: 306,
-        width: 439,
-        modal: true,
-        position: {
-            using: function () {
-                $(this).css({
-                    "position": "absolute",
-                    "top": "237px", //设置弹出框距离是页面顶端下的200px
-                    "left": "428px" //设置弹出框距离是页面顶端下的200px
-                });
+        $("#info-wrongcode").dialog({
+            open: function (event, ui) {
+                closeOnEscape: false, //取消esc键
+                    $(".ui-dialog-titlebar").hide();
+            },
+            draggable: false,
+            resizable: false,
+            autoOpen: false,
+            height: 306,
+            width: 439,
+            modal: true,
+            position: {
+                using: function () {
+                    $(this).css({
+                        "position": "absolute",
+                        "top": "237px", //设置弹出框距离是页面顶端下的200px
+                        "left": "428px" //设置弹出框距离是页面顶端下的200px
+                    });
+                }
             }
-        }
-    });
+        });
 //系统提示价格错误
-    $("#info-wrongprice").dialog({
-        open: function (event, ui) {
-            closeOnEscape: false, //取消esc键
-                $(".ui-dialog-titlebar").hide();
-        },
-        draggable: false,
-        resizable: false,
-        autoOpen: false,
-        height: 306,
-        width: 439,
-        modal: true,
-        position: {
-            using: function () {
-                $(this).css({
-                    "position": "absolute",
-                    "top": "237px", //设置弹出框距离是页面顶端下的200px
-                    "left": "428px" //设置弹出框距离是页面顶端下的200px
-                });
+        $("#info-wrongprice").dialog({
+            open: function (event, ui) {
+                closeOnEscape: false, //取消esc键
+                    $(".ui-dialog-titlebar").hide();
+            },
+            draggable: false,
+            resizable: false,
+            autoOpen: false,
+            height: 306,
+            width: 439,
+            modal: true,
+            position: {
+                using: function () {
+                    $(this).css({
+                        "position": "absolute",
+                        "top": "237px", //设置弹出框距离是页面顶端下的200px
+                        "left": "428px" //设置弹出框距离是页面顶端下的200px
+                    });
+                }
             }
-        }
-    });
+        });
 //出价有效
-    $("#price-right").dialog({
-        open: function (event, ui) {
-            closeOnEscape: false, //取消esc键
-                $(".ui-dialog-titlebar").hide();
-        },
-        draggable: false,
-        resizable: false,
-        autoOpen: false,
-        height: 306,
-        width: 439,
-        modal: true,
-        position: {
-            using: function () {
-                $(this).css({
-                    "position": "absolute",
-                    "top": "237px", //设置弹出框距离是页面顶端下的200px
-                    "left": "428px" //设置弹出框距离是页面顶端下的200px
-                });
+        $("#price-right").dialog({
+            open: function (event, ui) {
+                closeOnEscape: false, //取消esc键
+                    $(".ui-dialog-titlebar").hide();
+            },
+            draggable: false,
+            resizable: false,
+            autoOpen: false,
+            height: 306,
+            width: 439,
+            modal: true,
+            position: {
+                using: function () {
+                    $(this).css({
+                        "position": "absolute",
+                        "top": "237px", //设置弹出框距离是页面顶端下的200px
+                        "left": "428px" //设置弹出框距离是页面顶端下的200px
+                    });
+                }
             }
-        }
-    });
+        });
 //系统提示价格不在区间
-    $("#price-wrong").dialog({
-        open: function (event, ui) {
-            closeOnEscape: false, //取消esc键
-                $(".ui-dialog-titlebar").hide();
-        },
-        draggable: false,
-        resizable: false,
-        autoOpen: false,
-        height: 306,
-        width: 439,
-        modal: true,
-        position: {
-            using: function () {
-                $(this).css({
-                    "position": "absolute",
-                    "top": "237px", //设置弹出框距离是页面顶端下的200px
-                    "left": "428px" //设置弹出框距离是页面顶端下的200px
-                });
+        $("#price-wrong").dialog({
+            open: function (event, ui) {
+                closeOnEscape: false, //取消esc键
+                    $(".ui-dialog-titlebar").hide();
+            },
+            draggable: false,
+            resizable: false,
+            autoOpen: false,
+            height: 306,
+            width: 439,
+            modal: true,
+            position: {
+                using: function () {
+                    $(this).css({
+                        "position": "absolute",
+                        "top": "237px", //设置弹出框距离是页面顶端下的200px
+                        "left": "428px" //设置弹出框距离是页面顶端下的200px
+                    });
+                }
             }
-        }
-    });
+        });
 //系统提示超时
-    $("#outoftime").dialog({
-        open: function (event, ui) {
-            closeOnEscape: false, //取消esc键
-                $(".ui-dialog-titlebar").hide();
-        },
-        draggable: false,
-        resizable: false,
-        autoOpen: false,
-        height: 306,
-        width: 439,
-        modal: true,
-        position: {
-            using: function () {
-                $(this).css({
-                    "position": "absolute",
-                    "top": "237px", //设置弹出框距离是页面顶端下的200px
-                    "left": "428px" //设置弹出框距离是页面顶端下的200px
-                });
+        $("#outoftime").dialog({
+            open: function (event, ui) {
+                closeOnEscape: false, //取消esc键
+                    $(".ui-dialog-titlebar").hide();
+            },
+            draggable: false,
+            resizable: false,
+            autoOpen: false,
+            height: 306,
+            width: 439,
+            modal: true,
+            position: {
+                using: function () {
+                    $(this).css({
+                        "position": "absolute",
+                        "top": "237px", //设置弹出框距离是页面顶端下的200px
+                        "left": "428px" //设置弹出框距离是页面顶端下的200px
+                    });
+                }
             }
-        }
-    });
+        });
 //系统提示结果失败
-    $("#info-result-failure").dialog({
-        open: function (event, ui) {
-            closeOnEscape: false, //取消esc键
-                $(".ui-dialog-titlebar").hide();
-        },
-        draggable: false,
-        resizable: false,
-        autoOpen: false,
-        height: 306,
-        width: 439,
-        modal: true,
-        position: {
-            using: function () {
-                $(this).css({
-                    "position": "absolute",
-                    "top": "237px", //设置弹出框距离是页面顶端下的200px
-                    "left": "428px" //设置弹出框距离是页面顶端下的200px
+        $("#info-result-failure").dialog({
+            open: function (event, ui) {
+                closeOnEscape: false, //取消esc键
+                    $(".ui-dialog-titlebar").hide();
+            },
+            draggable: false,
+            resizable: false,
+            autoOpen: false,
+            height: 306,
+            width: 439,
+            modal: true,
+            position: {
+                using: function () {
+                    $(this).css({
+                        "position": "absolute",
+                        "top": "237px", //设置弹出框距离是页面顶端下的200px
+                        "left": "428px" //设置弹出框距离是页面顶端下的200px
 
-                });
+                    });
+                }
             }
-        }
-    });
+        });
 //系统提示结果成功
 
-    $("#info-result-success").dialog({
-        open: function (event, ui) {
-            closeOnEscape: false, //取消esc键
-                $(".ui-dialog-titlebar").hide();
-        },
-        draggable: false,
-        resizable: false,
-        autoOpen: false,
-        height: 306,
-        width: 439,
-        modal: true,
-        position: {
-            using: function () {
-                $(this).css({
-                    "position": "absolute",
-                    "top": "237px", //设置弹出框距离是页面顶端下的200px
-                    "left": "428px" //设置弹出框距离是页面顶端下的200px
-                });
+        $("#info-result-success").dialog({
+            open: function (event, ui) {
+                closeOnEscape: false, //取消esc键
+                    $(".ui-dialog-titlebar").hide();
+            },
+            draggable: false,
+            resizable: false,
+            autoOpen: false,
+            height: 306,
+            width: 439,
+            modal: true,
+            position: {
+                using: function () {
+                    $(this).css({
+                        "position": "absolute",
+                        "top": "237px", //设置弹出框距离是页面顶端下的200px
+                        "left": "428px" //设置弹出框距离是页面顶端下的200px
+                    });
+                }
             }
-        }
-    });
+        });
 //时间到界面跳转
-    $("#final-info").dialog({
-        open: function (event, ui) {
-            closeOnEscape: false, //取消esc键
-                $(".ui-dialog-titlebar").hide();
-        },
-        draggable: false,
-        resizable: false,
-        autoOpen: false,
-        height: 476,
-        width: 379,
-        modal: true,
+        $("#final-info").dialog({
+            open: function (event, ui) {
+                closeOnEscape: false, //取消esc键
+                    $(".ui-dialog-titlebar").hide();
+            },
+            draggable: false,
+            resizable: false,
+            autoOpen: false,
+            height: 476,
+            width: 379,
+            modal: true,
 //					position:{  				
 //						my: "left top",
 //						at: "left top+169 ",
 //						of: $('.leftmainbox')}
-        position: {
-            using: function () {
-                $(this).css({
-                    "position": "absolute",
-                    "top": "169px",
-                    "left": "22px",
-//								"top": (yp/2-215).toString(),
-//								"left": (xp/2-428).toString()
-                });
+            position: {
+                using: function () {
+                    $(this).css({
+                        "position": "absolute",
+                        "top": "169px",
+                        "left": "22px"
+                    })
+                }
             }
-        }
-    });
+        });
+        //								"top": (yp/2-215).toString(),
+//								"left": (xp/2-428).toString()
 //				var $div = $('.leftmainbox');
 //				$("#final-info").dialog('widget').position({
 //				my: "center",
@@ -667,132 +704,135 @@ $(function () {
 //				});
 
 
-    $(".middleconfirm").button().click(function () {
-        $("#info-tooquick").dialog("close");
-    });
-    $(".middleconfirm_wrongcode").button().click(function () {
-        $("#info-wrongcode").dialog("close");
-        $("#dialog-form").dialog("close");
-    });
-    $(".middleconfirm_wrongprice").button().click(function () {
-        $("#info-wrongcode").dialog("close");
-    });
-    $(".middleconfirm_result").button().click(function () {
-        $("#info-form").dialog("close");
-    });
+        $(".middleconfirm").button().click(function () {
+            $("#info-tooquick").dialog("close");
+        });
+        $(".middleconfirm_wrongcode").button().click(function () {
+            $("#info-wrongcode").dialog("close");
+            $("#dialog-form").dialog("close");
+        });
+        $(".middleconfirm_wrongprice").button().click(function () {
+            $("#info-wrongcode").dialog("close");
+        });
+        $(".middleconfirm_result").button().click(function () {
+            $("#info-form").dialog("close");
+        });
 //出价处理
-    $("#price-form").dialog({
-        open: function (event, ui) {
-            closeOnEscape: false, //取消esc键
-                $(".ui-dialog-titlebar").hide();
-        },
-        draggable: false,
-        resizable: false,
-        autoOpen: false,
-        height: 306,
-        width: 439,
-        modal: true,
-        position: {
-            using: function () {
-                $(this).css({
-                    "position": "absolute",
-                    "top": "237px", //设置弹出框距离是页面顶端下的200px
-                    "left": "428px" //设置弹出框距离是页面顶端下的200px
+        $("#price-form").dialog({
+            open: function (event, ui) {
+                closeOnEscape: false, //取消esc键
+                    $(".ui-dialog-titlebar").hide();
+            },
+            draggable: false,
+            resizable: false,
+            autoOpen: false,
+            height: 306,
+            width: 439,
+            modal: true,
+            position: {
+                using: function () {
+                    $(this).css({
+                        "position": "absolute",
+                        "top": "237px", //设置弹出框距离是页面顶端下的200px
+                        "left": "428px" //设置弹出框距离是页面顶端下的200px
 
-                });
+                    });
+                }
             }
-        }
-    });
+        });
 
-    $(".refresh").button().click(function () {
-        GetYanzhengma();
-        $(".refresh").attr("disabled", "disabled");
-    });
 
-    $(".refresh").attr("disabled", "disabled");
+        // $(".refresh").button().click(function () {
+        //     GetYanzhengma();
+        //     $(".refresh").attr("disabled", "disabled");
+        // });
+        //
+        // $(".refresh").attr("disabled", "disabled");
 
-    $("#chujia").button().click(function () {
-        var price100 = Price_confirm();
-        if (Interval()) {
-            query_time = realsecond;   //更新查询时间
-            if (price100) {
-                $("#dialog-form").dialog("open");
-                var userprice0 = $(".userwriteprice").val();
-                $("#userprice").text("您的出价为：" + userprice0 + "元")
-                if (No_image()) {
-                    path = "/bid/yanzhengma_refresh";
-                    $("#yanzhengma").load(path);
-                    $(".refresh").attr("disabled", false);
-                } //加载刷新
+        $("#chujia").button().click(function () {
+            var price100 = Price_confirm();
+            if (Interval()) {
+                query_time = realsecond;   //更新查询时间
+                if (price100) {
+                    $("#dialog-form").dialog("open");
+                    var userprice0 = $(".userwriteprice").val();
+                    $("#userprice").text("您的出价为：" + userprice0 + "元")
+                    if (No_image()) {
+                        path = "/bid/yanzhengma_refresh";
+                        // $("#yanzhengma").load(path);
+                        create_refresh();
+                    } //加载刷新
+                    else {
+                        GetYanzhengma();
+                    }
+                }
                 else {
-                    GetYanzhengma();
+                    $("#info-wrongprice").dialog("open")
                 }
             }
             else {
-                $("#info-wrongprice").dialog("open")
+                $("#info-tooquick").dialog("open")
             }
-        }
-        else {
-            $("#info-tooquick").dialog("open")
-        }
-    })
+        })
 
 
-    $(".middleconfirm_wrongcode").button().click(function () {
-        $("#info-wrongcode").dialog("close");
-    });
-    $(".middleconfirm_wrongprice").button().click(function () {
-        $("#info-wrongprice").dialog("close");
-    });
-    $(".cancel").button().click(function () {
-        $("#dialog-form").dialog("close");
-        ResumeYanzhengma();
-    });
-    $(".confirm").button().click(function () {
-        var t = 0;
-        if (realsecond < 52) {
-            t = time_need1
-        }
-        else if (realsecond > 52 && realsecond <= time_cut) {
-            t = time_need2
-        }
-        else {
-            t = time_torrent * (realsecond - time_cut) + 2
-        }
-        ProgressOn(t);
-        ResumeYanzhengma();
-    });
+        $(".middleconfirm_wrongcode").button().click(function () {
+            $("#info-wrongcode").dialog("close");
+        });
+        $(".middleconfirm_wrongprice").button().click(function () {
+            $("#info-wrongprice").dialog("close");
+        });
+        $(".cancel").button().click(function () {
+            $("#dialog-form").dialog("close");
+            ResumeYanzhengma();
+        });
+        $(".confirm").button().click(function () {
+            var t = 0;
+            if (realsecond < 52) {
+                t = time_need1
+            }
+            else if (realsecond > 52 && realsecond <= time_cut) {
+                t = time_need2
+            }
+            else {
+                t = time_torrent * (realsecond - time_cut) + 2
+            }
+            ProgressOn(t);
+            ResumeYanzhengma();
+        });
 
-    $(".middleconfirm_priceright").button().click(function () {
-        $("#price-right").dialog("close");
-        $("#dialog-form").dialog("close");
-    });
+        $(".middleconfirm_priceright").button().click(function () {
+            $("#price-right").dialog("close");
+
+            $("#dialog-form").dialog("close");
+        });
 
 
-    $(".middleconfirm_outoftime").button().click(function () {
-        $("#dialog-form").dialog("close");
-        $("#outoftime").dialog("close");
-    });
-    $(".middleconfirm_pricewrong").button().click(function () {
-        $("#price-wrong").dialog("close");
-        $("#dialog-form").dialog("close");
-    });
-    $(".middleconfirm_tooquick").button().click(function () {
-        $("#info-tooquick").dialog("close");
-    });
+        $(".middleconfirm_outoftime").button().click(function () {
+            $("#dialog-form").dialog("close");
+            $("#outoftime").dialog("close");
+        });
+        $(".middleconfirm_pricewrong").button().click(function () {
+            $("#price-wrong").dialog("close");
+            $("#dialog-form").dialog("close");
+        });
+        $(".middleconfirm_tooquick").button().click(function () {
+            $("#info-tooquick").dialog("close");
+        });
 
-    $(".middleconfirmsuccess").button().click(function () {
+        $(".middleconfirmsuccess").button().click(function () {
 //					history.go(0);
-        $('#final-info').dialog("close");
-        $('#info-result-success').dialog("close");
-        Reset();
-    });
-    $(".middleconfirmfailure").button().click(function () {
-        $('#final-info').dialog("close");
-        $('#info-result-failure').dialog("close");
-        Reset();
-    });
+            $('#final-info').dialog("close");
+            $('#info-result-success').dialog("close");
+            Reset();
+        });
+        $(".middleconfirmfailure").button().click(function () {
+            $('#final-info').dialog("close");
+            $('#info-result-failure').dialog("close");
+            Reset();
+        });
 
-});
+    }
+);
 
 

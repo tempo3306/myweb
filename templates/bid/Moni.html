@@ -2,6 +2,15 @@
 <head>
     <title>小鲜肉模拟拍牌系统</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <link href="/static/css/moni.css" rel="stylesheet">
+    <script>
+        function stop() {
+            return false;
+        }
+
+        {#document.oncontextmenu = stop;#}
+        document.ondragstart = stop;
+    </script>
 </head>
 
 <body>
@@ -50,13 +59,13 @@
 
             </li>
         </ul>
-        <button class="ghostbutton"></button>
+{#        <button class="ghostbutton"></button>#}
 
     </div>
     <div class='rightmainbox'>
         <p class='lowestprice'></p>
-        <input type="text" id='自定义加价' class='useraddprice' checked="checked">
-        <input type="text" id='自定义写价' class='userwriteprice' checked="checked">
+        <input type="text" id='selfadd' class='useraddprice' checked="checked">
+        <input type="text" id='selfwrite' class='userwriteprice' checked="checked">
         <button id='b1'></button>
         <button id='b2'></button>
         <button id='b3'></button>
@@ -80,7 +89,8 @@
             <div id="yanzhengma"></div>
             <input type="text" id='inputyanzhengma' class='inputyanzhengma' checked="checked">
             <p class="question" id="question"></p>
-            <button class="refresh"></button>
+            <div id="refresh">
+            </div>
             <button class="confirm"></button>
             <button class="cancel"></button>
         </div>
@@ -168,7 +178,6 @@
 
 <link href="http://cdn.bootcss.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
 <link href="http://cdn.bootcss.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
-<link href="/static/css/moni.css" rel="stylesheet">
 
 
 </body>

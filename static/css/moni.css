@@ -1,9 +1,10 @@
-html,body{
--moz-user-select: none;
--khtml-user-select: none;
-user-select: none;
+html, body {
+    -webkit-user-select: none; /* Chrome all / Safari all */
+    -moz-user-select: none; /* Firefox all */
+    -ms-user-select: none; /* IE 10+ */
+    user-select: none; /* Likely future */
+    cursor: default;
 }
-
 
 body {
     height: 100%;
@@ -257,17 +258,19 @@ input.userwriteprice {
 }
 
 .refresh {
-    background-color: transparent;
+    background-image: url(/media/code/moni_fresh.png);
     position: absolute;
     top: 180px;
     margin: 0 auto;
     padding: 0px;
     left: 65px;
-    width: 113px;
-    height: 27px;
+    width: 111px;
+    height: 26px;
     border: none;
     outline: none;
 }
+
+
 
 #b1 {
     background-color: transparent;
@@ -695,3 +698,6 @@ p.question {
     height: 38px;
 }
 
+input[type=text]::-ms-clear {
+    display: none
+}
