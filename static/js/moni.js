@@ -133,7 +133,6 @@ function create_refresh() {
 }
 
 
-
 //执行功能
 setInterval("Calculate_time()", 100);
 setInterval("Calculate_price()", 1000);
@@ -303,9 +302,10 @@ function Read_price() {
     usercode = $('.inputyanzhengma').val();
     var temp_price = $('.userwriteprice').val();
     $('#inputyanzhengma').val('');   //清空输入框
+
     if (usercode != answer) {
         $("#info-wrongcode").dialog("open");
-    } else if ((userprice > lowestprice + 300) || (userprice < lowestprice - 300)) {
+    } else if ((temp_price > lowestprice + 300) || (temp_price < lowestprice - 300)) {
         $('#price-wrong').dialog("open");
     } else if (usertime1 >= 59 && count == 0) {
         $('#outoftime').dialog('open');
@@ -393,6 +393,7 @@ function GetYanzhengma() {
 function ResumeYanzhengma() {
     $('#question').text('');
     $('#yanzhengma').html('');
+    $("#refresh").html('');
 
 }
 
@@ -459,8 +460,8 @@ $(function () {
                 using: function () {
                     $(this).css({
                         "position": "absolute",
-                        "top": "237px", //设置弹出框距离是页面顶端下的200px
-                        "left": "428px" //设置弹出框距离是页面顶端下的200px
+                        "top": "244px", //设置弹出框距离是页面顶端下的200px
+                        "left": "430px" //设置弹出框距离是页面顶端下的200px
 
                     });
                 }
@@ -482,8 +483,8 @@ $(function () {
                 using: function () {
                     $(this).css({
                         "position": "absolute",
-                        "top": "237px", //设置弹出框距离是页面顶端下的200px
-                        "left": "428px" //设置弹出框距离是页面顶端下的200px
+                        "top": "244px", //设置弹出框距离是页面顶端下的200px
+                        "left": "430px" //设置弹出框距离是页面顶端下的200px
 
                     });
                 }
@@ -505,8 +506,8 @@ $(function () {
                 using: function () {
                     $(this).css({
                         "position": "absolute",
-                        "top": "237px", //设置弹出框距离是页面顶端下的200px
-                        "left": "428px" //设置弹出框距离是页面顶端下的200px
+                        "top": "244px", //设置弹出框距离是页面顶端下的200px
+                        "left": "430px" //设置弹出框距离是页面顶端下的200px
 
                     });
                 }
@@ -528,8 +529,8 @@ $(function () {
                 using: function () {
                     $(this).css({
                         "position": "absolute",
-                        "top": "237px", //设置弹出框距离是页面顶端下的200px
-                        "left": "428px" //设置弹出框距离是页面顶端下的200px
+                        "top": "244px", //设置弹出框距离是页面顶端下的200px
+                        "left": "430px" //设置弹出框距离是页面顶端下的200px
                     });
                 }
             }
@@ -550,8 +551,8 @@ $(function () {
                 using: function () {
                     $(this).css({
                         "position": "absolute",
-                        "top": "237px", //设置弹出框距离是页面顶端下的200px
-                        "left": "428px" //设置弹出框距离是页面顶端下的200px
+                        "top": "244px", //设置弹出       框距离是页面顶端下的200px
+                        "left": "430px" //设置弹出框距离是页面顶端下的200px
                     });
                 }
             }
@@ -572,8 +573,8 @@ $(function () {
                 using: function () {
                     $(this).css({
                         "position": "absolute",
-                        "top": "237px", //设置弹出框距离是页面顶端下的200px
-                        "left": "428px" //设置弹出框距离是页面顶端下的200px
+                        "top": "244px", //设置弹出框距离是页面顶端下的200px
+                        "left": "430px" //设置弹出框距离是页面顶端下的200px
                     });
                 }
             }
@@ -594,8 +595,8 @@ $(function () {
                 using: function () {
                     $(this).css({
                         "position": "absolute",
-                        "top": "237px", //设置弹出框距离是页面顶端下的200px
-                        "left": "428px" //设置弹出框距离是页面顶端下的200px
+                        "top": "244px", //设置弹出框距离是页面顶端下的200px
+                        "left": "430px" //设置弹出框距离是页面顶端下的200px
                     });
                 }
             }
@@ -616,8 +617,8 @@ $(function () {
                 using: function () {
                     $(this).css({
                         "position": "absolute",
-                        "top": "237px", //设置弹出框距离是页面顶端下的200px
-                        "left": "428px" //设置弹出框距离是页面顶端下的200px
+                        "top": "244px", //设置弹出框距离是页面顶端下的200px
+                        "left": "430px" //设置弹出框距离是页面顶端下的200px
                     });
                 }
             }
@@ -638,8 +639,8 @@ $(function () {
                 using: function () {
                     $(this).css({
                         "position": "absolute",
-                        "top": "237px", //设置弹出框距离是页面顶端下的200px
-                        "left": "428px" //设置弹出框距离是页面顶端下的200px
+                        "top": "244px", //设置弹出框距离是页面顶端下的200px
+                        "left": "430px" //设置弹出框距离是页面顶端下的200px
 
                     });
                 }
@@ -662,8 +663,8 @@ $(function () {
                 using: function () {
                     $(this).css({
                         "position": "absolute",
-                        "top": "237px", //设置弹出框距离是页面顶端下的200px
-                        "left": "428px" //设置弹出框距离是页面顶端下的200px
+                        "top": "244px", //设置弹出框距离是页面顶端下的200px
+                        "left": "430px" //设置弹出框距离是页面顶端下的200px
                     });
                 }
             }
@@ -733,8 +734,8 @@ $(function () {
                 using: function () {
                     $(this).css({
                         "position": "absolute",
-                        "top": "237px", //设置弹出框距离是页面顶端下的200px
-                        "left": "428px" //设置弹出框距离是页面顶端下的200px
+                        "top": "244px", //设置弹出框距离是页面顶端下的200px
+                        "left": "430px" //设置弹出框距离是页面顶端下的200px
 
                     });
                 }
@@ -785,6 +786,7 @@ $(function () {
         $(".cancel").button().click(function () {
             $("#dialog-form").dialog("close");
             ResumeYanzhengma();
+            $('#yanzhengma').val();
         });
         $(".confirm").button().click(function () {
             var t = 0;
