@@ -55,7 +55,7 @@ body {
 .leftmainbox {
     background-image: url(/media/img/info.png);
     position: absolute;
-    top: 173px;
+    top: 175px;
     left: 22px;
     width: 379px;
     height: 476px;
@@ -88,7 +88,7 @@ body {
 .rightmainbox {
     background-image: url(/media/img/bid.png);
     position: absolute;
-    top: 173px;
+    top: 175px;
     left: 427px;
     width: 452px;
     height: 476px;

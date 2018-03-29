@@ -460,7 +460,7 @@ $(function () {
                 using: function () {
                     $(this).css({
                         "position": "absolute",
-                        "top": "244px", //设置弹出框距离是页面顶端下的200px
+                        "top": "246px", //设置弹出框距离是页面顶端下的200px
                         "left": "430px" //设置弹出框距离是页面顶端下的200px
 
                     });
@@ -483,7 +483,7 @@ $(function () {
                 using: function () {
                     $(this).css({
                         "position": "absolute",
-                        "top": "244px", //设置弹出框距离是页面顶端下的200px
+                        "top": "246px", //设置弹出框距离是页面顶端下的200px
                         "left": "430px" //设置弹出框距离是页面顶端下的200px
 
                     });
@@ -506,7 +506,7 @@ $(function () {
                 using: function () {
                     $(this).css({
                         "position": "absolute",
-                        "top": "244px", //设置弹出框距离是页面顶端下的200px
+                        "top": "246px", //设置弹出框距离是页面顶端下的200px
                         "left": "430px" //设置弹出框距离是页面顶端下的200px
 
                     });
@@ -529,7 +529,7 @@ $(function () {
                 using: function () {
                     $(this).css({
                         "position": "absolute",
-                        "top": "244px", //设置弹出框距离是页面顶端下的200px
+                        "top": "246px", //设置弹出框距离是页面顶端下的200px
                         "left": "430px" //设置弹出框距离是页面顶端下的200px
                     });
                 }
@@ -551,7 +551,7 @@ $(function () {
                 using: function () {
                     $(this).css({
                         "position": "absolute",
-                        "top": "244px", //设置弹出       框距离是页面顶端下的200px
+                        "top": "246px", //设置弹出       框距离是页面顶端下的200px
                         "left": "430px" //设置弹出框距离是页面顶端下的200px
                     });
                 }
@@ -573,7 +573,7 @@ $(function () {
                 using: function () {
                     $(this).css({
                         "position": "absolute",
-                        "top": "244px", //设置弹出框距离是页面顶端下的200px
+                        "top": "246px", //设置弹出框距离是页面顶端下的200px
                         "left": "430px" //设置弹出框距离是页面顶端下的200px
                     });
                 }
@@ -595,7 +595,7 @@ $(function () {
                 using: function () {
                     $(this).css({
                         "position": "absolute",
-                        "top": "244px", //设置弹出框距离是页面顶端下的200px
+                        "top": "246px", //设置弹出框距离是页面顶端下的200px
                         "left": "430px" //设置弹出框距离是页面顶端下的200px
                     });
                 }
@@ -617,7 +617,7 @@ $(function () {
                 using: function () {
                     $(this).css({
                         "position": "absolute",
-                        "top": "244px", //设置弹出框距离是页面顶端下的200px
+                        "top": "246px", //设置弹出框距离是页面顶端下的200px
                         "left": "430px" //设置弹出框距离是页面顶端下的200px
                     });
                 }
@@ -639,7 +639,7 @@ $(function () {
                 using: function () {
                     $(this).css({
                         "position": "absolute",
-                        "top": "244px", //设置弹出框距离是页面顶端下的200px
+                        "top": "246px", //设置弹出框距离是页面顶端下的200px
                         "left": "430px" //设置弹出框距离是页面顶端下的200px
 
                     });
@@ -663,7 +663,7 @@ $(function () {
                 using: function () {
                     $(this).css({
                         "position": "absolute",
-                        "top": "244px", //设置弹出框距离是页面顶端下的200px
+                        "top": "246px", //设置弹出框距离是页面顶端下的200px
                         "left": "430px" //设置弹出框距离是页面顶端下的200px
                     });
                 }
@@ -734,7 +734,7 @@ $(function () {
                 using: function () {
                     $(this).css({
                         "position": "absolute",
-                        "top": "244px", //设置弹出框距离是页面顶端下的200px
+                        "top": "246px", //设置弹出框距离是页面顶端下的200px
                         "left": "430px" //设置弹出框距离是页面顶端下的200px
 
                     });
@@ -786,7 +786,7 @@ $(function () {
         $(".cancel").button().click(function () {
             $("#dialog-form").dialog("close");
             ResumeYanzhengma();
-            $('#yanzhengma').val();
+            $('#yanzhengma').val('');
         });
         $(".confirm").button().click(function () {
             var t = 0;
