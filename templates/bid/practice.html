@@ -27,7 +27,7 @@
 <style>
     #bt1 {
         position: absolute;
-        top: -10%;
+        top: -13%;
         left: 8%;
         background: #00aeff;
         border-color: #00aeff
@@ -35,7 +35,7 @@
 
     #bt2 {
         position: absolute;
-        top: -10%;
+        top: -13%;
         left: 17%;
         background: #5e5e5e;
         border-color: #5e5e5e
@@ -43,14 +43,14 @@
 
     #bt3 {
         position: absolute;
-        top: -10%;
+        top: -13%;
         left: 26%;
         background: #5e5e5e;
         border-color: #5e5e5e
     }
 </style>
 
-<body style="left=0">
+<body >
 
 <div class="container" style="position: relative;margin:0 auto;left:20%;top:10%;">
 
@@ -58,8 +58,8 @@
         <span id="bt1" class="btn btn-success">练习模式</span>
         <span id="bt2" class="btn btn-success">测试模式</span>
         <span id="bt3" class="btn btn-success">考核模式</span>
-        <div id="userprice">验证码随机练习模式</div>
-        <select class="form-control" id="cofirm_select" onchange="selectOnchang(this)">
+        <div id="userprice" style="top:12%">验证码随机练习模式</div>
+        <select class="form-control" id="confirm_select" onchange="selectOnchang(this)"">
             <option>无辅助确认</option>
             <option>回车确认</option>
             <option>按E确认</option>
@@ -68,21 +68,19 @@
     <div id="yanzhengma"></div>
     <input type="text" id='inputyanzhengma' class='inputyanzhengma' checked="checked">
     <p class="question" id="question"></p>
-    <button class="refresh" id="refresh"></button>
     <button class="confirm" id="confirm"></button>
     <button class="cancel" id="cancel"></button>
 </div>
 
 
-<script src="http://libs.baidu.com/jquery/1.9.1/jquery.min.js"></script>
-<script src="http://apps.bdimg.com/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
+
 <script>
     var answer = 0;
     var question = 0;    //问题和答案
 </script>
 
-<script src="/static/js/practice.js"></script>
-
+<script src="https://cdn.bootcss.com/jquery/1.9.1/jquery.js"></script>
+<script src="https://cdn.bootcss.com/jqueryui/1.10.4/jquery-ui.min.js"></script>
 <!-- Latest compiled and minified JavaScript -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/bootstrap-select.min.js"></script>
 
@@ -109,7 +107,7 @@
 
 </script>
 
-
+<script src="/static/js/practice.js"></script>
 </body>
 
 </html>

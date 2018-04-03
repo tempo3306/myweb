@@ -6,7 +6,7 @@
 '''
 
 from rest_framework import viewsets, status
-from bid.api.serializers import Bid_actionSerializer, Bid_handerSerializer, Bid_auctionSerializer
+from bid.api.serializers import *
 from bid.models import Bid_action, Bid_auction, Bid_hander, query_auction_by_args, query_auction_by_url
 from rest_framework import permissions
 from rest_framework.response import Response
@@ -15,8 +15,48 @@ from rest_framework import generics
 from django_filters.rest_framework import DjangoFilterBackend
 import django_filters
 import json
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
+from bid.api.permissions import CanBid
 
+
+
+
+class ConsumerViewSet(viewsets.ModelViewSet):
+    queryset = Consumer.objects.all()
+    serializer_class = ConsumerSerializer
+    permission_classes = (permissions.IsAuthenticated,)  #permissions.AllowAny  注册设置为这个
+
+
+class Consumer_softwareViewSet(viewsets.ModelViewSet):
+    queryset = Consumer_software.objects.all()
+    serializer_class = Consumer_softwareSerializer
+    permissions_class = (permissions.IsAuthenticated,)
+
+class Consumer_bidViewSet(viewsets.ModelViewSet):
+    queryset = Consumer_bid.objects.all()
+    serializer_class = Consumer_bidSerializer
+    permissions_class = (permissions.IsAuthenticated,)
+
+class Identify_codeViewSet(viewsets.ModelViewSet):
+    queryset = Identify_code.objects.all()
+    serializer_class = Identify_codeSerializer
+    permissions_class = (permissions.IsAuthenticated,)
+
+class Invite_codeViewSet(viewsets.ModelViewSet):
+    queryset = Invite_code.objects.all()
+    serializer_class = Invite_codeSerializer
+    permission_classes = (permissions.IsAuthenticated,)
+
+
+
+
+
+
+class Bid_groupViewSet(viewsets.ModelViewSet):
+    queryset = Bid_group.objects.all()
+    serializer_class = Bid_groupSerializer
+    permission_classes = (permissions.IsAuthenticated,)  #permissions.AllowAny  注册设置为这个
 
 class Bid_handerViewSet(viewsets.ModelViewSet):
     queryset = Bid_hander.objects.all()
@@ -131,36 +171,34 @@ def Bid_auction_manage(request):
 
 
 
-    # def destroy(self, request, **kwargs):
-    #     try:
-    #         auctions = query_auction_by_url(request.data)['data']
-    #         auctions = json.loads(auctions) #转json
-    #         print(auctions)
-    #         serializer = Bid_auction(auctions, many=True)
-    #         serializer.delete()
-    #         return Response(status=status.HTTP_204_NO_CONTENT)
-    #     except:
-    #         return Response(status=status.HTTP_404_NOT_FOUND)
 
 
 
 
-# try:
-#     snippet = Snippet.objects.get(pk=pk)
-# except Snippet.DoesNotExist:
-#     return Response(status=status.HTTP_404_NOT_FOUND)
-#
-# if request.method == 'GET':
-#     serializer = SnippetSerializer(snippet)
-#     return Response(serializer.data)
-#
-# elif request.method == 'PUT':
-#     serializer = SnippetSerializer(snippet, data=request.data)
-#     if serializer.is_valid():
-#         serializer.save()
-#         return Response(serializer.data)
-#     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-#
-# elif request.method == 'DELETE':
-#     snippet.delete()
-#     return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+@api_view(['GET'])
+@permission_classes((IsAuthenticated, CanBid ))
+def get_guopaiurl(request):
+    if request.method == 'GET':
+        data = request.GET.get('data')
+        data = json.loads(data)
+        version = data['version']
+        debug = data['debug']
+
+        import time
+        time1 = time.localtime(time.time())
+        time2 = time.strftime("%Y%m%d", time1)
+        today_date = time2 + "01"
+        url_dianxin = "https://paimai2.alltobid.com/bid/%s/login.htm" % today_date
+        url_nodianxin = "https://paimai.alltobid.com/bid/%s/login.htm" % today_date
+        if version == '5.12s' or debug:
+            res = {'result': 'login success',
+                   'url_dianxin': url_dianxin,
+                   'url_nodianxin': url_nodianxin}
+            return Response(res, status=status.HTTP_200_OK, template_name=None, content_type=None)
+        else:
+            res = {'result': 'wrong version'}
+            return Response(res, status=status.HTTP_200_OK, template_name=None, content_type=None)
+
+

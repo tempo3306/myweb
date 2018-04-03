@@ -23,7 +23,7 @@ function Answer(useranswer) {
 
 //更新验证码及弹出窗口
 var id = Math.floor(Math.random() * 100 + 1);
-    var path_yanzhengma = "/bid/yanzhengma/" + id;
+var path_yanzhengma = "/bid/yanzhengma/" + id;
 var path_answer = "/bid/answer/" + id;
 ;
 
@@ -43,7 +43,7 @@ function GetYanzhengma() {
 
 function Confirm() {
     time2 = new Date().getTime();
-    usetime =time2-time1
+    usetime = time2 - time1
     var useranswer = $('input').val();
     var result = Answer(useranswer);
     if (result) {
@@ -51,7 +51,7 @@ function Confirm() {
         $('input').val("");
         var a = document.getElementsByTagName("input");
         a[0].focus();
-        alert("回答正确，用时"+usetime+"毫秒");
+        alert("回答正确，用时" + usetime + "毫秒");
     }
     else {
         $('input').val(""); //清空
@@ -74,7 +74,7 @@ $(document).ready(function () {
     $('.cancel').click(function () {
         GetYanzhengma();
         var a = document.getElementsByTagName("input");
-        $('intput').val("");
+        $('#inputyanzhengma').val('');
         a[0].focus();
     })
 })
@@ -96,37 +96,39 @@ $(document).keydown(function (event) {
 });
 
 //设计  bt1 bt2 bt3功能
-function gray(btn){
-    btn.css({'background': '#5e5e5e','border-color': '#5e5e5e'})
+function gray(btn) {
+    btn.css({'background': '#5e5e5e', 'border-color': '#5e5e5e'})
 }
-function blue(btn){
-    btn.css({'background': '#00aeff','border-color': '#00aeff'})
+
+function blue(btn) {
+    btn.css({'background': '#00aeff', 'border-color': '#00aeff'})
 }
-$(document).ready(function(){
-    $('#bt1').click(function(){
+
+$(document).ready(function () {
+    $('#bt1').click(function () {
         $('#userprice').text('验证码随机练习模式');
         blue($('#bt1'));
         gray($('#bt2'));
         gray($('#bt3'));
-        mode=0;
+        mode = 0;
     })
 })
-$(document).ready(function(){
-    $('#bt2').click(function(){
+$(document).ready(function () {
+    $('#bt2').click(function () {
         $('#userprice').text('验证码随机测试模式');
         blue($('#bt2'));
         gray($('#bt1'));
         gray($('#bt3'));
-        mode=1;
+        mode = 1;
     })
 })
-$(document).ready(function(){
-    $('#bt3').click(function(){
+$(document).ready(function () {
+    $('#bt3').click(function () {
         blue($('#bt3'));
         $('#userprice').text('验证码随机考核模式');
         gray($('#bt1'));
         gray($('#bt2'));
-        mode=2;
+        mode = 2;
     })
 })
 

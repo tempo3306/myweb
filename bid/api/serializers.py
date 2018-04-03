@@ -1,5 +1,14 @@
-from ..models import Bid_auction, Bid_action, Bid_hander
+from ..models import *
 from rest_framework import serializers
+
+##代拍管理
+## 团队
+class Bid_groupSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Bid_group
+        fileds = [
+            'group_name',
+        ]
 
 class Bid_actionSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -48,3 +57,65 @@ class Bid_auctionSerializer(serializers.HyperlinkedModelSerializer):
             'expired_date'
         ]
 
+## 
+class ConsumerSerializer(serializers.HyperlinkedModelSerializer):
+    consumer_softwares = serializers.PrimaryKeyRelatedField(many=True,
+                                        queryset=Consumer_software.objects.all()) #related_name
+    consumer_bids = serializers.PrimaryKeyRelatedField(many=True,
+                                        queryset=Consumer_bid.objects.all()) #related_name
+    class Meta:
+        model = Consumer
+        fields = [
+            'consumer_softwares',
+            'consumer_bids',
+        ]
+
+
+
+
+##购买激活码的用户
+class Consumer_softwareSerializer(serializers.HyperlinkedModelSerializer):
+    identify_codes = serializers.PrimaryKeyRelatedField(many=True,
+                                                        queryset=Identify_code.objects.all())
+    class Meta:
+        model = Consumer_software
+        fields = [
+            'order_number',
+            'identify_codes',
+        ]
+
+
+class Identify_codeSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Identify_code
+        fields = [
+            'identity_code',
+            'purchase_date',
+            'expired_date',
+            'bid_name',
+        ]
+
+
+
+class Invite_codeSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Invite_code
+        fields = [
+            'invite_code',
+            'type',
+        ]
+
+
+class Consumer_bidSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Consumer_bid
+        fields = [
+            'status',
+            'order_money',
+            'compensation',
+            'bid_number',
+            'did_number',
+        ]
+
+
+##------------------------------------------------------------------------------------------

@@ -3,15 +3,69 @@ from django.db.models import Q
 from django.contrib.auth.models import User
 from model_utils import Choices
 
+##------------------------------------------------------------------------------------------
+##完成商业场景下的模型搭建
+###创建消费者用户
+class Consumer(models.Model):
+    user_id = models.OneToOneField(User, unique=True, on_delete=models.CASCADE, related_name='user_consumers', null=True)
+
+
+
+
+
+##购买激活码的用户
+class Consumer_software(models.Model):
+    order_number = models.CharField(max_length=40)  ##表示订单来源，可以用于找回密码
+    consumer = models.ForeignKey(Consumer, on_delete=models.CASCADE, related_name='consumer_softwares')
+
+
+class Identify_code(models.Model):
+    identity_code = models.CharField(max_length=25)  # 激活码
+    purchase_date = models.DateField(auto_now_add=True)
+    expired_date = models.DateField(null=True)  # 过期时间,激活开始计算相应的时间
+    bid_name = models.CharField(max_length=10, default='one')  # 标书名字  one表示只有一次使用机会
+    consumer_software = models.ForeignKey(Consumer_software, on_delete=models.CASCADE, related_name='identify_codes')
+
+    def can_bid(self):
+        ##计算是否过期
+        import datetime
+        
+
+
+
+class Invite_code(models.Model):
+    invite_code = models.CharField(max_length=25)  # 邀请码
+    offer_name = models.ForeignKey(User, on_delete=models.CASCADE, related_name='offer_names')
+    type = models.CharField(max_length=1, choices=(('0', '体验'), ('1', '软件折扣'), ('2', '友情价代拍'), ('3', '提成')))
+
+
+class Consumer_bid(models.Model):
+    status = models.CharField(max_length=1, choices=(('0', '未中标结束交易'), ('1', '完成交易'), ('2', '进行中'),
+                                                     ('3', '等待客户提供新标书'), ('4', '中标后欠款中')))
+    consumer = models.ForeignKey(Consumer, on_delete=models.CASCADE, related_name='consumer_bids')
+    order_money = models.PositiveIntegerField() #中标之后的应付价格
+    compensation = models.PositiveIntegerField() #赔偿金额
+    bid_number = models.PositiveSmallIntegerField() #合同中约定的拍牌次数
+    did_number = models.PositiveSmallIntegerField() #已经完成的拍牌次数
+
+
+
+##------------------------------------------------------------------------------------------
+##代拍管理
+## 团队
+class Bid_group(models.Model):
+    group_name = models.CharField(max_length=15) ##所属团队
+    group_admin = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_groups')  ##团队管理员
 
 # 拍手
 class Bid_hander(models.Model):
-    user_id = models.OneToOneField(User, on_delete=models.CASCADE, related_name='user_handers', null=True)
+    user_id = models.OneToOneField(User, on_delete=models.CASCADE, unique=True, related_name='user_handers', null=True)
     hander_name = models.CharField(max_length=32, default='a')
     hander_passwd = models.CharField(max_length=32, default='123456')
     basic_salary = models.FloatField(default=50)  # 底薪
     extra_bonus = models.FloatField(default=0)  # 奖金
     total_income = models.FloatField(default=0)  # 总收入
+    bid_group = models.ForeignKey(Bid_group, on_delete=models.CASCADE, related_name='group_hander', null=True)
 
     def __str__(self):
         return self.hander_name
@@ -27,6 +81,10 @@ class Bid_auction(models.Model):
     status = models.CharField(max_length=8)  # 标书状态
     count = models.IntegerField()  # 参拍次数
     expired_date = models.DateField()  # 过期时间
+    ##下单情况
+    consumer_bid = models.ForeignKey(Consumer_bid, on_delete=models.CASCADE, related_name='bid_auctions', null=True)
+    bid_group = models.ForeignKey(Bid_group, on_delete=models.CASCADE, related_name='group_auctions', null=True)
+
 
     def __str__(self):
         return self.description
@@ -52,7 +110,7 @@ def query_auction_by_args(params):
     if searchText:
         queryset = queryset.filter(
             Q(id__icontains=searchText) |
-            Q(auction_name__icontains = searchText) |
+            Q(auction_name__icontains=searchText) |
             Q(description__icontains=searchText) |
             Q(ID_number__icontains=searchText) |
             Q(Bid_number__icontains=searchText) |
@@ -89,11 +147,11 @@ class Bid_action(models.Model):
     action_date = models.DateField()  # 拍牌时间
     auction_id = models.ForeignKey(Bid_auction, on_delete=models.CASCADE, related_name='auction_actions')
     action_result = models.CharField(max_length=128, null=True)  # 结果记录
+    bid_group = models.ForeignKey(Bid_group, on_delete=models.CASCADE, related_name='group_actions', null=True)
 
     def __str__(self):
         return '{0}秒加{1}提前{2}延迟{3}秒，截止时间{4}秒'.format(self.refer_time, self.diff, self.ahead_price,
                                                      self.delay_time, self.bid_time)
-
 
 
 ##设置为undefined可以获取pageNumber，pageSize，searchText，sortName，sortOrder
@@ -113,7 +171,7 @@ def query_action_by_args(params):
     if searchText:
         queryset = queryset.filter(
             Q(id__icontains=searchText) |
-            Q(refer_time__icontains = searchText) |
+            Q(refer_time__icontains=searchText) |
             Q(bid_time__icontains=searchText) |
             Q(delay_time__icontains=searchText) |
             Q(ahead_price__icontains=searchText) |
@@ -139,10 +197,13 @@ def query_action_by_url(params):
     return queryset
 
 
-
-#验证码库
+# 验证码库
 class Yanzhengma(models.Model):
-    picture=models.CharField(max_length=30)  #文件名 始终位于media/code下
-    question=models.CharField(max_length=15)  #问题
-    answer=models.CharField(max_length=4)   #答案
-    type=models.CharField(max_length=20)  #类别s    51拿来的类别1
+    picture = models.CharField(max_length=30)  # 文件名 始终位于media/code下
+    question = models.CharField(max_length=15)  # 问题
+    answer = models.CharField(max_length=4)  # 答案
+    type = models.CharField(max_length=20)  # 类别s
+
+    # class Meta:
+    #     unique_together = ('album', 'order')
+    #     ordering = ['order']

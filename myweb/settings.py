@@ -62,7 +62,7 @@ MIDDLEWARE = [
 
 ##权限控制
 AUTHENTICATION_BACKENDS = (
-    'django.contrib.auth.backends.ModelBackend',  #django默认的backend
+    'django.contrib.auth.backends.ModelBackend',  # django默认的backend
     # 'guardian.backends.ObjectPermissionBackend',  #对对象的权限控制
 )
 
@@ -100,9 +100,6 @@ DATABASES = {
         'PORT': '3306'
     }
 }
-
-
-
 
 # Password validation
 # https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators
@@ -177,7 +174,13 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.BasicAuthentication',
     ),
     # 'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',)
-
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',
+        'rest_framework.renderers.BrowsableAPIRenderer',),
+    'DEFAULT_PARSER_CLASSES': (
+        'rest_framework.parsers.JSONParser',
+        'rest_framework.parsers.FormParser',
+        'rest_framework.parsers.MultiPartParser'),
 }
 ###JWT AUTH认证配置
 JWT_AUTH = {
@@ -274,14 +277,13 @@ BROKER_TRANSPORT_OPTIONS = {'visibility_timeout': 3600}  # 1 hour.超时
 ##--------------------------------------------------
 ##配置邮箱
 EMAIL_BACKEND = 'django_smtp_ssl.SSLEmailBackend'
-EMAIL_HOST = "smtp.qq.com"   # 服务器
-EMAIL_PORT = 465               # 一般情况下都为25
-EMAIL_HOST_USER = "810909753@qq.com"   # 账号
+EMAIL_HOST = "smtp.qq.com"  # 服务器
+EMAIL_PORT = 465  # 一般情况下都为25
+EMAIL_HOST_USER = "810909753@qq.com"  # 账号
 EMAIL_HOST_PASSWORD = "tveiryfnsgxibfia"  # 密码
 EMAIL_SUBJECT_PREFIX = u'沪牌一号'  ##为邮件Subject-line前缀,默认是'[django]'
 EMAIL_USE_TLS = True
-EMAIL_FROM = "810909753@qq.com"        # 邮箱来自
-
+EMAIL_FROM = "810909753@qq.com"  # 邮箱来自
 
 ##--------------------------------------------------
 LOGGING = {
@@ -373,4 +375,4 @@ CONTENT_TYPES = ['image', 'video']
 # 250MB - 214958080
 # 500MB - 429916160
 MAX_UPLOAD_SIZE = 5242880
-MAX_PHOTO_SIZE = 51200 ##头像50kb大小限制
+MAX_PHOTO_SIZE = 51200  ##头像50kb大小限制
