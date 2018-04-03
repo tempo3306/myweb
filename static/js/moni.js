@@ -40,7 +40,7 @@ var answer;
 
 
 $(document).ready(function () {
-    $('body').css({"postion": "relative", "left": "15px", "top": 0})
+    $('body').css({"postion": "relative", "left": "25px", "top": 0})
 });
 //获取主背景位置
 
