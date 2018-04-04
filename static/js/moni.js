@@ -44,7 +44,7 @@ $(document).ready(function () {
 });
 //获取主背景位置
 
-lowestprice = 90000 + parseInt((Math.random() - 0.5) * 40) * 100;
+lowestprice = 86000 + parseInt((Math.random() - 0.25) * 50) * 100;
 //-----------------------------------------------------------------------------------------------
 //系统模块
 //随机种子，影响跳价情况
@@ -143,28 +143,31 @@ function Calculate_price() {
     if (running) {
         text1 = lowestprice.toString() + '元';
         $('.lowestprice').text(text1);
+        lowestprice = lowestprice + 100;
+        pt1.push(lowestprice);
+        pt2.push(realsecond);
         //根据时间随机跳价
-        if (realsecond < 40) {
-            if (price_grow <= price_limit1) {
-                lowestprice = lowestprice + 100;
-                pt1.push(lowestprice);
-                pt2.push(realsecond);
-            }
-        }
-        else if (realsecond >= 40 && realsecond < 50) {
-            if (price_grow <= price_limit2) {
-                lowestprice = lowestprice + 100;
-                pt1.push(lowestprice);
-                pt2.push(realsecond);
-            }
-        }
-        else {
-            if (price_grow <= price_limit3) {
-//						lowestprice = lowestprice + 100;
-                pt1.push(lowestprice);
-                pt2.push(realsecond);
-            }
-        }
+        // if (realsecond < 40) {
+        //     if (price_grow <= price_limit1) {
+        //         lowestprice = lowestprice + 100;
+        //         pt1.push(lowestprice);
+        //         pt2.push(realsecond);
+        //     }
+        // }
+        // else if (realsecond >= 40 && realsecond < 50) {
+        //     if (price_grow <= price_limit2) {
+        //         lowestprice = lowestprice + 100;
+        //         pt1.push(lowestprice);
+        //         pt2.push(realsecond);
+        //     }
+        // }
+        // else {
+        //     if (price_grow <= price_limit3) {
+        //         lowestprice = lowestprice + 100;
+        //         pt1.push(lowestprice);
+        //         pt2.push(realsecond);
+        //     }
+        // }
         $(".leftprice").text(lowestprice);
         $(".pricerange").text((lowestprice - 300) + '至' + (lowestprice + 300));
     }
@@ -249,7 +252,7 @@ function Reset() {
     userprice2 = 0;
     query_time = -10;   //查询间隔
     //随机创建随机数
-    lowestprice = 87000 + parseInt((Math.random() - 0.35) * 40) * 100;
+    lowestprice = 82000 + parseInt((Math.random() - 0.35) * 50) * 100;
 //系统模块
 //随机种子，影响跳价情况
     var x1 = Math.random() < 0.5 ? 1 : (-1)   //随机+-
