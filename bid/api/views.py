@@ -7,7 +7,7 @@
 
 from rest_framework import viewsets, status
 from bid.api.serializers import *
-from bid.models import Bid_action, Bid_auction, Bid_hander, query_auction_by_args, query_auction_by_url
+from bid.models import *
 from rest_framework import permissions
 from rest_framework.response import Response
 from rest_framework.decorators import detail_route, list_route
@@ -18,14 +18,15 @@ import json
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from bid.api.permissions import CanBid
-
-
+from django.shortcuts import get_object_or_404
+import time
+from django.contrib.auth import login, authenticate
 
 
 class ConsumerViewSet(viewsets.ModelViewSet):
     queryset = Consumer.objects.all()
     serializer_class = ConsumerSerializer
-    permission_classes = (permissions.IsAuthenticated,)  #permissions.AllowAny  注册设置为这个
+    permission_classes = (permissions.IsAuthenticated,)  # permissions.AllowAny  注册设置为这个
 
 
 class Consumer_softwareViewSet(viewsets.ModelViewSet):
@@ -33,15 +34,18 @@ class Consumer_softwareViewSet(viewsets.ModelViewSet):
     serializer_class = Consumer_softwareSerializer
     permissions_class = (permissions.IsAuthenticated,)
 
+
 class Consumer_bidViewSet(viewsets.ModelViewSet):
     queryset = Consumer_bid.objects.all()
     serializer_class = Consumer_bidSerializer
     permissions_class = (permissions.IsAuthenticated,)
 
+
 class Identify_codeViewSet(viewsets.ModelViewSet):
     queryset = Identify_code.objects.all()
     serializer_class = Identify_codeSerializer
     permissions_class = (permissions.IsAuthenticated,)
+
 
 class Invite_codeViewSet(viewsets.ModelViewSet):
     queryset = Invite_code.objects.all()
@@ -49,19 +53,16 @@ class Invite_codeViewSet(viewsets.ModelViewSet):
     permission_classes = (permissions.IsAuthenticated,)
 
 
-
-
-
-
 class Bid_groupViewSet(viewsets.ModelViewSet):
     queryset = Bid_group.objects.all()
     serializer_class = Bid_groupSerializer
-    permission_classes = (permissions.IsAuthenticated,)  #permissions.AllowAny  注册设置为这个
+    permission_classes = (permissions.IsAuthenticated,)  # permissions.AllowAny  注册设置为这个
+
 
 class Bid_handerViewSet(viewsets.ModelViewSet):
     queryset = Bid_hander.objects.all()
     serializer_class = Bid_handerSerializer
-    permission_classes = (permissions.IsAuthenticated,)  #permissions.AllowAny  注册设置为这个
+    permission_classes = (permissions.IsAuthenticated,)  # permissions.AllowAny  注册设置为这个
 
 
 class Bid_actionViewSet(viewsets.ModelViewSet):
@@ -73,10 +74,8 @@ class Bid_actionViewSet(viewsets.ModelViewSet):
     filter_fields = ('diff', 'ahead_price')
 
 
-
-
 class Bid_auctionViewSet(viewsets.ModelViewSet):
-    queryset = Bid_auction.objects.all()  #pk = id
+    queryset = Bid_auction.objects.all()  # pk = id
     serializer_class = Bid_auctionSerializer
     permission_classes = (permissions.IsAuthenticated,)
     filter_backends = (django_filters.rest_framework.DjangoFilterBackend,)
@@ -120,8 +119,8 @@ class Bid_auction_serversideViewSet(viewsets.ModelViewSet):
             count = data['count']  # 参拍次数
             expired_date = data['expired_date']  # 过期时间
             auction.update(description=description, auction_name=auction_name, ID_number=ID_number,
-                                         Bid_number=Bid_number, Bid_password=Bid_password, status=status_,
-                                         count=count, expired_date=expired_date)
+                           Bid_number=Bid_number, Bid_password=Bid_password, status=status_,
+                           count=count, expired_date=expired_date)
         except:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
@@ -148,7 +147,7 @@ def Bid_auction_manage(request):
             if serializer.is_valid():
                 serializer.save()
             return Response(serializer.data)
-        except :
+        except:
             return Response(status=status.HTTP_404_NOT_FOUND)
     elif request.method == 'DELETE':
         try:
@@ -171,34 +170,73 @@ def Bid_auction_manage(request):
 
 
 
-
-
-
-
-
-
+##
 @api_view(['GET'])
-@permission_classes((IsAuthenticated, CanBid ))
 def get_guopaiurl(request):
     if request.method == 'GET':
-        data = request.GET.get('data')
-        data = json.loads(data)
-        version = data['version']
-        debug = data['debug']
+        try:
+            type = request.GET['type']
+            if type == 'identify_code':
+                identify_code = request.GET['identify_code']
+                print(identify_code)
+                identify = get_object_or_404(Identify_code, identify_code=identify_code)
+                if identify.can_bid():
+                    version = request.GET.get('version', None)
+                    debug = request.GET.get('debug', None)
 
-        import time
-        time1 = time.localtime(time.time())
-        time2 = time.strftime("%Y%m%d", time1)
-        today_date = time2 + "01"
-        url_dianxin = "https://paimai2.alltobid.com/bid/%s/login.htm" % today_date
-        url_nodianxin = "https://paimai.alltobid.com/bid/%s/login.htm" % today_date
-        if version == '5.12s' or debug:
-            res = {'result': 'login success',
-                   'url_dianxin': url_dianxin,
-                   'url_nodianxin': url_nodianxin}
-            return Response(res, status=status.HTTP_200_OK, template_name=None, content_type=None)
-        else:
-            res = {'result': 'wrong version'}
-            return Response(res, status=status.HTTP_200_OK, template_name=None, content_type=None)
+                    time1 = time.localtime(time.time())
+                    time2 = time.strftime("%Y%m%d", time1)
+                    today_date = time2 + "01"
+                    url_dianxin = "https://paimai2.alltobid.com/bid/%s/login.htm" % today_date
+                    url_nodianxin = "https://paimai.alltobid.com/bid/%s/login.htm" % today_date
+                    if version == '1.2s' or debug:
+                        res = {'result': 'login success',
+                               'url_dianxin': url_dianxin,
+                               'url_nodianxin': url_nodianxin}
+                        return Response(res, status=status.HTTP_200_OK, template_name=None, content_type=None)
+                    else:
+                        res = {'result': 'wrong version'}
+                        return Response(res, status=status.HTTP_200_OK, template_name=None, content_type=None)
+                else:
+                    res = {'result': 'expired date'}
+                    return Response(res, status=status.HTTP_200_OK, template_name=None, content_type=None)
+            else:
+                return Response(status=status.HTTP_404_NOT_FOUND)
+        except:
+            return Response(status=status.HTTP_404_NOT_FOUND)
 
 
+
+
+@permission_classes((IsAuthenticated, CanBid))
+@api_view(['GET'])
+def bid_login(request):
+    if request.method == 'GET':
+        try:
+            username = request.GET['username']
+            password = request.GET['password']
+            version = request.GET['version']
+            debug = request.GET['debug']
+
+            user = authenticate(username=username, password=password)
+            if user:
+                time1 = time.localtime(time.time())
+                time2 = time.strftime("%Y%m%d", time1)
+                today_date = time2 + "01"
+                url_dianxin = "https://paimai2.alltobid.com/bid/%s/login.htm" % today_date
+                url_nodianxin = "https://paimai.alltobid.com/bid/%s/login.htm" % today_date
+                if version == '5.12s' or debug:
+                    res = {'result': 'login success',
+                           'url_dianxin': url_dianxin,
+                           'url_nodianxin': url_nodianxin}
+                    return Response(res, status=status.HTTP_200_OK, template_name=None, content_type=None)
+                else:
+                    res = {'result': 'wrong version'}
+                    return Response(res, status=status.HTTP_200_OK, template_name=None, content_type=None)
+            else:
+                res = {'result': 'wrong account'}
+                return Response(res, status=status.HTTP_200_OK, template_name=None, content_type=None)
+        except:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+    else:
+        return Response(status=status.HTTP_404_NOT_FOUND)

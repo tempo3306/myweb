@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Bid_hander, Bid_action, Bid_auction
+from .models import *
 # Register your models here.
 
 class Bid_handerAdmin(admin.ModelAdmin):
@@ -26,3 +26,9 @@ class Bid_auctionAdmin(admin.ModelAdmin):
 admin.site.register(Bid_hander, Bid_handerAdmin)
 admin.site.register(Bid_auction, Bid_auctionAdmin)
 admin.site.register(Bid_action, Bid_actionAdmin)
+admin.site.register(Bid_group)
+admin.site.register(Invite_code)
+admin.site.register(Identify_code)
+admin.site.register(Consumer_bid)
+admin.site.register(Consumer_software)
+admin.site.register(Consumer)

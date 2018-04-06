@@ -44,4 +44,7 @@ urlpatterns = [
     url('^auction', include(auction_router.urls)),
     url('^auction_serverside', include(auction_serverside_router.urls)),
     url('^bid_auction_manage/$', views.Bid_auction_manage, name='api_bid_auction_manage'),
+
+    ##登录
+    url('^get_guopaiurl/$', views.get_guopaiurl, name='get_guopaiurl')
 ]

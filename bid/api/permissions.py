@@ -7,13 +7,9 @@ class CanBid(permissions.BasePermission):
     """
 
     def has_permission(self, request, view):
-        pass
-        # try:
-        #     user = request.user
-        #     user.
-        #
-        #
-        # return not blacklisted
+        user = request.user
+        return user.has_perm('bid.bid_software')
+
 
 
 

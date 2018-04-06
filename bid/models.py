@@ -3,34 +3,48 @@ from django.db.models import Q
 from django.contrib.auth.models import User
 from model_utils import Choices
 
+import datetime
 ##------------------------------------------------------------------------------------------
 ##完成商业场景下的模型搭建
 ###创建消费者用户
 class Consumer(models.Model):
-    user_id = models.OneToOneField(User, unique=True, on_delete=models.CASCADE, related_name='user_consumers', null=True)
+    user_id = models.OneToOneField(User, unique=True, on_delete=models.CASCADE, related_name='user_consumers',
+                                   null=True, blank=True)
+    account = models.CharField(max_length=8, default='1111')  ##邮箱登录
+    passwd = models.CharField(max_length=6, default='1111')  ##身份证后6位
+    online_status = models.SmallIntegerField(default=0)  ##登录状态，0代表未登录，1代表登录中
+    login_IP = models.CharField(max_length=15, blank=True, null=True)  ##登录IP
+    login_mac = models.CharField(max_length=20, blank=True, null=True)  ##mac地址
+    taobao = models.CharField(max_length=30, default='none')  ##淘宝账号
 
 
-
-
-
-##购买激活码的用户
+##购买激活码的订单
 class Consumer_software(models.Model):
     order_number = models.CharField(max_length=40)  ##表示订单来源，可以用于找回密码
-    consumer = models.ForeignKey(Consumer, on_delete=models.CASCADE, related_name='consumer_softwares')
+    consumer = models.ForeignKey(Consumer, on_delete=models.CASCADE, related_name='consumer_softwares', blank=True,
+                                 null=True)
+    order_date = models.DateField(auto_now_add=True)  ##订单时间
 
 
+
+## 激活码直接可用于登录
 class Identify_code(models.Model):
-    identity_code = models.CharField(max_length=25)  # 激活码
-    purchase_date = models.DateField(auto_now_add=True)
-    expired_date = models.DateField(null=True)  # 过期时间,激活开始计算相应的时间
-    bid_name = models.CharField(max_length=10, default='one')  # 标书名字  one表示只有一次使用机会
-    consumer_software = models.ForeignKey(Consumer_software, on_delete=models.CASCADE, related_name='identify_codes')
-
+    identify_code = models.CharField(max_length=6, unique=True)  # 激活码
+    purchase_date = models.DateField()
+    expired_date = models.DateField()  # 过期时间,激活开始计算相应的时间
+    bid_name = models.CharField(max_length=10, default='one')  # 标书姓名  one表示只有一次使用机会
+    ##一个订单可以 生成多个激活码
+    consumer_software = models.ForeignKey(Consumer_software, on_delete=models.CASCADE, related_name='identify_codes',
+                                          blank=True, null=True) ##空值表示免费试用
     def can_bid(self):
         ##计算是否过期
         import datetime
-        
-
+        today = datetime.date.today()
+        time_difference = (self.expired_date - today).days
+        if time_difference >= 0:
+            return True
+        else:
+            return False
 
 
 class Invite_code(models.Model):
@@ -43,19 +57,19 @@ class Consumer_bid(models.Model):
     status = models.CharField(max_length=1, choices=(('0', '未中标结束交易'), ('1', '完成交易'), ('2', '进行中'),
                                                      ('3', '等待客户提供新标书'), ('4', '中标后欠款中')))
     consumer = models.ForeignKey(Consumer, on_delete=models.CASCADE, related_name='consumer_bids')
-    order_money = models.PositiveIntegerField() #中标之后的应付价格
-    compensation = models.PositiveIntegerField() #赔偿金额
-    bid_number = models.PositiveSmallIntegerField() #合同中约定的拍牌次数
-    did_number = models.PositiveSmallIntegerField() #已经完成的拍牌次数
-
+    order_money = models.PositiveIntegerField()  # 中标之后的应付价格
+    compensation = models.PositiveIntegerField()  # 赔偿金额
+    bid_number = models.PositiveSmallIntegerField()  # 合同中约定的拍牌次数
+    did_number = models.PositiveSmallIntegerField()  # 已经完成的拍牌次数
+    order_date = models.DateField(auto_now_add=True)  ##订单时间
 
 
 ##------------------------------------------------------------------------------------------
 ##代拍管理
 ## 团队
 class Bid_group(models.Model):
-    group_name = models.CharField(max_length=15) ##所属团队
-    group_admin = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_groups')  ##团队管理员
+    group_name = models.CharField(max_length=15)  ##所属团队
+
 
 # 拍手
 class Bid_hander(models.Model):
@@ -66,6 +80,16 @@ class Bid_hander(models.Model):
     extra_bonus = models.FloatField(default=0)  # 奖金
     total_income = models.FloatField(default=0)  # 总收入
     bid_group = models.ForeignKey(Bid_group, on_delete=models.CASCADE, related_name='group_hander', null=True)
+
+    class Meta:
+        permissions = (
+            ('bid_software', '使用软件'),
+            ('bid_edit', '修改'),
+            ('bid_search', '搜索'),
+            ('bid_create', '发帖'),
+            ('bid_delete', '删除'),
+            ('bid_control', '管理')
+        )
 
     def __str__(self):
         return self.hander_name
@@ -84,7 +108,6 @@ class Bid_auction(models.Model):
     ##下单情况
     consumer_bid = models.ForeignKey(Consumer_bid, on_delete=models.CASCADE, related_name='bid_auctions', null=True)
     bid_group = models.ForeignKey(Bid_group, on_delete=models.CASCADE, related_name='group_auctions', null=True)
-
 
     def __str__(self):
         return self.description
