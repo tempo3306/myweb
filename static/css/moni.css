@@ -9,7 +9,7 @@ html, body {
 body {
     height: 100%;
     width: 100%;
-    left: 8px;
+    left: 0px;
 }
 
 body {
@@ -55,7 +55,7 @@ body {
 .leftmainbox {
     background-image: url(/media/img/info.png);
     position: absolute;
-    top: 175px;
+    top: 169px;
     left: 22px;
     width: 379px;
     height: 476px;
@@ -88,17 +88,17 @@ body {
 .rightmainbox {
     background-image: url(/media/img/bid.png);
     position: absolute;
-    top: 175px;
-    left: 427px;
+    top: 169px;
+    left: 425px;
     width: 452px;
     height: 476px;
 }
 
 .toptext {
     position: absolute;
-    top: 95px;
+    top: 101px;
     margin: 0 auto;
-    left: 11px;
+    left: 10px;
     padding: 0px;
     list-style-type: none;
     text-align: left;
@@ -112,10 +112,10 @@ body {
 
 .bottomtext {
     position: absolute;
-    top: 207px;
+    top: 213px;
     margin: 0;
     padding: 0px;
-    left: 11px;
+    left: 10px;
     list-style-type: none;
     text-align: left;
     line-height: 16px;
@@ -260,10 +260,10 @@ input.userwriteprice {
 .refresh {
     background-image: url(/media/code/moni_fresh.png);
     position: absolute;
-    top: 180px;
+    top: 172px;
     margin: 0 auto;
     padding: 0px;
-    left: 65px;
+    left: 66px;
     width: 111px;
     height: 26px;
     border: none;
@@ -386,7 +386,7 @@ input.userwriteprice {
     background-image: url(/media/img/confirm.png);
     width: 115px;
     height: 30px;
-    top: 249px;
+    top: 241px;
     left: 64px;
     position: absolute;
     padding: 0px;
@@ -400,7 +400,7 @@ input.userwriteprice {
     background-image: url(/media/img/cancel.png);
     width: 115px;
     height: 30px;
-    top: 249px;
+    top: 241px;
     left: 254px;
     position: absolute;
     padding: 0px;
@@ -643,7 +643,7 @@ input.userwriteprice {
     width: 113px;
     height: 50px;
     position: absolute;
-    top: 169px;
+    top: 168px;
     left: 64px;
 }
 
@@ -672,9 +672,9 @@ input.userwriteprice {
 
 p.question {
     position: absolute;
-    font-size: 15px;
-    top: 115px;
-    left: 32px;
+    font-size: 16px;
+    top: 118px;
+    left: 31px;
     color: #050505;
     font-family: "宋体";
     letter-spacing: 1px;

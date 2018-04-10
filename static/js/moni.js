@@ -40,7 +40,7 @@ var answer;
 
 
 $(document).ready(function () {
-    $('body').css({"postion": "relative", "left": "25px", "top": 0})
+    $('body').css({"postion": "relative", "left": "3px", "top": 0})
 });
 //获取主背景位置
 
@@ -463,8 +463,8 @@ $(function () {
                 using: function () {
                     $(this).css({
                         "position": "absolute",
-                        "top": "246px", //设置弹出框距离是页面顶端下的200px
-                        "left": "430px" //设置弹出框距离是页面顶端下的200px
+                        "top": "240px", //设置弹出框距离是页面顶端下的200px
+                        "left": "427px" //设置弹出框距离是页面顶端下的200px
 
                     });
                 }
@@ -486,8 +486,8 @@ $(function () {
                 using: function () {
                     $(this).css({
                         "position": "absolute",
-                        "top": "246px", //设置弹出框距离是页面顶端下的200px
-                        "left": "430px" //设置弹出框距离是页面顶端下的200px
+                        "top": "240px", //设置弹出框距离是页面顶端下的200px
+                        "left": "427px" //设置弹出框距离是页面顶端下的200px
 
                     });
                 }
@@ -509,8 +509,8 @@ $(function () {
                 using: function () {
                     $(this).css({
                         "position": "absolute",
-                        "top": "246px", //设置弹出框距离是页面顶端下的200px
-                        "left": "430px" //设置弹出框距离是页面顶端下的200px
+                        "top": "240px", //设置弹出框距离是页面顶端下的200px
+                        "left": "427px" //设置弹出框距离是页面顶端下的200px
 
                     });
                 }
@@ -532,8 +532,8 @@ $(function () {
                 using: function () {
                     $(this).css({
                         "position": "absolute",
-                        "top": "246px", //设置弹出框距离是页面顶端下的200px
-                        "left": "430px" //设置弹出框距离是页面顶端下的200px
+                        "top": "240px", //设置弹出框距离是页面顶端下的200px
+                        "left": "427px" //设置弹出框距离是页面顶端下的200px
                     });
                 }
             }
@@ -554,8 +554,8 @@ $(function () {
                 using: function () {
                     $(this).css({
                         "position": "absolute",
-                        "top": "246px", //设置弹出       框距离是页面顶端下的200px
-                        "left": "430px" //设置弹出框距离是页面顶端下的200px
+                        "top": "240px", //设置弹出       框距离是页面顶端下的200px
+                        "left": "427px" //设置弹出框距离是页面顶端下的200px
                     });
                 }
             }
@@ -576,8 +576,8 @@ $(function () {
                 using: function () {
                     $(this).css({
                         "position": "absolute",
-                        "top": "246px", //设置弹出框距离是页面顶端下的200px
-                        "left": "430px" //设置弹出框距离是页面顶端下的200px
+                        "top": "240px", //设置弹出框距离是页面顶端下的200px
+                        "left": "427px" //设置弹出框距离是页面顶端下的200px
                     });
                 }
             }
@@ -598,8 +598,8 @@ $(function () {
                 using: function () {
                     $(this).css({
                         "position": "absolute",
-                        "top": "246px", //设置弹出框距离是页面顶端下的200px
-                        "left": "430px" //设置弹出框距离是页面顶端下的200px
+                        "top": "240px", //设置弹出框距离是页面顶端下的200px
+                        "left": "427px" //设置弹出框距离是页面顶端下的200px
                     });
                 }
             }
@@ -620,8 +620,8 @@ $(function () {
                 using: function () {
                     $(this).css({
                         "position": "absolute",
-                        "top": "246px", //设置弹出框距离是页面顶端下的200px
-                        "left": "430px" //设置弹出框距离是页面顶端下的200px
+                        "top": "240px", //设置弹出框距离是页面顶端下的200px
+                        "left": "427px" //设置弹出框距离是页面顶端下的200px
                     });
                 }
             }
@@ -642,8 +642,8 @@ $(function () {
                 using: function () {
                     $(this).css({
                         "position": "absolute",
-                        "top": "246px", //设置弹出框距离是页面顶端下的200px
-                        "left": "430px" //设置弹出框距离是页面顶端下的200px
+                        "top": "240px", //设置弹出框距离是页面顶端下的200px
+                        "left": "427px" //设置弹出框距离是页面顶端下的200px
 
                     });
                 }
@@ -666,8 +666,8 @@ $(function () {
                 using: function () {
                     $(this).css({
                         "position": "absolute",
-                        "top": "246px", //设置弹出框距离是页面顶端下的200px
-                        "left": "430px" //设置弹出框距离是页面顶端下的200px
+                        "top": "240px", //设置弹出框距离是页面顶端下的200px
+                        "left": "427px" //设置弹出框距离是页面顶端下的200px
                     });
                 }
             }
@@ -699,7 +699,7 @@ $(function () {
             }
         });
         //								"top": (yp/2-215).toString(),
-//								"left": (xp/2-428).toString()
+//								"left": (xp/2-427).toString()
 //				var $div = $('.leftmainbox');
 //				$("#final-info").dialog('widget').position({
 //				my: "center",
@@ -737,8 +737,8 @@ $(function () {
                 using: function () {
                     $(this).css({
                         "position": "absolute",
-                        "top": "246px", //设置弹出框距离是页面顶端下的200px
-                        "left": "430px" //设置弹出框距离是页面顶端下的200px
+                        "top": "240px", //设置弹出框距离是页面顶端下的200px
+                        "left": "427px" //设置弹出框距离是页面顶端下的200px
 
                     });
                 }
