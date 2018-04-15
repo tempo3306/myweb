@@ -50,9 +50,9 @@ lowestprice = 86000 + parseInt((Math.random() - 0.25) * 50) * 100;
 //随机种子，影响跳价情况
 var x1 = Math.random() < 0.5 ? 1 : (-1)   //随机+-
 price_torrent = parseInt((Math.random()) * 20) * x1; //20档跳价
-var price_limit1 = 10 + price_torrent / 4;  //0-40     10%之间概率跳价
-var price_limit2 = 35 + price_torrent / 2;  //40~50    35%之间概论跳价
-var price_limit3 = 50 + price_torrent;  //50-60     50%概论跳价
+var price_limit1 = 15 + price_torrent / 4;  //0-40     10%之间概率跳价
+var price_limit2 = 40 + price_torrent / 2;  //40~50    35%之间概论跳价
+var price_limit3 = 65 + price_torrent;  //50-60     50%概论跳价
 
 
 //随机种子，影响接受时间,初始化的时候确定，时间每一秒的读秒时间由这个时间的百分比确定
@@ -143,31 +143,35 @@ function Calculate_price() {
     if (running) {
         text1 = lowestprice.toString() + '元';
         $('.lowestprice').text(text1);
-        lowestprice = lowestprice + 100;
-        pt1.push(lowestprice);
-        pt2.push(realsecond);
-        //根据时间随机跳价
-        // if (realsecond < 40) {
-        //     if (price_grow <= price_limit1) {
-        //         lowestprice = lowestprice + 100;
-        //         pt1.push(lowestprice);
-        //         pt2.push(realsecond);
-        //     }
-        // }
-        // else if (realsecond >= 40 && realsecond < 50) {
-        //     if (price_grow <= price_limit2) {
-        //         lowestprice = lowestprice + 100;
-        //         pt1.push(lowestprice);
-        //         pt2.push(realsecond);
-        //     }
-        // }
-        // else {
-        //     if (price_grow <= price_limit3) {
-        //         lowestprice = lowestprice + 100;
-        //         pt1.push(lowestprice);
-        //         pt2.push(realsecond);
-        //     }
-        // }
+
+
+        // lowestprice = lowestprice + 100;
+        // pt1.push(lowestprice);
+        // pt2.push(realsecond);
+
+
+        // 根据时间随机跳价
+        if (realsecond < 40) {
+            if (price_grow <= price_limit1) {
+                lowestprice = lowestprice + 100;
+                pt1.push(lowestprice);
+                pt2.push(realsecond);
+            }
+        }
+        else if (realsecond >= 40 && realsecond < 50) {
+            if (price_grow <= price_limit2) {
+                lowestprice = lowestprice + 100;
+                pt1.push(lowestprice);
+                pt2.push(realsecond);
+            }
+        }
+        else {
+            if (price_grow <= price_limit3) {
+                lowestprice = lowestprice + 100;
+                pt1.push(lowestprice);
+                pt2.push(realsecond);
+            }
+        }
         $(".leftprice").text(lowestprice);
         $(".pricerange").text((lowestprice - 300) + '至' + (lowestprice + 300));
     }
