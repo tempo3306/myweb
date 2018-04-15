@@ -73,6 +73,9 @@ def shooter_init():
 
 
 def admin_init():
+    ##superadmin
+    User.objects.create_superuser(username='zs', email='810909753@qq.com', password='Warzxw123;')
+
     ##管理员初始化
     groups = Group.objects.get(name='admin')
     groups_bid_admin = Group.objects.get(name='bid_admin')
