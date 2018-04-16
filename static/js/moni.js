@@ -10,7 +10,8 @@ var delay = 2 //随机动态延迟
 var no_image = Math.random() * 5 + 55;   //95%+的概率需要刷新验证码
 var userprice1 = 0 //用户出价
 var userprice2 = 0
-count = 0  //出价次数
+var count = 0  //出价次数 初始为0
+
 
 var usertime1 = 0 //用户出价时间第一次
 var usertime2 = 0 //用户出价时间第二次
@@ -314,12 +315,15 @@ function Read_price() {
         $("#info-wrongcode").dialog("open");
     } else if ((temp_price > lowestprice + 300) || (temp_price < lowestprice - 300)) {
         $('#price-wrong').dialog("open");
-    } else if (usertime1 >= 59 && count == 0) {
+    } else if (usertime1 >= 59 && count === 0) {
         $('#outoftime').dialog('open');
-    } else if (usertime2 >= 59 && count == 1) {
+    } else if (usertime2 >= 59 && count === 1) {
         $('#outoftime').dialog('open');
-    } else {
-        if (count == 0) {
+    } else if (usertime2 <= 59 && count >= 2) {
+        $('#price-toomany').dialog('open');
+    }
+    else {
+        if (count === 0) {
             userprice1 = temp_price;
             usertime1 = realsecond;
             $('#price-right').dialog("open");
@@ -327,6 +331,9 @@ function Read_price() {
             $('#li1').html("您第二次出价");
             $('#li2').html("出价金额:" + userprice1);
             $('#li3').html("出价时间:" + today + " 10:30:5" + parseInt(usertime1));
+        }
+        else if (temp_price === userprice1){
+        $('#price-same').dialog('open');
         }
         else {
             userprice2 = temp_price;
@@ -608,6 +615,51 @@ $(function () {
                 }
             }
         });
+//系统提示价格相同
+        $("#price-same").dialog({
+            open: function (event, ui) {
+                closeOnEscape: false, //取消esc键
+                    $(".ui-dialog-titlebar").hide();
+            },
+            draggable: false,
+            resizable: false,
+            autoOpen: false,
+            height: 306,
+            width: 439,
+            modal: true,
+            position: {
+                using: function () {
+                    $(this).css({
+                        "position": "absolute",
+                        "top": "240px", //设置弹出框距离是页面顶端下的200px
+                        "left": "427px" //设置弹出框距离是页面顶端下的200px
+                    });
+                }
+            }
+        });
+//系统提示价格修改次数过多
+        $("#price-toomany").dialog({
+            open: function (event, ui) {
+                closeOnEscape: false, //取消esc键
+                    $(".ui-dialog-titlebar").hide();
+            },
+            draggable: false,
+            resizable: false,
+            autoOpen: false,
+            height: 306,
+            width: 439,
+            modal: true,
+            position: {
+                using: function () {
+                    $(this).css({
+                        "position": "absolute",
+                        "top": "240px", //设置弹出框距离是页面顶端下的200px
+                        "left": "427px" //设置弹出框距离是页面顶端下的200px
+                    });
+                }
+            }
+        });
+
 //系统提示超时
         $("#outoftime").dialog({
             open: function (event, ui) {
@@ -721,6 +773,7 @@ $(function () {
         });
         $(".middleconfirm_wrongprice").button().click(function () {
             $("#info-wrongcode").dialog("close");
+
         });
         $(".middleconfirm_result").button().click(function () {
             $("#info-form").dialog("close");
@@ -823,6 +876,8 @@ $(function () {
         });
         $(".middleconfirm_pricewrong").button().click(function () {
             $("#price-wrong").dialog("close");
+            $("#price-same").dialog("close");
+            $("#price-toomany").dialog("close");
             $("#dialog-form").dialog("close");
         });
         $(".middleconfirm_tooquick").button().click(function () {

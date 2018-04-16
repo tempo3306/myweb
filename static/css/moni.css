@@ -639,6 +639,36 @@ input.userwriteprice {
     letter-spacing: 1px;
 }
 
+#price-toomany {
+    background-image: url(/media/img/tip.png);
+    width: 439px;
+    height: 306px;
+}
+
+#price-toomany p {
+    position: absolute;
+    left: 25px;
+    top: 85px;
+    font-family: "宋体";
+    font-size: 16px;
+    letter-spacing: 1px;
+}
+
+#price-same {
+    background-image: url(/media/img/tip.png);
+    width: 439px;
+    height: 306px;
+}
+
+#price-same p {
+    position: absolute;
+    left: 25px;
+    top: 85px;
+    font-family: "宋体";
+    font-size: 16px;
+    letter-spacing: 1px;
+}
+
 .priceoperation {
     background-image: url(/media/img/price.png);
     width: 439px;
