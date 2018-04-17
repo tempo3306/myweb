@@ -46,5 +46,6 @@ urlpatterns = [
     url('^bid_auction_manage/$', views.Bid_auction_manage, name='api_bid_auction_manage'),
 
     ##登录
-    url('^get_guopaiurl/$', views.get_guopaiurl, name='get_guopaiurl')
+    url('^get_guopaiurl/$', views.get_guopaiurl, name='get_guopaiurl'),
+    url('^get_remotetime/$', views.get_remotetime, name='get_remotetime')
 ]

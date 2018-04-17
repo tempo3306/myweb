@@ -173,59 +173,22 @@ def Bid_auction_manage(request):
 ##
 @api_view(['GET'])
 def get_guopaiurl(request):
-    if request.method == 'GET':
-        try:
-            type = request.GET['type']
-            if type == 'identify_code':
-                identify_code = request.GET['identify_code']
-                print(identify_code)
-                identify = get_object_or_404(Identify_code, identify_code=identify_code)
-                if identify.can_bid():
-                    version = request.GET.get('version', None)
-                    debug = request.GET.get('debug', None)
+    try:
+        type = request.GET['type']
+        if type == 'identify_code':
+            identify_code = request.GET['identify_code']
+            print(identify_code)
+            identify = get_object_or_404(Identify_code, identify_code=identify_code)
+            if identify.can_bid():
+                version = request.GET.get('version', None)
+                debug = request.GET.get('debug', None)
 
-                    time1 = time.localtime(time.time())
-                    time2 = time.strftime("%Y%m%d", time1)
-                    today_date = time2 + "01"
-                    url_dianxin = "https://paimai2.alltobid.com/bid/%s/login.htm" % today_date
-                    url_nodianxin = "https://paimai.alltobid.com/bid/%s/login.htm" % today_date
-                    if version == '1.2s' or debug:
-                        res = {'result': 'login success',
-                               'url_dianxin': url_dianxin,
-                               'url_nodianxin': url_nodianxin}
-                        return Response(res, status=status.HTTP_200_OK, template_name=None, content_type=None)
-                    else:
-                        res = {'result': 'wrong version'}
-                        return Response(res, status=status.HTTP_200_OK, template_name=None, content_type=None)
-                else:
-                    res = {'result': 'expired date'}
-                    return Response(res, status=status.HTTP_200_OK, template_name=None, content_type=None)
-            else:
-                return Response(status=status.HTTP_404_NOT_FOUND)
-        except:
-            return Response(status=status.HTTP_404_NOT_FOUND)
-
-
-
-
-@permission_classes((IsAuthenticated, CanBid))
-@api_view(['GET'])
-def bid_login(request):
-    if request.method == 'GET':
-        try:
-            username = request.GET['username']
-            password = request.GET['password']
-            version = request.GET['version']
-            debug = request.GET['debug']
-
-            user = authenticate(username=username, password=password)
-            if user:
                 time1 = time.localtime(time.time())
                 time2 = time.strftime("%Y%m%d", time1)
                 today_date = time2 + "01"
                 url_dianxin = "https://paimai2.alltobid.com/bid/%s/login.htm" % today_date
                 url_nodianxin = "https://paimai.alltobid.com/bid/%s/login.htm" % today_date
-                if version == '5.12s' or debug:
+                if version == '1.2s' or debug:
                     res = {'result': 'login success',
                            'url_dianxin': url_dianxin,
                            'url_nodianxin': url_nodianxin}
@@ -234,9 +197,52 @@ def bid_login(request):
                     res = {'result': 'wrong version'}
                     return Response(res, status=status.HTTP_200_OK, template_name=None, content_type=None)
             else:
-                res = {'result': 'wrong account'}
+                res = {'result': 'expired date'}
                 return Response(res, status=status.HTTP_200_OK, template_name=None, content_type=None)
-        except:
+        else:
             return Response(status=status.HTTP_404_NOT_FOUND)
-    else:
+    except:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+
+
+
+@permission_classes((IsAuthenticated, CanBid))
+@api_view(['GET'])
+def bid_login(request):
+    try:
+        username = request.GET['username']
+        password = request.GET['password']
+        version = request.GET['version']
+        debug = request.GET['debug']
+
+        user = authenticate(username=username, password=password)
+        if user:
+            time1 = time.localtime(time.time())
+            time2 = time.strftime("%Y%m%d", time1)
+            today_date = time2 + "01"
+            url_dianxin = "https://paimai2.alltobid.com/bid/%s/login.htm" % today_date
+            url_nodianxin = "https://paimai.alltobid.com/bid/%s/login.htm" % today_date
+            if version == '5.12s' or debug:
+                res = {'result': 'login success',
+                       'url_dianxin': url_dianxin,
+                       'url_nodianxin': url_nodianxin}
+                return Response(res, status=status.HTTP_200_OK, template_name=None, content_type=None)
+            else:
+                res = {'result': 'wrong version'}
+                return Response(res, status=status.HTTP_200_OK, template_name=None, content_type=None)
+        else:
+            res = {'result': 'wrong account'}
+            return Response(res, status=status.HTTP_200_OK, template_name=None, content_type=None)
+    except:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+##返回时间
+@api_view(['GET'])
+def get_remotetime(request):
+    try:
+        currenttime = time.time()
+        res = {'currenttime': currenttime}
+        return Response(res, status=status.HTTP_200_OK, template_name=None, content_type=None)
+    except:
         return Response(status=status.HTTP_404_NOT_FOUND)
