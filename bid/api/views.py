@@ -180,19 +180,26 @@ def get_guopaiurl(request):
             print(identify_code)
             identify = get_object_or_404(Identify_code, identify_code=identify_code)
             if identify.can_bid():
-                version = request.GET.get('version', None)
-                debug = request.GET.get('debug', None)
-
-                time1 = time.localtime(time.time())
-                time2 = time.strftime("%Y%m%d", time1)
-                today_date = time2 + "01"
-                url_dianxin = "https://paimai2.alltobid.com/bid/%s/login.htm" % today_date
-                url_nodianxin = "https://paimai.alltobid.com/bid/%s/login.htm" % today_date
-                if version == '1.2s' or debug:
-                    res = {'result': 'login success',
-                           'url_dianxin': url_dianxin,
-                           'url_nodianxin': url_nodianxin}
-                    return Response(res, status=status.HTTP_200_OK, template_name=None, content_type=None)
+                diskid = request.GET['diskid']
+                uuuid = identify.uuuid
+                if not uuuid or diskid == uuuid:
+                    identify.uuuid = diskid
+                    identify.save()  #更新uuuid
+                    version = request.GET.get('version', None)
+                    debug = request.GET.get('debug', None)
+                    time1 = time.localtime(time.time())
+                    time2 = time.strftime("%Y%m%d", time1)
+                    today_date = time2 + "01"
+                    url_dianxin = "https://paimai2.alltobid.com/bid/%s/login.htm" % today_date
+                    url_nodianxin = "https://paimai.alltobid.com/bid/%s/login.htm" % today_date
+                    if version == '1.2s' or debug:
+                        res = {'result': 'login success',
+                               'url_dianxin': url_dianxin,
+                               'url_nodianxin': url_nodianxin}
+                        return Response(res, status=status.HTTP_200_OK, template_name=None, content_type=None)
+                    else:
+                        res = {'result': 'wrong version'}
+                        return Response(res, status=status.HTTP_200_OK, template_name=None, content_type=None)
                 else:
                     res = {'result': 'wrong version'}
                     return Response(res, status=status.HTTP_200_OK, template_name=None, content_type=None)
@@ -203,6 +210,46 @@ def get_guopaiurl(request):
             return Response(status=status.HTTP_404_NOT_FOUND)
     except:
         return Response(status=status.HTTP_404_NOT_FOUND)
+
+
+@api_view(['GET'])
+def bid_logout(request):
+    try:
+        type = request.GET['type']
+        if type == 'identify_code':
+            identify_code = request.GET['identify_code']
+            identify = get_object_or_404(Identify_code, identify_code=identify_code)
+            identify.uuuid = None
+            identify.save()
+            res = {'result': 'logout success'}
+            return Response(res, status=status.HTTP_200_OK, template_name=None, content_type=None)
+        else:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+    except:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+
+@api_view(['GET'])
+def bid_keeplogin(request):
+    try:
+        type = request.GET['type']
+        if type == 'identify_code':
+            identify_code = request.GET['identify_code']
+            identify = get_object_or_404(Identify_code, identify_code=identify_code)
+
+            diskid = request.GET['diskid']
+            uuuid = identify.uuuid
+            if diskid == uuuid:
+                res = {'result': 'keep success'}
+                return Response(res, status=status.HTTP_200_OK, template_name=None, content_type=None)
+            else:
+                res = {'result': 'keep failure'}
+                return Response(res, status=status.HTTP_200_OK, template_name=None, content_type=None)
+        else:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+    except:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
 
 
 
@@ -236,6 +283,10 @@ def bid_login(request):
             return Response(res, status=status.HTTP_200_OK, template_name=None, content_type=None)
     except:
         return Response(status=status.HTTP_404_NOT_FOUND)
+
+
+
+
 
 ##返回时间
 @api_view(['GET'])

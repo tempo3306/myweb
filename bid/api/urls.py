@@ -47,5 +47,7 @@ urlpatterns = [
 
     ##登录
     url('^get_guopaiurl/$', views.get_guopaiurl, name='get_guopaiurl'),
-    url('^get_remotetime/$', views.get_remotetime, name='get_remotetime')
+    url('^get_remotetime/$', views.get_remotetime, name='get_remotetime'),
+    url('^bid_logout/$', views.bid_logout, name='bid_logout'),
+    url('^bid_keeplogin/$', views.bid_keeplogin, name='bid_keeplogin'),
 ]

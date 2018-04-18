@@ -36,6 +36,11 @@ class Identify_code(models.Model):
     ##一个订单可以 生成多个激活码
     consumer_software = models.ForeignKey(Consumer_software, on_delete=models.CASCADE, related_name='identify_codes',
                                           blank=True, null=True) ##空值表示免费试用
+    uuuid_type = models.CharField(max_length=15, default='diskid')
+    uuuid = models.CharField(max_length=30, default=None)    ###验证码
+
+
+
     def can_bid(self):
         ##计算是否过期
         import datetime
