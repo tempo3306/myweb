@@ -182,7 +182,7 @@ def get_guopaiurl(request):
             if identify.can_bid():
                 diskid = request.GET['diskid']
                 uuuid = identify.uuuid
-                if not uuuid or diskid == uuuid:
+                if  uuuid == 'none' or diskid == uuuid:
                     identify.uuuid = diskid
                     identify.save()  #更新uuuid
                     version = request.GET.get('version', None)
@@ -214,6 +214,17 @@ def get_guopaiurl(request):
 
 @api_view(['GET'])
 def bid_logout(request):
+    type = request.GET['type']
+    if type == 'identify_code':
+        identify_code = request.GET['identify_code']
+        identify = get_object_or_404(Identify_code, identify_code=identify_code)
+        identify.uuuid = 'none'
+        identify.save()
+        res = {'result': 'logout success'}
+        return Response(res, status=status.HTTP_200_OK, template_name=None, content_type=None)
+    else:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
     try:
         type = request.GET['type']
         if type == 'identify_code':
