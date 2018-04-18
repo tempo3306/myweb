@@ -37,7 +37,7 @@ class Identify_code(models.Model):
     consumer_software = models.ForeignKey(Consumer_software, on_delete=models.CASCADE, related_name='identify_codes',
                                           blank=True, null=True) ##空值表示免费试用
     uuuid_type = models.CharField(max_length=15, default='diskid')
-    uuuid = models.CharField(max_length=30, default='none', blank=True)    ###验证码
+    uuuid = models.CharField(max_length=60, default='none', blank=True)    ###验证码
 
 
 
