@@ -37,8 +37,9 @@ class Identify_code(models.Model):
     consumer_software = models.ForeignKey(Consumer_software, on_delete=models.CASCADE, related_name='identify_codes',
                                           blank=True, null=True) ##空值表示免费试用
     uuuid_type = models.CharField(max_length=15, default='diskid')
-    uuuid = models.CharField(max_length=60, default='none', blank=True)    ###验证码
-
+    uuuid = models.CharField(max_length=40, default='none', blank=True)    ###激活码
+    last_uuuid = models.CharField(max_length=40, default='none', blank=True)  ###最近的一个激活码
+    # login_status = models.SmallIntegerField(default=0, blank=True)   ##登录状态 默认为0 代表未登录  代表登录
 
 
     def can_bid(self):

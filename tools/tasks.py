@@ -2,6 +2,8 @@ from __future__ import absolute_import, unicode_literals
 from celery import shared_task
 from celery import task, Task
 from .utils import send_control_email
+from bid.models import Identify_code
+
 
 @task
 def confirm_email(email):
@@ -13,6 +15,24 @@ def confirm_email(email):
 def reset_email(email):
     mail_sent = send_control_email(email, send_type='forget')
     return mail_sent
+
+@task
+def send_identify_email(email):
+    mail_sent = send_control_email(email, send_type='send_once_identify_code')
+    return mail_sent
+
+
+##还原激活码登录状态
+@task
+def reset_identify_code(identify_code):
+    try:
+        import time
+        time.sleep(60 * 5)  ##登录或keep 5分钟后将软件重置
+        identify = Identify_code.objects.get(identify_code=identify_code)
+        identify.uuuid = 'none'
+        identify.save()
+    except:
+        pass
 
 
 class CallbackTask(Task):

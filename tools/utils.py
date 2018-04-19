@@ -3,6 +3,8 @@ from django.core.mail import send_mail  # 发送邮件模块
 from account.models import EmailVerifyRecord  # 邮箱验证model
 from myweb.settings import EMAIL_FROM  # setting.py添加的的配置信息
 from myweb.settings import DEBUG
+from bid.models import Identify_code
+
 
 # 生成随机字符串
 def random_str(randomlength=12):
@@ -27,7 +29,7 @@ def random_num(randomlength=6):
 
 
 # 发送邮件
-def send_control_email(email, send_type="register"):
+def send_control_email(email, send_type="register", **kwargs):
     # 初始化为空
     email_title = ""
     email_body = ""
@@ -66,6 +68,11 @@ def send_control_email(email, send_type="register"):
         send_status = send_mail(email_title, email_body, EMAIL_FROM, [email])
         if send_status:
             pass
+    elif send_type == "send_once_identify_code":
+        identify_code = random_str(randomlength=6)   ##生成6位数的随机验证码
+        Identify_code.objects.create(identify_code, )
+
+
 
 ##上传文件控制
 def handle_uploaded_file(f):

@@ -21,7 +21,7 @@ from bid.api.permissions import CanBid
 from django.shortcuts import get_object_or_404
 import time
 from django.contrib.auth import login, authenticate
-
+from tools.tasks import reset_identify_code
 
 class ConsumerViewSet(viewsets.ModelViewSet):
     queryset = Consumer.objects.all()
@@ -181,11 +181,10 @@ def get_guopaiurl(request):
             if identify.can_bid():
                 diskid = request.GET['diskid']
                 uuuid = identify.uuuid
-                print(uuuid)
-
                 if  uuuid == 'none' or diskid == uuuid:
                     identify.uuuid = diskid
                     identify.save()  #更新uuuid
+                    reset_identify_code()   ##异步更新数据库
                     version = request.GET.get('version', None)
                     debug = request.GET.get('debug', None)
                     time1 = time.localtime(time.time())
@@ -202,7 +201,7 @@ def get_guopaiurl(request):
                         res = {'result': 'wrong version'}
                         return Response(res, status=status.HTTP_200_OK, template_name=None, content_type=None)
                 else:
-                    res = {'result': 'wrong version'}
+                    res = {'result': 'repeat'}
                     return Response(res, status=status.HTTP_200_OK, template_name=None, content_type=None)
             else:
                 res = {'result': 'expired date'}
@@ -237,10 +236,15 @@ def bid_keeplogin(request):
         if type == 'identify_code':
             identify_code = request.GET['identify_code']
             identify = get_object_or_404(Identify_code, identify_code=identify_code)
-
             diskid = request.GET['diskid']
             uuuid = identify.uuuid
             if diskid == uuuid:
+                res = {'result': 'keep success'}
+                reset_identify_code()  ##异步还原identify_code
+                return Response(res, status=status.HTTP_200_OK, template_name=None, content_type=None)
+            elif uuuid == 'none':
+                identify.uuuid = diskid
+                identify.save()
                 res = {'result': 'keep success'}
                 return Response(res, status=status.HTTP_200_OK, template_name=None, content_type=None)
             else:
@@ -255,35 +259,35 @@ def bid_keeplogin(request):
 
 
 
-@permission_classes((IsAuthenticated, CanBid))
-@api_view(['GET'])
-def bid_login(request):
-    try:
-        username = request.GET['username']
-        password = request.GET['password']
-        version = request.GET['version']
-        debug = request.GET['debug']
-
-        user = authenticate(username=username, password=password)
-        if user:
-            time1 = time.localtime(time.time())
-            time2 = time.strftime("%Y%m%d", time1)
-            today_date = time2 + "01"
-            url_dianxin = "https://paimai2.alltobid.com/bid/%s/login.htm" % today_date
-            url_nodianxin = "https://paimai.alltobid.com/bid/%s/login.htm" % today_date
-            if version == '5.12s' or debug:
-                res = {'result': 'login success',
-                       'url_dianxin': url_dianxin,
-                       'url_nodianxin': url_nodianxin}
-                return Response(res, status=status.HTTP_200_OK, template_name=None, content_type=None)
-            else:
-                res = {'result': 'wrong version'}
-                return Response(res, status=status.HTTP_200_OK, template_name=None, content_type=None)
-        else:
-            res = {'result': 'wrong account'}
-            return Response(res, status=status.HTTP_200_OK, template_name=None, content_type=None)
-    except:
-        return Response(status=status.HTTP_404_NOT_FOUND)
+# @permission_classes((IsAuthenticated, CanBid))
+# @api_view(['GET'])
+# def bid_login(request):
+#     try:
+#         username = request.GET['username']
+#         password = request.GET['password']
+#         version = request.GET['version']
+#         debug = request.GET['debug']
+#
+#         user = authenticate(username=username, password=password)
+#         if user:
+#             time1 = time.localtime(time.time())
+#             time2 = time.strftime("%Y%m%d", time1)
+#             today_date = time2 + "01"
+#             url_dianxin = "https://paimai2.alltobid.com/bid/%s/login.htm" % today_date
+#             url_nodianxin = "https://paimai.alltobid.com/bid/%s/login.htm" % today_date
+#             if version == '5.12s' or debug:
+#                 res = {'result': 'login success',
+#                        'url_dianxin': url_dianxin,
+#                        'url_nodianxin': url_nodianxin}
+#                 return Response(res, status=status.HTTP_200_OK, template_name=None, content_type=None)
+#             else:
+#                 res = {'result': 'wrong version'}
+#                 return Response(res, status=status.HTTP_200_OK, template_name=None, content_type=None)
+#         else:
+#             res = {'result': 'wrong account'}
+#             return Response(res, status=status.HTTP_200_OK, template_name=None, content_type=None)
+#     except:
+#         return Response(status=status.HTTP_404_NOT_FOUND)
 
 
 
@@ -298,3 +302,14 @@ def get_remotetime(request):
         return Response(res, status=status.HTTP_200_OK, template_name=None, content_type=None)
     except:
         return Response(status=status.HTTP_404_NOT_FOUND)
+
+
+
+#### 电商自动化
+@api_view(['GET'])
+def create_identify_code(request):
+    try:
+        pass
+    except:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
