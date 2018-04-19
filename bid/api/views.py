@@ -184,7 +184,7 @@ def get_guopaiurl(request):
                 if  uuuid == 'none' or diskid == uuuid:
                     identify.uuuid = diskid
                     identify.save()  #更新uuuid
-                    reset_identify_code()   ##异步更新数据库
+                    reset_identify_code(identify_code)   ##异步更新数据库
                     version = request.GET.get('version', None)
                     debug = request.GET.get('debug', None)
                     time1 = time.localtime(time.time())
@@ -240,7 +240,7 @@ def bid_keeplogin(request):
             uuuid = identify.uuuid
             if diskid == uuuid:
                 res = {'result': 'keep success'}
-                reset_identify_code()  ##异步还原identify_code
+                reset_identify_code(identify_code)  ##异步还原identify_code
                 return Response(res, status=status.HTTP_200_OK, template_name=None, content_type=None)
             elif uuuid == 'none':
                 identify.uuuid = diskid

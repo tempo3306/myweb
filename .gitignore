@@ -3,5 +3,5 @@ myweb/config.py
 */*.pyc
 *.pyc
 /static/media/user_image/
-/__pycache__/
+__pycache__/
 */migrations/
