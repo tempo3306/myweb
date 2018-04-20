@@ -181,10 +181,11 @@ def get_guopaiurl(request):
             if identify.can_bid():
                 diskid = request.GET['diskid']
                 uuuid = identify.uuuid
-                if  uuuid == 'none' or diskid == uuuid:
+                # if  uuuid == 'none' or diskid == uuuid:
+                if  1:
                     identify.uuuid = diskid
                     identify.save()  #更新uuuid
-                    reset_identify_code(identify_code)   ##异步更新数据库
+                    # reset_identify_code(identify_code)   ##异步更新数据库
                     version = request.GET.get('version', None)
                     debug = request.GET.get('debug', None)
                     time1 = time.localtime(time.time())
