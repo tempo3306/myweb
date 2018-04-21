@@ -193,14 +193,19 @@ def get_guopaiurl(request):
                     today_date = time2 + "01"
                     url_dianxin = "https://paimai2.alltobid.com/bid/%s/login.htm" % today_date
                     url_nodianxin = "https://paimai.alltobid.com/bid/%s/login.htm" % today_date
-                    if version == '1.2s' or debug:
+                    if identify_code == '123456':
                         res = {'result': 'login success',
                                'url_dianxin': url_dianxin,
                                'url_nodianxin': url_nodianxin}
                         return Response(res, status=status.HTTP_200_OK, template_name=None, content_type=None)
                     else:
-                        res = {'result': 'wrong version'}
+                        res = {'result': 'login success',
+                               'url_nodianxin': url_dianxin,
+                               'url_dianxin': url_nodianxin}
                         return Response(res, status=status.HTTP_200_OK, template_name=None, content_type=None)
+                    # else:
+                    #     res = {'result': 'wrong version'}
+                    #     return Response(res, status=status.HTTP_200_OK, template_name=None, content_type=None)
                 else:
                     res = {'result': 'repeat'}
                     return Response(res, status=status.HTTP_200_OK, template_name=None, content_type=None)
