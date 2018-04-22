@@ -1,11 +1,21 @@
-import requests
+import time
+from celery import Celery
+
+# tasks.py
+import time
+from celery import Celery
+
+celery = Celery('tasks', broker='redis://localhost:6379/0')
+
+@celery.task
+def sendmail(mail):
+    print('sending mail to %s...')
+    time.sleep(2.0)
+    print('mail sent.')
 
 
 
-# a = requests.Session()
-#
-# url = "http://127.0.0.1:8000/api/bid/action"
-#
-# response = a.get(url)
-#
-# print(response.json())
+def testmail(mail):
+    print('fsdfsfs')
+    sendmail(mail)
+    print('fsdfsssssssfs')

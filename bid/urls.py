@@ -20,7 +20,6 @@ urlpatterns = [
 
 
     ##模拟
-    url('^moni/$', views.moni, name='moni'),
     path('yanzhengma/<int:pk>', views.yanzhengma, name='yanzhengma'),
     path('answer/<int:pk>', views.answer, name='answer'),
     url('^yanzhengma_refresh/$', views.yanzhengma_refresh, name='yanzhengma_refresh'),

@@ -18,11 +18,11 @@ import json
 from django.http import HttpResponse
 
 ##模拟系统
-def moni(request):
-    yan = "code/yan0.jpg"
-    answer = 1356
-    context = {'yan': yan, 'answer': answer}
-    return render(request, 'bid/Moni.html', context=context)
+# def moni(request):
+#     yan = "code/yan0.jpg"
+#     answer = 1356
+#     context = {'yan': yan, 'answer': answer}
+#     return render(request, 'bid/Moni.html', context=context)
 
 
 def yanzhengma(request, pk):

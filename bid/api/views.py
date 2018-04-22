@@ -185,7 +185,7 @@ def get_guopaiurl(request):
                 if  1:
                     identify.uuuid = diskid
                     identify.save()  #更新uuuid
-                    # reset_identify_code(identify_code)   ##异步更新数据库
+                    reset_identify_code.delay(identify_code)   ##异步更新数据库
                     version = request.GET.get('version', None)
                     debug = request.GET.get('debug', None)
                     time1 = time.localtime(time.time())
@@ -193,7 +193,7 @@ def get_guopaiurl(request):
                     today_date = time2 + "01"
                     url_dianxin = "https://paimai2.alltobid.com/bid/%s/login.htm" % today_date
                     url_nodianxin = "https://paimai.alltobid.com/bid/%s/login.htm" % today_date
-                    if identify_code == '123456':
+                    if identify_code == '666666':
                         res = {'result': 'login success',
                                'url_dianxin': url_dianxin,
                                'url_nodianxin': url_nodianxin}
@@ -246,7 +246,7 @@ def bid_keeplogin(request):
             uuuid = identify.uuuid
             if diskid == uuuid:
                 res = {'result': 'keep success'}
-                reset_identify_code(identify_code)  ##异步还原identify_code
+                reset_identify_code.delay(identify_code)  ##异步还原identify_code
                 return Response(res, status=status.HTTP_200_OK, template_name=None, content_type=None)
             elif uuuid == 'none':
                 identify.uuuid = diskid

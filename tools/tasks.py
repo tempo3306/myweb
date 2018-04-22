@@ -25,6 +25,7 @@ def send_identify_email(email):
 ##还原激活码登录状态
 @task
 def reset_identify_code(identify_code):
+    import time
     try:
         import time
         time.sleep(60 * 5)  ##登录或keep 5分钟后将软件重置
