@@ -275,6 +275,18 @@ CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = 'Africa/Nairobi'
 BROKER_TRANSPORT_OPTIONS = {'visibility_timeout': 3600}  # 1 hour.超时
 
+# import djcelery
+# djcelery.setup_loader()
+# BROKER_URL = ‘redis://localhost:6379‘
+# CELERYBEAT_SCHEDULER = ‘djcelery.schedulers.DatabaseScheduler‘ # 定时任务
+# CELERY_RESULT_BACKEND = ‘djcelery.backends.database:DatabaseBackend‘
+# CELERY_RESULT_BACKEND = ‘redis://localhost:6379‘
+# CELERY_ACCEPT_CONTENT = [‘application/json‘]
+# CELERY_TASK_SERIALIZER = ‘json‘
+# CELERY_RESULT_SERIALIZER = ‘json‘
+# CELERY_TIMEZONE = ‘Asia/Shanghai‘
+
+
 ##∂
 ##--------------------------------------------------
 ##配置邮箱
