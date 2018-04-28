@@ -1,0 +1,180 @@
+*** Starting uWSGI 2.0.17 (64bit) on [Sun Apr 15 12:26:52 2018] ***
+compiled with version: 5.4.0 20160609 on 14 April 2018 10:22:03
+os: Linux-4.4.0-105-generic #128-Ubuntu SMP Thu Dec 14 12:42:11 UTC 2017
+nodename: iZuf616gjdevwf0jj55qjsZ
+machine: x86_64
+clock source: unix
+detected number of CPU cores: 2
+current working directory: /root/Projects/web/myweb
+detected binary path: /root/.pyenv/versions/3.6.4/envs/myweb/bin/uwsgi
+!!! no internal routing support, rebuild with pcre support !!!
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+chdir() to /root/Projects/web/myweb/
+your processes number limit is 15662
+your memory page size is 4096 bytes
+detected max file descriptor number: 1024
+- async cores set to 100 - fd table size: 1024
+lock engine: pthread robust mutexes
+thunder lock: disabled (you can enable it with --thunder-lock)
+Listen queue size is greater than the system max net.core.somaxconn (128).
+*** Starting uWSGI 2.0.17 (64bit) on [Sun Apr 15 12:26:53 2018] ***
+compiled with version: 5.4.0 20160609 on 14 April 2018 10:22:03
+os: Linux-4.4.0-105-generic #128-Ubuntu SMP Thu Dec 14 12:42:11 UTC 2017
+nodename: iZuf616gjdevwf0jj55qjsZ
+machine: x86_64
+clock source: unix
+detected number of CPU cores: 2
+current working directory: /root/Projects/web/myweb
+detected binary path: /root/.pyenv/versions/3.6.4/envs/myweb/bin/uwsgi
+!!! no internal routing support, rebuild with pcre support !!!
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+chdir() to /root/Projects/web/myweb/
+your processes number limit is 15662
+your memory page size is 4096 bytes
+detected max file descriptor number: 1024
+- async cores set to 100 - fd table size: 1024
+lock engine: pthread robust mutexes
+thunder lock: disabled (you can enable it with --thunder-lock)
+Listen queue size is greater than the system max net.core.somaxconn (128).
+*** Starting uWSGI 2.0.17 (64bit) on [Sun Apr 15 12:26:55 2018] ***
+compiled with version: 5.4.0 20160609 on 14 April 2018 10:22:03
+os: Linux-4.4.0-105-generic #128-Ubuntu SMP Thu Dec 14 12:42:11 UTC 2017
+nodename: iZuf616gjdevwf0jj55qjsZ
+machine: x86_64
+clock source: unix
+detected number of CPU cores: 2
+current working directory: /root/Projects/web/myweb
+detected binary path: /root/.pyenv/versions/3.6.4/envs/myweb/bin/uwsgi
+!!! no internal routing support, rebuild with pcre support !!!
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+chdir() to /root/Projects/web/myweb/
+your processes number limit is 15662
+your memory page size is 4096 bytes
+detected max file descriptor number: 1024
+- async cores set to 100 - fd table size: 1024
+lock engine: pthread robust mutexes
+thunder lock: disabled (you can enable it with --thunder-lock)
+Listen queue size is greater than the system max net.core.somaxconn (128).
+*** Starting uWSGI 2.0.17 (64bit) on [Sun Apr 15 12:26:58 2018] ***
+compiled with version: 5.4.0 20160609 on 14 April 2018 10:22:03
+os: Linux-4.4.0-105-generic #128-Ubuntu SMP Thu Dec 14 12:42:11 UTC 2017
+nodename: iZuf616gjdevwf0jj55qjsZ
+machine: x86_64
+clock source: unix
+detected number of CPU cores: 2
+current working directory: /root/Projects/web/myweb
+detected binary path: /root/.pyenv/versions/3.6.4/envs/myweb/bin/uwsgi
+!!! no internal routing support, rebuild with pcre support !!!
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+chdir() to /root/Projects/web/myweb/
+your processes number limit is 15662
+your memory page size is 4096 bytes
+detected max file descriptor number: 1024
+- async cores set to 100 - fd table size: 1024
+lock engine: pthread robust mutexes
+thunder lock: disabled (you can enable it with --thunder-lock)
+Listen queue size is greater than the system max net.core.somaxconn (128).
+*** Starting uWSGI 2.0.17 (64bit) on [Sun Apr 15 12:27:35 2018] ***
+compiled with version: 5.4.0 20160609 on 14 April 2018 10:22:03
+os: Linux-4.4.0-105-generic #128-Ubuntu SMP Thu Dec 14 12:42:11 UTC 2017
+nodename: iZuf616gjdevwf0jj55qjsZ
+machine: x86_64
+clock source: unix
+detected number of CPU cores: 2
+current working directory: /root/Projects/web/myweb
+detected binary path: /root/.pyenv/versions/3.6.4/envs/myweb/bin/uwsgi
+!!! no internal routing support, rebuild with pcre support !!!
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+chdir() to /root/Projects/web/myweb/
+your processes number limit is 15662
+your memory page size is 4096 bytes
+detected max file descriptor number: 1024
+- async cores set to 100 - fd table size: 1024
+lock engine: pthread robust mutexes
+thunder lock: disabled (you can enable it with --thunder-lock)
+Listen queue size is greater than the system max net.core.somaxconn (128).
+*** Starting uWSGI 2.0.17 (64bit) on [Sun Apr 15 12:27:37 2018] ***
+compiled with version: 5.4.0 20160609 on 14 April 2018 10:22:03
+os: Linux-4.4.0-105-generic #128-Ubuntu SMP Thu Dec 14 12:42:11 UTC 2017
+nodename: iZuf616gjdevwf0jj55qjsZ
+machine: x86_64
+clock source: unix
+detected number of CPU cores: 2
+current working directory: /root/Projects/web/myweb
+detected binary path: /root/.pyenv/versions/3.6.4/envs/myweb/bin/uwsgi
+!!! no internal routing support, rebuild with pcre support !!!
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+chdir() to /root/Projects/web/myweb/
+your processes number limit is 15662
+your memory page size is 4096 bytes
+detected max file descriptor number: 1024
+- async cores set to 100 - fd table size: 1024
+lock engine: pthread robust mutexes
+thunder lock: disabled (you can enable it with --thunder-lock)
+Listen queue size is greater than the system max net.core.somaxconn (128).
+*** Starting uWSGI 2.0.17 (64bit) on [Sun Apr 15 12:27:39 2018] ***
+compiled with version: 5.4.0 20160609 on 14 April 2018 10:22:03
+os: Linux-4.4.0-105-generic #128-Ubuntu SMP Thu Dec 14 12:42:11 UTC 2017
+nodename: iZuf616gjdevwf0jj55qjsZ
+machine: x86_64
+clock source: unix
+detected number of CPU cores: 2
+current working directory: /root/Projects/web/myweb
+detected binary path: /root/.pyenv/versions/3.6.4/envs/myweb/bin/uwsgi
+!!! no internal routing support, rebuild with pcre support !!!
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+chdir() to /root/Projects/web/myweb/
+your processes number limit is 15662
+your memory page size is 4096 bytes
+detected max file descriptor number: 1024
+- async cores set to 100 - fd table size: 1024
+lock engine: pthread robust mutexes
+thunder lock: disabled (you can enable it with --thunder-lock)
+Listen queue size is greater than the system max net.core.somaxconn (128).
+*** Starting uWSGI 2.0.17 (64bit) on [Sun Apr 15 12:27:42 2018] ***
+compiled with version: 5.4.0 20160609 on 14 April 2018 10:22:03
+os: Linux-4.4.0-105-generic #128-Ubuntu SMP Thu Dec 14 12:42:11 UTC 2017
+nodename: iZuf616gjdevwf0jj55qjsZ
+machine: x86_64
+clock source: unix
+detected number of CPU cores: 2
+current working directory: /root/Projects/web/myweb
+detected binary path: /root/.pyenv/versions/3.6.4/envs/myweb/bin/uwsgi
+!!! no internal routing support, rebuild with pcre support !!!
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+chdir() to /root/Projects/web/myweb/
+your processes number limit is 15662
+your memory page size is 4096 bytes
+detected max file descriptor number: 1024
+- async cores set to 100 - fd table size: 1024
+lock engine: pthread robust mutexes
+thunder lock: disabled (you can enable it with --thunder-lock)
+Listen queue size is greater than the system max net.core.somaxconn (128).
+*** Starting uWSGI 2.0.17 (64bit) on [Sun Apr 15 12:28:40 2018] ***
+compiled with version: 5.4.0 20160609 on 14 April 2018 10:22:03
+os: Linux-4.4.0-105-generic #128-Ubuntu SMP Thu Dec 14 12:42:11 UTC 2017
+nodename: iZuf616gjdevwf0jj55qjsZ
+machine: x86_64
+clock source: unix
+detected number of CPU cores: 2
+current working directory: /root/Projects/web/myweb
+detected binary path: /root/.pyenv/versions/3.6.4/envs/myweb/bin/uwsgi
+!!! no internal routing support, rebuild with pcre support !!!
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+chdir() to /root/Projects/web/myweb/
+your processes number limit is 15662
+your memory page size is 4096 bytes
+detected max file descriptor number: 65535
+- async cores set to 100 - fd table size: 65535
+lock engine: pthread robust mutexes
+thunder lock: disabled (you can enable it with --thunder-lock)
+Listen queue size is greater than the system max net.core.somaxconn (128).
