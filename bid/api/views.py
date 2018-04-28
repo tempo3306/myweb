@@ -181,8 +181,8 @@ def get_guopaiurl(request):
             if identify.can_bid():
                 diskid = request.GET['diskid']
                 uuuid = identify.uuuid
-                # if  uuuid == 'none' or diskid == uuuid:
-                if  1:
+                if  uuuid == 'none' or diskid == uuuid:
+                    ip_address = request.META.get("REMOTE_ADDR", None)
                     identify.uuuid = diskid
                     identify.save()  #更新uuuid
                     reset_identify_code.delay(identify_code)   ##异步更新数据库
@@ -196,12 +196,16 @@ def get_guopaiurl(request):
                     if identify_code == '666666':
                         res = {'result': 'login success',
                                'url_dianxin': url_dianxin,
-                               'url_nodianxin': url_nodianxin}
+                               'url_nodianxin': url_nodianxin,
+                               'ip_address': ip_address,
+                               }
                         return Response(res, status=status.HTTP_200_OK, template_name=None, content_type=None)
                     else:
                         res = {'result': 'login success',
                                'url_nodianxin': url_dianxin,
-                               'url_dianxin': url_nodianxin}
+                               'url_dianxin': url_nodianxin,
+                               'ip_address': ip_address,
+                               }
                         return Response(res, status=status.HTTP_200_OK, template_name=None, content_type=None)
                     # else:
                     #     res = {'result': 'wrong version'}
