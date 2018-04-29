@@ -23,49 +23,27 @@ def weixin(request):
             token = "zs1989"  # 请按照公众平台官网\基本配置中信息填写
             hashlist = [token, timestamp, nonce]
             hashlist.sort()
-            hashstr = ''.join([s for s in hashlist])
+            hashstr = ''.join(hashlist)
             hashstr = hashlib.sha1(hashstr.encode("utf8")).hexdigest()
             sha1 = hashlib.sha1()
-            print("handle/GET func: hashcode, signature: ", hashstr, signature)
-            print('hashcode', hashstr)
-            print('signature', signature)
+            # print("handle/GET func: hashcode, signature: ", hashstr, signature)
+            # print('hashcode', hashstr)
+            # print('signature', signature)
             if hashstr == signature:
                 return HttpResponse(echostr)
             else:
                 return HttpResponse("wrong token")
         except Exception as e:
             return HttpResponse("wrong")
+    else:
+        othercontent = autoreply(request)
+        return HttpResponse(othercontent)
 
 
 
-###/weixin?signature=64272334b5c0da42ccbbdd2abac6fb3282d    7430e&echostr=17096529284169071343&timestamp=1524987951&nonce=950447046
-    #
-    # try:
-    #     if request.method == "GET":
-    #         #接收微信服务器get请求发过来的参数
-    #         signature = request.GET.get('signature', None)
-    #         timestamp = request.GET.get('timestamp', None)
-    #         nonce = request.GET.get('nonce', None)
-    #         echostr = request.GET.get('echostr', None)
-    #         #服务器配置中的token
-    #         token = 'zs1989'
-    #         #把参数放到list中排序后合成一个字符串，再用sha1加密得到新的字符串与微信发来的signature对比，如果相同就返回echostr给服务器，校验通过
-    #         hashlist = [token, timestamp, nonce]
-    #         hashlist.sort()
-    #         hashstr = ''.join([s for s in hashlist])
-    #         hashstr = hashlib.sha1(hashstr).hexdigest()
-    #         if hashstr == signature:
-    #           return HttpResponse(echostr)
-    #         else:
-    #           return HttpResponse("field")
-    #     else:
-    #         othercontent = autoreply(request)
-    #         return HttpResponse(othercontent)
-    # except:
-    #     return HttpResponse("wrong")
 
-
-#微信服务器推送消息是xml的，根据利用ElementTree来解析出的不同xml内容返回不同的回复信息，就实现了基本的自动回复功能了，也可以按照需求用其他的XML解析方法
+# 微信服务器推送消息是xml的，根据利用ElementTree来解析出的不同xml内容返回不同的回复信息，就实现了基本的自动回复功能了，
+# 也可以按照需求用其他的XML解析方法
 import xml.etree.ElementTree as ET
 def autoreply(request):
     try:
