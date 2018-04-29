@@ -39,6 +39,8 @@ urlpatterns = [
     url(r'^api-token-refresh/', refresh_jwt_token), #刷新token
     url(r'^api-token-verify/', verify_jwt_token), #刷新token
 
+    url('^weixin/', include('wx_zhuoqiuzhibo.urls'))
+
 ]
 
 if settings.DEBUG:
