@@ -7,11 +7,11 @@ import json
 from django.utils.encoding import smart_str
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
+from rest_framework.views import APIView
+from django.views import View
 
-#django默认开启csrf防护，这里使用@csrf_exempt去掉防护
-@csrf_exempt
-def weixin(request):
-    if request.method == "GET":
+class Weixin(View):
+    def get(self, request):
         try:
             signature = request.GET.get('signature', None)
             timestamp = request.GET.get('timestamp', None)
@@ -35,17 +35,19 @@ def weixin(request):
                 return HttpResponse("wrong token")
         except Exception as e:
             return HttpResponse("wrong")
-    elif request.method == 'POST':
+    def post(self, request):
         othercontent = autoreply(request)
         return HttpResponse(othercontent)
-    else:
-        return HttpResponse('')
+
+    # django默认开启csrf防护，这里使用@csrf_exempt去掉防护
+    # @csrf_exempt
+    @csrf_exempt
+    def dispatch(self, *args, **kwargs):
+        return super(Weixin, self).dispatch(*args, **kwargs)
 
 
-
-
-# 微信服务器推送消息是xml的，根据利用ElementTree来解析出的不同xml内容返回不同的回复信息，就实现了基本的自动回复功能了，
-# 也可以按照需求用其他的XML解析方法
+# # 微信服务器推送消息是xml的，根据利用ElementTree来解析出的不同xml内容返回不同的回复信息，就实现了基本的自动回复功能了，
+# # 也可以按照需求用其他的XML解析方法
 import xml.etree.ElementTree as ET
 def autoreply(request):
     try:
