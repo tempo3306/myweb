@@ -35,9 +35,11 @@ def weixin(request):
                 return HttpResponse("wrong token")
         except Exception as e:
             return HttpResponse("wrong")
-    else:
+    elif request.method == 'POST':
         othercontent = autoreply(request)
         return HttpResponse(othercontent)
+    else:
+        return HttpResponse('')
 
 
 
@@ -49,7 +51,6 @@ def autoreply(request):
     try:
         webData = request.body
         xmlData = ET.fromstring(webData)
-
         msg_type = xmlData.find('MsgType').text
         ToUserName = xmlData.find('ToUserName').text
         FromUserName = xmlData.find('FromUserName').text
@@ -61,7 +62,7 @@ def autoreply(request):
         fromUser = ToUserName
 
         if msg_type == 'text':
-            content = "您好,欢迎来到Python大学习!希望我们可以一起进步!"
+            content = "大家好!"
             replyMsg = TextMsg(toUser, fromUser, content)
             print ("成功了!!!!!!!!!!!!!!!!!!!")
             print (replyMsg)

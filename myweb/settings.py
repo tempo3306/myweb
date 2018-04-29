@@ -304,78 +304,125 @@ EMAIL_FROM = "810909753@qq.com"  # 邮箱来自
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
-    'formatters': {
-        'verbose': {
-            'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
-        },
-        'simple': {
-            'format': '%(levelname)s %(message)s'
-        },
+    'filters': {
+        'require_debug_true': {
+            '()': 'django.utils.log.RequireDebugTrue',
+        }, # 针对 DEBUG = True 的情况
     },
-    # 'filters': {
-    #     'special': {
-    #         '()': 'project.logging.SpecialFilter',
-    #         'foo': 'bar',
-    #     },
-    #     'require_debug_true': {
-    #         '()': 'django.utils.log.RequireDebugTrue',
-    #     },
-    # },
+    'formatters': {
+        'standard': {
+            'format': '%(levelname)s %(asctime)s %(pathname)s %(filename)s %(module)s %(funcName)s %(lineno)d: %(message)s'
+        }, # 对日志信息进行格式化，每个字段对应了日志格式中的一个字段，更多字段参考官网文档，我认为这些字段比较合适，输出类似于下面的内容
+        # INFO 2016-09-03 16:25:20,067 /home/ubuntu/mysite/views.py views.py views get 29: some info...
+    },
     'handlers': {
-        'console': {
-            'level': 'DEBUG',
-            # 'filters': ['require_debug_true'],
-            'class': 'logging.StreamHandler',
-            'formatter': 'verbose'
+        'mail_admins': {
+            'level': 'ERROR',
+            'class': 'django.utils.log.AdminEmailHandler',
+             'formatter':'standard'
         },
-        # 'file': {
-        #     'level': 'DEBUG',
-        #     'class': 'logging.FileHandler',
-        #     'filename': 'mylog_test.log',
-        #     'formatter': 'verbose'
-        # },
-
-        # 'mail_admins': {
-        #     'level': 'ERROR',
-        #     'class': 'django.utils.log.AdminEmailHandler',
-        #     'filters': ['special']
-        # }
+        'file_handler': {
+             'level': 'DEBUG',
+             'class': 'logging.handlers.TimedRotatingFileHandler',
+             'filename': '/usr/local/logs/django_myweb.log',
+             'formatter':'standard'
+        }, # 用于文件输出
+        'console':{
+            'level': 'INFO',
+            'filters': ['require_debug_true'],
+            'class': 'logging.StreamHandler',
+            'formatter': 'standard'
+        },
     },
     'loggers': {
         'django': {
-            'handlers': ['console'],  # console or file
-            'propagate': True,
-            'level': 'DEBUG',
-        },
+            'handlers' :['file_handler', 'console'],
+            'level':'DEBUG',
+            'propagate': True # 是否继承父类的log信息
+        }, # handlers 来自于上面的 handlers 定义的内容
         'django.request': {
-            'handlers': ['console'],
-            'level': 'DEBUG',
+            'handlers': ['mail_admins'],
+            'level': 'ERROR',
             'propagate': False,
         },
-        # For performance reasons, SQL logging is only enabled when settings.DEBUG is set to True
-        # ref. https://docs.djangoproject.com/en/1.11/topics/logging/#django-db-backends
-        'django.db.backends': {
-            'handlers': ['console'],
-            'propagate': False,
-            'level': 'DEBUG',
-        },
-        # 'api.views': {
-        #     'handlers': ['console'],
-        #     'propagate': False,
-        #     'level': 'DEBUG',
-        # },
-        # 'background_task': {
-        #     'handlers': ['console'],
-        #     'level': 'DEBUG',
-        #     'propagate': True,
-        # }
-        # 'myproject.custom': {
-        #     'handlers': ['console', 'mail_admins'],
-        #     'level': 'INFO',
-        #     'filters': ['special']
-        # }
     }
 }
+
+# LOGGING = {
+#     'version': 1,
+#     'disable_existing_loggers': False,
+#     'formatters': {
+#         'verbose': {
+#             'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
+#         },
+#         'simple': {
+#             'format': '%(levelname)s %(message)s'
+#         },
+#     },
+#     # 'filters': {
+#     #     'special': {
+#     #         '()': 'project.logging.SpecialFilter',
+#     #         'foo': 'bar',
+#     #     },
+#     #     'require_debug_true': {
+#     #         '()': 'django.utils.log.RequireDebugTrue',
+#     #     },
+#     # },
+#     'handlers': {
+#         'console': {
+#             'level': 'DEBUG',
+#             # 'filters': ['require_debug_true'],
+#             'class': 'logging.StreamHandler',
+#             'formatter': 'verbose'
+#         },
+#         # 'file': {
+#         #     'level': 'DEBUG',
+#         #     'class': 'logging.FileHandler',
+#         #     'filename': 'mylog_test.log',
+#         #     'formatter': 'verbose'
+#         # },
+#
+#         # 'mail_admins': {
+#         #     'level': 'ERROR',
+#         #     'class': 'django.utils.log.AdminEmailHandler',
+#         #     'filters': ['special']
+#         # }
+#     },
+#     'loggers': {
+#         'django': {
+#             'handlers': ['console'],  # console or file
+#             'propagate': True,
+#             'level': 'DEBUG',
+#         },
+#         'django.request': {
+#             'handlers': ['console'],
+#             'level': 'DEBUG',
+#             'propagate': False,
+#         },
+#         # For performance reasons, SQL logging is only enabled when settings.DEBUG is set to True
+#         # ref. https://docs.djangoproject.com/en/1.11/topics/logging/#django-db-backends
+#         'django.db.backends': {
+#             'handlers': ['console'],
+#             'propagate': False,
+#             'level': 'DEBUG',
+#         },
+#         # 'api.views': {
+#         #     'handlers': ['console'],
+#         #     'propagate': False,
+#         #     'level': 'DEBUG',
+#         # },
+#         # 'background_task': {
+#         #     'handlers': ['console'],
+#         #     'level': 'DEBUG',
+#         #     'propagate': True,
+#         # }
+#         # 'myproject.custom': {
+#         #     'handlers': ['console', 'mail_admins'],
+#         #     'level': 'INFO',
+#         #     'filters': ['special']
+#         # }
+#     }
+# }
 
 ##-------------------------------------------------------------------
 ##设置上传大小
