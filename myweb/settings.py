@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'django_extensions',
     'django_filters',
     'django_celery_results',
+    'wx_zhuoqiuzhibo',
 
 ]
 
