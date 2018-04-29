@@ -28,12 +28,15 @@ def weixin(request):
             hashcode = sha1.hexdigest()
             print ("handle/GET func: hashcode, signature: ", hashcode, signature)
             if hashcode == signature:
-                return echostr
+                return  HttpResponse(echostr)
             else:
-                return ""
+                return HttpResponse("wrong token")
         except Exception as e:
-            return e
+            return HttpResponse("wrong")
 
+
+
+###/weixin?signature=64272334b5c0da42ccbbdd2abac6fb3282d    7430e&echostr=17096529284169071343&timestamp=1524987951&nonce=950447046
     #
     # try:
     #     if request.method == "GET":
