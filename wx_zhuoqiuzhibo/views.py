@@ -12,23 +12,25 @@ from django.http import HttpResponse
 @csrf_exempt
 def weixin(request):
     if request.method == "GET":
-        signature = request.GET.get('signature', None)
-        timestamp = request.GET.get('timestamp', None)
-        nonce = request.GET.get('nonce', None)
-        echostr = request.GET.get('echostr', None)
-
         try:
+            signature = request.GET.get('signature', None)
+            timestamp = request.GET.get('timestamp', None)
+            nonce = request.GET.get('nonce', None)
+            echostr = request.GET.get('echostr', None)
+            print(echostr)
             if not echostr:
                 return HttpResponse("hello, this is handle view")
             token = "zs1989"  # 请按照公众平台官网\基本配置中信息填写
-            list = [token, timestamp, nonce]
-            list.sort()
+            hashlist = [token, timestamp, nonce]
+            hashlist.sort()
+            hashstr = ''.join([s for s in hashlist])
+            hashstr = hashlib.sha1(hashstr.encode("utf8")).hexdigest()
             sha1 = hashlib.sha1()
-            map(sha1.update, list)
-            hashcode = sha1.hexdigest()
-            print ("handle/GET func: hashcode, signature: ", hashcode, signature)
-            if hashcode == signature:
-                return  HttpResponse(echostr)
+            print("handle/GET func: hashcode, signature: ", hashstr, signature)
+            print('hashcode', hashstr)
+            print('signature', signature)
+            if hashstr == signature:
+                return HttpResponse(echostr)
             else:
                 return HttpResponse("wrong token")
         except Exception as e:
