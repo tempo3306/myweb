@@ -171,6 +171,26 @@ def Bid_auction_manage(request):
 
 
 ##
+def init_variable():
+    ##用于计算 最低成交价位置
+    data = {}
+    data['px_relative'] = 49  # 查找出来位置反算相对位置
+    data['py_relative'] =  0
+    ## 相对于最低成交价位置
+    #   ## 0:加价  1：出价 2：提交  3：刷新   4 ：确认   5：验证码    6:验证码输入框     7：取消
+    data['P_relative2'] = [[647, -98], [650, 8], [400, 89], [396, 14], [505, 68], [585, 8], [565, 5], [586, 86]]
+    P_relative2 = data['P_relative2']
+    data['Position_frame'] = [[0, 0] for i in range(len(P_relative2))]
+    ## 限定截图位置
+    data['refresh_area_relative'] = [396 - 150, 11 - 100, 396 + 150, 11 + 100]
+    data['confirm_area_relative'] = [505 - 80, 68 - 50, 505 + 80, 68 + 50]
+    data['yan_confirm_area_relative'] = [205 - 80, 68 - 50, 405 + 80, 68 + 50]
+    data['Pos_controlframe_relative'] = [192 - 344, 514 - 183]
+    data['Pos_yanzhengma_relative'] = [-277, - 65, - 97, + 45]  # 验证码所在位置
+    data['Pos_yanzhengmaframe_relative'] = [297, - 283]  # 验证码框放置位置
+    return data
+
+
 @api_view(['GET'])
 def get_guopaiurl(request):
     try:
@@ -193,11 +213,13 @@ def get_guopaiurl(request):
                     today_date = time2 + "01"
                     url_dianxin = "https://paimai2.alltobid.com/bid/%s/login.htm" % today_date
                     url_nodianxin = "https://paimai.alltobid.com/bid/%s/login.htm" % today_date
+                    data = init_variable()
                     if identify_code == '666666':
                         res = {'result': 'login success',
                                'url_dianxin': url_dianxin,
                                'url_nodianxin': url_nodianxin,
                                'ip_address': ip_address,
+                               'data': data,
                                }
                         return Response(res, status=status.HTTP_200_OK, template_name=None, content_type=None)
                     else:
@@ -205,6 +227,7 @@ def get_guopaiurl(request):
                                'url_nodianxin': url_dianxin,
                                'url_dianxin': url_nodianxin,
                                'ip_address': ip_address,
+                               'data': data,
                                }
                         return Response(res, status=status.HTTP_200_OK, template_name=None, content_type=None)
                     # else:
