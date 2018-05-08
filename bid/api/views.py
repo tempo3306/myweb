@@ -22,6 +22,7 @@ from django.shortcuts import get_object_or_404
 import time
 from django.contrib.auth import login, authenticate
 from tools.tasks import reset_identify_code
+from tools.utils import get_timebase
 
 class ConsumerViewSet(viewsets.ModelViewSet):
     queryset = Consumer.objects.all()
@@ -190,7 +191,8 @@ def init_variable():
     data['Pos_yanzhengmaframe_relative'] = [297, - 283]  # 验证码框放置位置
     ##返回正确的时间
     nowtime = get_timebase()
-    data['nowtime'] = nowtime
+    data['timebase_str'] = nowtime[0]
+    data['target_time'] = nowtime[1]
     return data
 
 
@@ -349,10 +351,3 @@ def create_identify_code(request):
     except:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
-##时间基 11:30:1的时间戳
-def get_timebase():
-    currenttime = time.time()
-    timebase_str = time.strftime("%Y-%m-%d", time.localtime(currenttime))
-    target_str = "{0} 11:30:1".format(timebase_str)
-    target_time = time.mktime(time.strptime(target_str, "%Y-%m-%d %H:%M:%S"))  ##时间戳
-    return (timebase_str, target_time)

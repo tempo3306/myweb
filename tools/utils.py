@@ -4,7 +4,7 @@ from account.models import EmailVerifyRecord  # 邮箱验证model
 from myweb.settings import EMAIL_FROM  # setting.py添加的的配置信息
 from myweb.settings import DEBUG
 from bid.models import Identify_code
-
+import time
 
 # 生成随机字符串
 def random_str(randomlength=12):
@@ -109,3 +109,11 @@ def handle_fileupload(file, p):  ##file: request.FILES['file']    p: MEDIA下的
         return newname
     except:
         return None
+
+##时间基 11:30:1的时间戳
+def get_timebase():
+    currenttime = time.time()
+    timebase_str = time.strftime("%Y-%m-%d", time.localtime(currenttime))
+    target_str = "{0} 11:30:1".format(timebase_str)
+    target_time = time.mktime(time.strptime(target_str, "%Y-%m-%d %H:%M:%S"))  ##时间戳
+    return (timebase_str, target_time)
