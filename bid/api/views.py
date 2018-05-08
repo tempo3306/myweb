@@ -188,6 +188,9 @@ def init_variable():
     data['Pos_controlframe_relative'] = [192 - 344, 514 - 183]
     data['Pos_yanzhengma_relative'] = [-277, - 65, - 97, + 45]  # 验证码所在位置
     data['Pos_yanzhengmaframe_relative'] = [297, - 283]  # 验证码框放置位置
+    ##返回正确的时间
+    nowtime = get_timebase()
+    data['nowtime'] = nowtime
     return data
 
 
@@ -213,7 +216,7 @@ def get_guopaiurl(request):
                     today_date = time2 + "01"
                     url_dianxin = "https://paimai2.alltobid.com/bid/%s/login.htm" % today_date
                     url_nodianxin = "https://paimai.alltobid.com/bid/%s/login.htm" % today_date
-                    data = init_variable()
+                    data = init_variable()  ##初始化数据
                     if identify_code == '666666':
                         res = {'result': 'login success',
                                'url_dianxin': url_dianxin,
@@ -346,3 +349,10 @@ def create_identify_code(request):
     except:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
+##时间基 11:30:1的时间戳
+def get_timebase():
+    currenttime = time.time()
+    timebase_str = time.strftime("%Y-%m-%d", time.localtime(currenttime))
+    target_str = "{0} 11:30:1".format(timebase_str)
+    target_time = time.mktime(time.strptime(target_str, "%Y-%m-%d %H:%M:%S"))  ##时间戳
+    return (timebase_str, target_time)
