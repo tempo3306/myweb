@@ -110,10 +110,41 @@ def handle_fileupload(file, p):  ##file: request.FILES['file']    p: MEDIA下的
     except:
         return None
 
-##时间基 11:30:1的时间戳
+
+##初始化软件
+def init_variable():
+    ##用于计算 最低成交价位置
+    data = {}
+    data['px_relative'] = 49  # 查找出来位置反算相对位置
+    data['py_relative'] =  0
+    ## 相对于最低成交价位置
+    #   ## 0:加价  1：出价 2：提交  3：刷新   4 ：确认   5：价格输入框    6:验证码输入框     7：取消
+    data['P_relative2'] = [[647, -98], [650, 8], [400, 89], [396, 14], [505, 68], [562, 8], [585, 8], [586, 86]]
+    P_relative2 = data['P_relative2']
+    data['Position_frame'] = [[0, 0] for i in range(len(P_relative2))]
+    ## 限定截图位置
+    data['refresh_area_relative'] = [396 - 150, 11 - 100, 396 + 150, 11 + 100]
+    data['confirm_area_relative'] = [505 - 80, 68 - 50, 505 + 80, 68 + 50]
+    data['yan_confirm_area_relative'] = [205 - 80, 68 - 50, 405 + 80, 68 + 50]
+    data['Pos_controlframe_relative'] = [192 - 344, 514 - 183]
+    data['Pos_yanzhengma_relative'] = [-277, - 65, - 97, + 45]  # 验证码所在位置
+    data['Pos_yanzhengmaframe_relative'] = [297, - 283]  # 验证码框放置位置
+    ##返回正确的时间
+    nowtime = get_timebase()
+    data['timebase_str'] = nowtime[0]
+    data['target_time'] = nowtime[1]
+    data['final_time'] = nowtime[2]
+    return data
+
+'''
+target_time 11:30:1 策略还原的时间戳
+final_time  11:29:56.5 智能出价的戴上时间
+'''
 def get_timebase():
     currenttime = time.time()
     timebase_str = time.strftime("%Y-%m-%d", time.localtime(currenttime))
     target_str = "{0} 11:30:1".format(timebase_str)
+    finaltime_str = "{0} 11:29:56".format(timebase_str)
     target_time = time.mktime(time.strptime(target_str, "%Y-%m-%d %H:%M:%S"))  ##时间戳
-    return (timebase_str, target_time)
+    final_time = time.mktime(time.strptime(finaltime_str, "%Y-%m-%d %H:%M:%S")) + 0.5  ##时间戳
+    return (timebase_str, target_time, final_time)
