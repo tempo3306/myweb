@@ -186,9 +186,10 @@ def get_guopaiurl(request):
                 uuuid = identify.uuuid
                 if  uuuid == 'none' or diskid == uuuid:
                     ip_address = request.META.get("REMOTE_ADDR", None)
-                    identify.uuuid = diskid
-                    identify.save()  #更新uuuid
-                    reset_identify_code.delay(identify_code)   ##异步更新数据库
+                    if identify_code != '123456':
+                        identify.uuuid = diskid
+                        identify.save()  #更新uuuid
+                        reset_identify_code.delay(identify_code)   ##异步更新数据库
                     version = request.GET.get('version', None)
                     debug = request.GET.get('debug', None)
                     time1 = time.localtime(time.time())
