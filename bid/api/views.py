@@ -198,20 +198,22 @@ def get_guopaiurl(request):
                     url_dianxin = "https://paimai2.alltobid.com/bid/%s/login.htm" % today_date
                     url_nodianxin = "https://paimai.alltobid.com/bid/%s/login.htm" % today_date
                     data = init_variable()  ##初始化数据
-                    if identify_code == '666666':
+                    if identify_code == '123456':
+                        res = {'result': 'login success',
+                               'url_dianxin': "http://51hupai.org/moni",
+                               'url_nodianxin': "http://51hupai.org/moni",
+                               'ip_address': ip_address,
+                               'data': data,
+                               'test': True,
+                               }
+                        return Response(res, status=status.HTTP_200_OK, template_name=None, content_type=None)
+                    else:
                         res = {'result': 'login success',
                                'url_dianxin': url_dianxin,
                                'url_nodianxin': url_nodianxin,
                                'ip_address': ip_address,
                                'data': data,
-                               }
-                        return Response(res, status=status.HTTP_200_OK, template_name=None, content_type=None)
-                    else:
-                        res = {'result': 'login success',
-                               'url_nodianxin': url_dianxin,
-                               'url_dianxin': url_nodianxin,
-                               'ip_address': ip_address,
-                               'data': data,
+                               'test': False,
                                }
                         return Response(res, status=status.HTTP_200_OK, template_name=None, content_type=None)
                     # else:
