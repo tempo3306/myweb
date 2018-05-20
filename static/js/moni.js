@@ -28,6 +28,8 @@ var day = date.getDate();
 var today = year.toString() + '-' + month.toString() + '-' + day.toString();
 $(document).ready(function () {
     $('#li3').html("出价时间:" + today + " 10:30:5");
+    $('#inputyanzhengma').val('');
+
 });
 //创建记录数组
 var pt1 = [];
@@ -41,7 +43,7 @@ var answer;
 
 
 $(document).ready(function () {
-    $('body').css({"postion": "relative", "left": "3px", "top": 0})
+    $('body').css({"postion": "relative", "left": "-677px", "top": 0})
 });
 //获取主背景位置
 
@@ -49,7 +51,7 @@ lowestprice = 86000 + parseInt((Math.random() - 0.25) * 50) * 100;
 //-----------------------------------------------------------------------------------------------
 //系统模块
 //随机种子，影响跳价情况
-var x1 = Math.random() < 0.5 ? 1 : (-1)   //随机+-
+var x1 = Math.random() < 0.5 ? 1 : (-1);   //随机+-
 price_torrent = parseInt((Math.random()) * 20) * x1; //20档跳价
 var price_limit1 = 15 + price_torrent / 4;  //0-40     10%之间概率跳价
 var price_limit2 = 40 + price_torrent / 2;  //40~50    35%之间概论跳价
@@ -57,13 +59,13 @@ var price_limit3 = 65 + price_torrent;  //50-60     50%概论跳价
 
 
 //随机种子，影响接受时间,初始化的时候确定，时间每一秒的读秒时间由这个时间的百分比确定
-time_torrent = Math.random() / 2 + 0.5 //随机种子，影响时间显示情况    0.5-1
-var time_cut = Math.random() * 5 + 53 // 随机一个时间分隔因子   平均时间55.5
-var time_need1 = time_torrent - 0.5  //52秒之前
-var time_need2 = time_torrent    //52到time_cut之间
-var time_need3 = 2      //time_cut之后  + time_torrent*n   n为当前时间与时间种子差值
+time_torrent = Math.random() / 2 + 0.5; //随机种子，影响时间显示情况    0.5-1
+var time_cut = Math.random() * 5 + 53; // 随机一个时间分隔因子   平均时间55.5
+var time_need1 = time_torrent - 0.5;  //52秒之前
+var time_need2 = time_torrent;    //52到time_cut之间
+var time_need3 = 2;      //time_cut之后  + time_torrent*n   n为当前时间与时间种子差值
 //随机显示状态
-var view_torrent = Math.random() * 10
+var view_torrent = Math.random() * 10;
 
 
 //-----------------------------------------------------------------------------------------------
@@ -90,8 +92,11 @@ if (!Array.prototype.indexOf) {
 //-----------------------------------------------------------------------------------------------
 //限制只能输入数字
 $(function () {
-    $('input').keypress(function (e) {
-        if (!String.fromCharCode(e.keyCode).match(/[0-9\.]/)) {
+    $('textarea').keypress(function (e) {
+        if (!String.fromCharCode(e.keyCode).match(/[0-9]/)) {
+            return false;
+        }
+        else if (this.value.length >= 6) {
             return false;
         }
     })
@@ -102,23 +107,23 @@ function selectFromMess() {
 }
 
 //复制粘贴
-function copy() {
-    var obj = document.getElementById("txarea");
-    window.clipboardData.setData("Text", obj.value);//设置数据
-    alert("复制成功");
-}
+// function copy() {
+//     var obj = document.getElementById("txarea");
+//     window.clipboardData.setData("Text", obj.value);//设置数据
+//     alert("复制成功");
+// }
+//
+// function paste() {
+//     var clipboard = window.clipboardData.getData("Text");
+//     clipboard == null ? alert('no data') : $(".inputyanzhengma").value = clipboard;
+// }
 
-function paste() {
-    var clipboard = window.clipboardData.getData("Text");
-    clipboard == null ? alert('no data') : $(".inputyanzhengma").value = clipboard;
-}
-
-$(document).keydown(function (event) {
-    if (event.keyCode == 13) {
-//　　　　　　alert('你按下了Enter');
-        $('.userwriteprice').val(98000);
-    }
-});
+// $(document).keydown(function (event) {
+//     if (event.keyCode == 13) {
+// //　　　　　　alert('你按下了Enter');
+//         $('.userwriteprice').val(98000);
+//     }
+// });
 //    //IE
 //    if (window.clipboardData) {
 //        return window.clipboardData.getData("Text");
@@ -136,7 +141,7 @@ function create_refresh() {
 
 //执行功能
 setInterval("Calculate_time()", 100);
-setInterval("Calculate_price()", 1000);
+setInterval("Calculate_price()", 1101);
 
 //模拟价格波动
 function Calculate_price() {
@@ -294,7 +299,7 @@ function ProgressOn(t) {
         if (width_now >= 350) {
             Read_price();
         }
-        ;
+
         if (width_now >= 350) {
             $('#price-form').dialog("close");
             $(".progressbar").width(0);
@@ -332,8 +337,8 @@ function Read_price() {
             $('#li2').html("出价金额:" + userprice1);
             $('#li3').html("出价时间:" + today + " 10:30:5" + parseInt(usertime1));
         }
-        else if (temp_price === userprice1){
-        $('#price-same').dialog('open');
+        else if (temp_price === userprice1) {
+            $('#price-same').dialog('open');
         }
         else {
             userprice2 = temp_price;
@@ -447,7 +452,7 @@ $(document).ready(function () {
 $(document).ready(function () {
     $("#jiajia").click(function () {
         var A = $('.useraddprice').val();
-        if (A == "") {
+        if (A === "") {
             var useradd = lowestprice
         } else {
             var useradd = lowestprice + parseInt(A)
@@ -475,7 +480,7 @@ $(function () {
                     $(this).css({
                         "position": "absolute",
                         "top": "240px", //设置弹出框距离是页面顶端下的200px
-                        "left": "427px" //设置弹出框距离是页面顶端下的200px
+                        "left": "1101px" //设置弹出框距离是页面顶端下的200px
 
                     });
                 }
@@ -498,7 +503,7 @@ $(function () {
                     $(this).css({
                         "position": "absolute",
                         "top": "240px", //设置弹出框距离是页面顶端下的200px
-                        "left": "427px" //设置弹出框距离是页面顶端下的200px
+                        "left": "1101px" //设置弹出框距离是页面顶端下的200px
 
                     });
                 }
@@ -521,7 +526,7 @@ $(function () {
                     $(this).css({
                         "position": "absolute",
                         "top": "240px", //设置弹出框距离是页面顶端下的200px
-                        "left": "427px" //设置弹出框距离是页面顶端下的200px
+                        "left": "1101px" //设置弹出框距离是页面顶端下的200px
 
                     });
                 }
@@ -544,7 +549,7 @@ $(function () {
                     $(this).css({
                         "position": "absolute",
                         "top": "240px", //设置弹出框距离是页面顶端下的200px
-                        "left": "427px" //设置弹出框距离是页面顶端下的200px
+                        "left": "1101px" //设置弹出框距离是页面顶端下的200px
                     });
                 }
             }
@@ -566,7 +571,7 @@ $(function () {
                     $(this).css({
                         "position": "absolute",
                         "top": "240px", //设置弹出       框距离是页面顶端下的200px
-                        "left": "427px" //设置弹出框距离是页面顶端下的200px
+                        "left": "1101px" //设置弹出框距离是页面顶端下的200px
                     });
                 }
             }
@@ -588,7 +593,7 @@ $(function () {
                     $(this).css({
                         "position": "absolute",
                         "top": "240px", //设置弹出框距离是页面顶端下的200px
-                        "left": "427px" //设置弹出框距离是页面顶端下的200px
+                        "left": "1101px" //设置弹出框距离是页面顶端下的200px
                     });
                 }
             }
@@ -610,7 +615,7 @@ $(function () {
                     $(this).css({
                         "position": "absolute",
                         "top": "240px", //设置弹出框距离是页面顶端下的200px
-                        "left": "427px" //设置弹出框距离是页面顶端下的200px
+                        "left": "1101px" //设置弹出框距离是页面顶端下的200px
                     });
                 }
             }
@@ -632,7 +637,7 @@ $(function () {
                     $(this).css({
                         "position": "absolute",
                         "top": "240px", //设置弹出框距离是页面顶端下的200px
-                        "left": "427px" //设置弹出框距离是页面顶端下的200px
+                        "left": "1101px" //设置弹出框距离是页面顶端下的200px
                     });
                 }
             }
@@ -654,7 +659,7 @@ $(function () {
                     $(this).css({
                         "position": "absolute",
                         "top": "240px", //设置弹出框距离是页面顶端下的200px
-                        "left": "427px" //设置弹出框距离是页面顶端下的200px
+                        "left": "1101px" //设置弹出框距离是页面顶端下的200px
                     });
                 }
             }
@@ -677,7 +682,7 @@ $(function () {
                     $(this).css({
                         "position": "absolute",
                         "top": "240px", //设置弹出框距离是页面顶端下的200px
-                        "left": "427px" //设置弹出框距离是页面顶端下的200px
+                        "left": "1101px" //设置弹出框距离是页面顶端下的200px
                     });
                 }
             }
@@ -699,7 +704,7 @@ $(function () {
                     $(this).css({
                         "position": "absolute",
                         "top": "240px", //设置弹出框距离是页面顶端下的200px
-                        "left": "427px" //设置弹出框距离是页面顶端下的200px
+                        "left": "1101px" //设置弹出框距离是页面顶端下的200px
 
                     });
                 }
@@ -723,7 +728,7 @@ $(function () {
                     $(this).css({
                         "position": "absolute",
                         "top": "240px", //设置弹出框距离是页面顶端下的200px
-                        "left": "427px" //设置弹出框距离是页面顶端下的200px
+                        "left": "1101px" //设置弹出框距离是页面顶端下的200px
                     });
                 }
             }
@@ -749,13 +754,13 @@ $(function () {
                     $(this).css({
                         "position": "absolute",
                         "top": "169px",
-                        "left": "22px"
+                        "left": "512px"
                     })
                 }
             }
         });
         //								"top": (yp/2-215).toString(),
-//								"left": (xp/2-427).toString()
+//								"left": (xp/2-1101).toString()
 //				var $div = $('.leftmainbox');
 //				$("#final-info").dialog('widget').position({
 //				my: "center",
@@ -795,7 +800,7 @@ $(function () {
                     $(this).css({
                         "position": "absolute",
                         "top": "240px", //设置弹出框距离是页面顶端下的200px
-                        "left": "427px" //设置弹出框距离是页面顶端下的200px
+                        "left": "1101px" //设置弹出框距离是页面顶端下的200px
 
                     });
                 }
@@ -846,7 +851,7 @@ $(function () {
         $(".cancel").button().click(function () {
             $("#dialog-form").dialog("close");
             ResumeYanzhengma();
-            $('#yanzhengma').val('');
+            $('#inputyanzhengma').val('');
         });
         $(".confirm").button().click(function () {
             var t = 0;

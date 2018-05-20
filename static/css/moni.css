@@ -217,7 +217,15 @@ body {
     font-family: "宋体";
 }
 
-input.useraddprice {
+textarea {
+    vertical-align: middle;
+    height: 27px;
+    line-height: 27px;
+    font-size: 20px;
+}
+
+
+textarea.useraddprice {
     background-color: transparent;
     position: absolute;
     top: 133px;
@@ -225,14 +233,13 @@ input.useraddprice {
     padding: 0px;
     left: 207px;
     width: 103px;
-    height: 27px;
     border: 0px;
     outline: none;
     text-align: center;
     color: red;
 }
 
-input.userwriteprice {
+textarea.userwriteprice {
     background-color: transparent;
     position: absolute;
     top: 237px;
@@ -240,7 +247,6 @@ input.userwriteprice {
     padding: 0px;
     left: 190px;
     width: 121px;
-    height: 27px;
     border: 0px;
     outline: none;
     text-align: center;
