@@ -1,25 +1,25 @@
-var lowestprice = 90000 //此时的最低成交价
-var realsecond = 0 //真实秒钟
-var viewsecond = 0 //显示秒钟
-var accept_second = 0 //最低成交价接受时间
-var price_limit = 10 //随机种子，影响跳价情况
-var time_torrent = 10 //随机种子，影响时间显示情况
-var price_torrent = 0
+var lowestprice = 90000; //此时的最低成交价
+var realsecond = 0; //真实秒钟
+var viewsecond = 0; //显示秒钟
+var accept_second = 0; //最低成交价接受时间
+var price_limit = 10; //随机种子，影响跳价情况
+var time_torrent = 10; //随机种子，影响时间显示情况
+var price_torrent = 0;
 
-var delay = 2 //随机动态延迟
+var delay = 2; //随机动态延迟
 var no_image = Math.random() * 5 + 55;   //95%+的概率需要刷新验证码
-var userprice1 = 0 //用户出价
-var userprice2 = 0
-var count = 0  //出价次数 初始为0
+var userprice1 = 0; //用户出价
+var userprice2 = 0;
+var count = 0;  //出价次数 初始为0
 
 
-var usertime1 = 0 //用户出价时间第一次
-var usertime2 = 0 //用户出价时间第二次
-var interval = 4 //4秒内不能查看验证码
-var query_time = -10 //最近一次查看验证码的时间
-var accept_time = 60 //接受时间
-var running = true //是否进行中
-var usercode = 0 //用户验证码
+var usertime1 = 0; //用户出价时间第一次
+var usertime2 = 0; //用户出价时间第二次
+var interval = 4; //4秒内不能查看验证码
+var query_time = -10; //最近一次查看验证码的时间
+var accept_time = 60; //接受时间
+var running = true; //是否进行中
+var usercode = 0; //用户验证码
 //日期获取
 var date = new Date();
 var year = date.getFullYear();
@@ -29,6 +29,8 @@ var today = year.toString() + '-' + month.toString() + '-' + day.toString();
 $(document).ready(function () {
     $('#li3').html("出价时间:" + today + " 10:30:5");
     $('#inputyanzhengma').val('');
+    $('.useraddprice').val('');
+    $('.userwriteprice').val('');
 
 });
 //创建记录数组
@@ -43,7 +45,7 @@ var answer;
 
 
 $(document).ready(function () {
-    $('body').css({"postion": "relative", "left": "-677px", "top": 0})
+    $('body').css({"postion": "relative", "left": "-447px", "top": 0})
 });
 //获取主背景位置
 
@@ -480,7 +482,7 @@ $(function () {
                     $(this).css({
                         "position": "absolute",
                         "top": "240px", //设置弹出框距离是页面顶端下的200px
-                        "left": "1101px" //设置弹出框距离是页面顶端下的200px
+                        "left": "878px" //设置弹出框距离是页面顶端下的200px
 
                     });
                 }
@@ -503,7 +505,7 @@ $(function () {
                     $(this).css({
                         "position": "absolute",
                         "top": "240px", //设置弹出框距离是页面顶端下的200px
-                        "left": "1101px" //设置弹出框距离是页面顶端下的200px
+                        "left": "878px" //设置弹出框距离是页面顶端下的200px
 
                     });
                 }
@@ -526,7 +528,7 @@ $(function () {
                     $(this).css({
                         "position": "absolute",
                         "top": "240px", //设置弹出框距离是页面顶端下的200px
-                        "left": "1101px" //设置弹出框距离是页面顶端下的200px
+                        "left": "878px" //设置弹出框距离是页面顶端下的200px
 
                     });
                 }
@@ -549,7 +551,7 @@ $(function () {
                     $(this).css({
                         "position": "absolute",
                         "top": "240px", //设置弹出框距离是页面顶端下的200px
-                        "left": "1101px" //设置弹出框距离是页面顶端下的200px
+                        "left": "878px" //设置弹出框距离是页面顶端下的200px
                     });
                 }
             }
@@ -571,7 +573,7 @@ $(function () {
                     $(this).css({
                         "position": "absolute",
                         "top": "240px", //设置弹出       框距离是页面顶端下的200px
-                        "left": "1101px" //设置弹出框距离是页面顶端下的200px
+                        "left": "878px" //设置弹出框距离是页面顶端下的200px
                     });
                 }
             }
@@ -593,7 +595,7 @@ $(function () {
                     $(this).css({
                         "position": "absolute",
                         "top": "240px", //设置弹出框距离是页面顶端下的200px
-                        "left": "1101px" //设置弹出框距离是页面顶端下的200px
+                        "left": "878px" //设置弹出框距离是页面顶端下的200px
                     });
                 }
             }
@@ -615,7 +617,7 @@ $(function () {
                     $(this).css({
                         "position": "absolute",
                         "top": "240px", //设置弹出框距离是页面顶端下的200px
-                        "left": "1101px" //设置弹出框距离是页面顶端下的200px
+                        "left": "878px" //设置弹出框距离是页面顶端下的200px
                     });
                 }
             }
@@ -637,7 +639,7 @@ $(function () {
                     $(this).css({
                         "position": "absolute",
                         "top": "240px", //设置弹出框距离是页面顶端下的200px
-                        "left": "1101px" //设置弹出框距离是页面顶端下的200px
+                        "left": "878px" //设置弹出框距离是页面顶端下的200px
                     });
                 }
             }
@@ -659,7 +661,7 @@ $(function () {
                     $(this).css({
                         "position": "absolute",
                         "top": "240px", //设置弹出框距离是页面顶端下的200px
-                        "left": "1101px" //设置弹出框距离是页面顶端下的200px
+                        "left": "878px" //设置弹出框距离是页面顶端下的200px
                     });
                 }
             }
@@ -682,7 +684,7 @@ $(function () {
                     $(this).css({
                         "position": "absolute",
                         "top": "240px", //设置弹出框距离是页面顶端下的200px
-                        "left": "1101px" //设置弹出框距离是页面顶端下的200px
+                        "left": "878px" //设置弹出框距离是页面顶端下的200px
                     });
                 }
             }
@@ -704,7 +706,7 @@ $(function () {
                     $(this).css({
                         "position": "absolute",
                         "top": "240px", //设置弹出框距离是页面顶端下的200px
-                        "left": "1101px" //设置弹出框距离是页面顶端下的200px
+                        "left": "878px" //设置弹出框距离是页面顶端下的200px
 
                     });
                 }
@@ -728,7 +730,7 @@ $(function () {
                     $(this).css({
                         "position": "absolute",
                         "top": "240px", //设置弹出框距离是页面顶端下的200px
-                        "left": "1101px" //设置弹出框距离是页面顶端下的200px
+                        "left": "878px" //设置弹出框距离是页面顶端下的200px
                     });
                 }
             }
@@ -754,7 +756,7 @@ $(function () {
                     $(this).css({
                         "position": "absolute",
                         "top": "169px",
-                        "left": "512px"
+                        "left": "285px"
                     })
                 }
             }
@@ -800,7 +802,7 @@ $(function () {
                     $(this).css({
                         "position": "absolute",
                         "top": "240px", //设置弹出框距离是页面顶端下的200px
-                        "left": "1101px" //设置弹出框距离是页面顶端下的200px
+                        "left": "878px" //设置弹出框距离是页面顶端下的200px
 
                     });
                 }
