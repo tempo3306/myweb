@@ -41,6 +41,7 @@ class Identify_code(models.Model):
     last_uuuid = models.CharField(max_length=40, default='none', blank=True)  ###最近的一个激活码
     # login_status = models.SmallIntegerField(default=0, blank=True)   ##登录状态 默认为0 代表未登录  代表登录
 
+    strategy_dick = models.TextField(default='none', blank=True)  ##保存用户设置的策略
 
     def can_bid(self):
         ##计算是否过期

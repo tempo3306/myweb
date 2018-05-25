@@ -26,6 +26,7 @@ var year = date.getFullYear();
 var month = date.getMonth() + 1;  //0-11
 var day = date.getDate();
 var today = year.toString() + '-' + month.toString() + '-' + day.toString();
+
 $(document).ready(function () {
     $('#li3').html("出价时间:" + today + " 10:30:5");
     $('#inputyanzhengma').val('');
@@ -33,6 +34,44 @@ $(document).ready(function () {
     $('.userwriteprice').val('');
 
 });
+//禁止缩放
+document.onmousewheel = function (evt) {
+        var e = evt || window.event;
+        if(e.preventDefault && e.ctrlKey) e.preventDefault();
+        if(e.ctrlKey) e.returnValue = false;
+    };
+    if (window.addEventListener) window.addEventListener('DOMMouseScroll', document.onmousewheel, false);
+
+// window.onload = function () {
+//     document.addEventListener('touchstart', function (event) {
+//
+//         if (event.touches.length > 1) {
+//
+//             event.preventDefault();
+//
+//         }
+//
+//     });
+//
+//     var lastTouchEnd = 0;
+//
+//     document.addEventListener('touchend', function (event) {
+//
+//         var now = (new Date()).getTime();
+//
+//         if (now - lastTouchEnd <= 300) {
+//
+//             event.preventDefault();
+//
+//         }
+//
+//         lastTouchEnd = now;
+//
+//     }, false)
+//
+// };
+
+
 //创建记录数组
 var pt1 = [];
 var pt2 = [];

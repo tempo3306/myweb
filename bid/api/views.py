@@ -239,6 +239,7 @@ def bid_logout(request):
             identify_code = request.GET['identify_code']
             identify = get_object_or_404(Identify_code, identify_code=identify_code)
             identify.uuuid = 'none'
+            identify.strategy_dick = request.GET['strategy_dick']
             identify.save()
             res = {'result': 'logout success'}
             return Response(res, status=status.HTTP_200_OK, template_name=None, content_type=None)
@@ -260,9 +261,12 @@ def bid_keeplogin(request):
             if diskid == uuuid:
                 res = {'result': 'keep success'}
                 reset_identify_code.delay(identify_code)  ##异步还原identify_code
+                identify.strategy_dick = request.GET['strategy_dick']
+                identify.save()
                 return Response(res, status=status.HTTP_200_OK, template_name=None, content_type=None)
             elif uuuid == 'none':
                 identify.uuuid = diskid
+                identify.strategy_dick = request.GET['strategy_dick']
                 identify.save()
                 res = {'result': 'keep success'}
                 return Response(res, status=status.HTTP_200_OK, template_name=None, content_type=None)
