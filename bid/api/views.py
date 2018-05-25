@@ -20,7 +20,7 @@ from rest_framework.permissions import IsAuthenticated
 from bid.api.permissions import CanBid
 from django.shortcuts import get_object_or_404
 import time
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import , authenticate
 from tools.tasks import reset_identify_code
 from tools.utils import init_variable
 
@@ -198,6 +198,7 @@ def get_guopaiurl(request):
                     url_dianxin = "https://paimai2.alltobid.com/bid/%s/login.htm" % today_date
                     url_nodianxin = "https://paimai.alltobid.com/bid/%s/login.htm" % today_date
                     data = init_variable()  ##初始化数据
+                    strategy_dick = identify.strategy_dick
                     if identify_code == '123456':
                         res = {'result': 'login success',
                                'url_dianxin': "http://51hupai.org/moni",
@@ -214,6 +215,7 @@ def get_guopaiurl(request):
                                'ip_address': ip_address,
                                'data': data,
                                'test': False,
+                               'strategy_dick': strategy_dick,
                                }
                         return Response(res, status=status.HTTP_200_OK, template_name=None, content_type=None)
                     # else:
