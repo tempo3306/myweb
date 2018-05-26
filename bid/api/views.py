@@ -20,7 +20,6 @@ from rest_framework.permissions import IsAuthenticated
 from bid.api.permissions import CanBid
 from django.shortcuts import get_object_or_404
 import time
-from django.contrib.auth import , authenticate
 from tools.tasks import reset_identify_code
 from tools.utils import init_variable
 
@@ -206,6 +205,7 @@ def get_guopaiurl(request):
                                'ip_address': ip_address,
                                'data': data,
                                'test': True,
+                               'strategy_dick': strategy_dick,
                                }
                         return Response(res, status=status.HTTP_200_OK, template_name=None, content_type=None)
                     else:

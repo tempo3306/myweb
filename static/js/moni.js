@@ -40,7 +40,16 @@ document.onmousewheel = function (evt) {
         if(e.preventDefault && e.ctrlKey) e.preventDefault();
         if(e.ctrlKey) e.returnValue = false;
     };
-    if (window.addEventListener) window.addEventListener('DOMMouseScroll', document.onmousewheel, false);
+
+//缩放
+if (window.addEventListener) window.addEventListener('DOMMouseScroll', document.onmousewheel, false);
+
+//禁止选中文本
+document.body.onselectstart = document.body.ondrag = function(){
+  return false;
+};
+
+
 
 // window.onload = function () {
 //     document.addEventListener('touchstart', function (event) {
