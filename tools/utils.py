@@ -115,8 +115,8 @@ def handle_fileupload(file, p):  ##file: request.FILES['file']    p: MEDIA下的
 def init_variable():
     ##用于计算 最低成交价位置
     data = {}
-    data['px_relative'] = 49  # 查找出来位置反算相对位置
-    data['py_relative'] =  0
+    data['px_relative'] = 118  # 查找出来位置反算相对位置
+    data['py_relative'] =  1
     ## 相对于最低成交价位置
     #   ## 0:加价  1：出价 2：提交  3：刷新   4 ：确认   5：价格输入框    6:验证码输入框     7：取消
     data['P_relative2'] = [[647, -98], [650, 8], [400, 89], [396, 14], [505, 68], [562, 8], [585, 8], [586, 86]]
