@@ -5,3 +5,4 @@ myweb/config.py
 /static/media/user_image/
 __pycache__/
 */migrations/
+.idea
