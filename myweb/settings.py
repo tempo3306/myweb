@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'corsheaders',
     'bid',
     'images',
     'bbsapp',
@@ -51,15 +52,64 @@ INSTALLED_APPS = [
 
 ]
 
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',  # 跨域
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',  # 防跨站伪造请求
-    'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+#--------------------------------------------------------------
+#跨域增加忽略
+#If True, cookies will be allowed to be included in cross-site HTTP requests. Defaults to False.
+CORS_ALLOW_CREDENTIALS = True
+
+CORS_ORIGIN_ALLOW_ALL = True  #与CORS_ORIGIN_WHITELIST类似，限制IP
+CORS_ORIGIN_WHITELIST = (
+    '*',
+    # 'http://localhost:8002'
+)
+
+CORS_ALLOW_METHODS = (
+    'DELETE',
+    'GET',
+    'OPTIONS',
+    'PATCH',
+    'POST',
+    'PUT',
+    'VIEW',
+)
+
+
+CORS_ALLOW_HEADERS = (
+    'XMLHttpRequest',
+    'X_FILENAME',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
+    'Pragma',
+)
+
+##允许以下REFER
+# CSRF_TRUSTED_ORIGINS = (
+#     'http://hupai.pro',
+#     'http://localhost:8002'
+# )
+
+#--------------------------------------------------------------
+
+
+
 
 ##权限控制
 AUTHENTICATION_BACKENDS = (
@@ -72,7 +122,8 @@ ROOT_URLCONF = 'myweb.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        'DIRS': [os.path.join(BASE_DIR, 'templates'),
+                 os.path.join(BASE_DIR, 'FRONTEND/hp-manage/manage')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -133,8 +184,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
-STATIC_URL = '/static/'
-LOGIN_URL = '/account/login'
+STATIC_URL = '/manage/static/'
+LOGIN_URL = '/account/login/'
 SITE_ROOT = os.path.join(os.path.abspath(os.path.dirname(__file__)), '..')
 
 # 通用静态文件存放位置
@@ -144,10 +195,15 @@ STATICFILES_DIRS = (
     ("js", os.path.join(STATIC_ROOT, 'js')),
     ("assets", os.path.join(STATIC_ROOT, 'assets')),
     ("main", os.path.join(STATIC_ROOT, 'main')),
+    os.path.join(BASE_DIR, 'FRONTEND/hp-manage/manage/static/'),
 )
+
+
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'static/media/')
+
+
 
 APPEND_SLASH = True
 
@@ -210,7 +266,7 @@ JWT_AUTH = {
     'JWT_VERIFY': True,
     'JWT_VERIFY_EXPIRATION': True,
     'JWT_LEEWAY': 0,
-    'JWT_EXPIRATION_DELTA': datetime.timedelta(seconds=300),  # 过期时间
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(seconds=3600),  # 过期时间
     'JWT_AUDIENCE': None,
     'JWT_ISSUER': None,
 
@@ -218,7 +274,7 @@ JWT_AUTH = {
     If JWT_ALLOW_REFRESH is True, non-expired tokens can be "refreshed" to 
     obtain a brand new token with renewed expiration time. 
     '''
-    'JWT_ALLOW_REFRESH': False,
+    'JWT_ALLOW_REFRESH': True,
     'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days=7),  #
 
     'JWT_AUTH_HEADER_PREFIX': 'JWT',  # headers 头  "Authorization: JWT your_token"

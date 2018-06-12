@@ -6,3 +6,14 @@ myweb/config.py
 __pycache__/
 */migrations/
 .idea
+.DS_Store
+node_modules/
+dist/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+test/unit/coverage
+test/e2e/reports
+selenium-debug.log
+package-lock.json
+.DS_Store

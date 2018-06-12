@@ -21,7 +21,6 @@ invite_code_router = routers.DefaultRouter()
 invite_code_router.register(r'', Invite_codeViewSet)
 
 group_router = routers.DefaultRouter()
-group_router.register(r'', Bid_groupViewSet)
 hander_router = routers.DefaultRouter()
 hander_router.register(r'', Bid_handerViewSet)
 action_router = routers.DefaultRouter()
@@ -30,6 +29,9 @@ auction_router = routers.DefaultRouter()
 auction_router.register(r'', Bid_auctionViewSet)
 auction_serverside_router = routers.DefaultRouter()
 auction_serverside_router.register(r'', Bid_auction_serversideViewSet)
+
+identify_code_serverside_router = routers.DefaultRouter()
+identify_code_serverside_router.register(r'', Identify_code_serversideViewSet)
 
 urlpatterns = [
     url('^consumer', include(consumer_router.urls)),
@@ -50,4 +52,7 @@ urlpatterns = [
     url('^get_remotetime/$', views.get_remotetime, name='get_remotetime'),
     url('^bid_logout/$', views.bid_logout, name='bid_logout'),
     url('^bid_keeplogin/$', views.bid_keeplogin, name='bid_keeplogin'),
+
+    ##管理操作
+    url('^identify_code_manage', include(identify_code_serverside_router.urls))
 ]

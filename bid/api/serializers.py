@@ -1,30 +1,28 @@
 from ..models import *
 from rest_framework import serializers
 
-##代拍管理
-## 团队
-class Bid_groupSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = Bid_group
-        fileds = [
-            'group_name',
-        ]
 
-class Bid_actionSerializer(serializers.HyperlinkedModelSerializer):
+##代拍管理
+
+
+class Bid_actionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Bid_action
-        fields = [
-            'id',
-            'diff',
-            'refer_time',
-            'bid_time',
-            'delay_time',
-            'ahead_price',
-            'action_date',
-            'action_result'
-        ]
+        fields = '__all__'
+        # fields = [
+        #     'id',
+        #     'diff',
+        #     'refer_time',
+        #     'bid_time',
+        #     'delay_time',
+        #     'ahead_price',
+        #     'hander_id',
+        #     'action_date',
+        #     'auction_id', #ModelSerializer 转换成了外键网址
+        #     'action_result',
+        # ]
 
-class Bid_handerSerializer(serializers.HyperlinkedModelSerializer):
+class Bid_handerSerializer(serializers.ModelSerializer):
     hander_actions = serializers.PrimaryKeyRelatedField(many=True,
                                         queryset=Bid_action.objects.all())  #related_name
     class Meta:
@@ -39,7 +37,7 @@ class Bid_handerSerializer(serializers.HyperlinkedModelSerializer):
 
 
 
-class Bid_auctionSerializer(serializers.HyperlinkedModelSerializer):
+class Bid_auctionSerializer(serializers.ModelSerializer):
     auction_actions = serializers.PrimaryKeyRelatedField(many=True,
                                         queryset=Bid_auction.objects.all()) #related_name
     class Meta:
@@ -58,7 +56,7 @@ class Bid_auctionSerializer(serializers.HyperlinkedModelSerializer):
         ]
 
 ## 
-class ConsumerSerializer(serializers.HyperlinkedModelSerializer):
+class ConsumerSerializer(serializers.ModelSerializer):
     consumer_softwares = serializers.PrimaryKeyRelatedField(many=True,
                                         queryset=Consumer_software.objects.all()) #related_name
     consumer_bids = serializers.PrimaryKeyRelatedField(many=True,
@@ -74,7 +72,7 @@ class ConsumerSerializer(serializers.HyperlinkedModelSerializer):
 
 
 ##购买激活码的用户
-class Consumer_softwareSerializer(serializers.HyperlinkedModelSerializer):
+class Consumer_softwareSerializer(serializers.ModelSerializer):
     identify_codes = serializers.PrimaryKeyRelatedField(many=True,
                                                         queryset=Identify_code.objects.all())
     class Meta:
@@ -85,11 +83,12 @@ class Consumer_softwareSerializer(serializers.HyperlinkedModelSerializer):
         ]
 
 
-class Identify_codeSerializer(serializers.HyperlinkedModelSerializer):
+class Identify_codeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Identify_code
         fields = [
-            'identity_code',
+            'id',
+            'identify_code',
             'purchase_date',
             'expired_date',
             'bid_name',
@@ -97,7 +96,7 @@ class Identify_codeSerializer(serializers.HyperlinkedModelSerializer):
 
 
 
-class Invite_codeSerializer(serializers.HyperlinkedModelSerializer):
+class Invite_codeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Invite_code
         fields = [
@@ -106,7 +105,7 @@ class Invite_codeSerializer(serializers.HyperlinkedModelSerializer):
         ]
 
 
-class Consumer_bidSerializer(serializers.HyperlinkedModelSerializer):
+class Consumer_bidSerializer(serializers.ModelSerializer):
     class Meta:
         model = Consumer_bid
         fields = [

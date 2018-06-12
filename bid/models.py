@@ -8,16 +8,15 @@ import datetime
 ##完成商业场景下的模型搭建
 ###创建消费者用户
 class Consumer(models.Model):
-    user_id = models.OneToOneField(User, unique=True, on_delete=models.CASCADE, related_name='user_consumers',
-                                   null=True, blank=True)
-    account = models.CharField(max_length=8, default='1111')  ##邮箱登录
-    passwd = models.CharField(max_length=6, default='1111')  ##身份证后6位
-    online_status = models.SmallIntegerField(default=0)  ##登录状态，0代表未登录，1代表登录中
-    login_IP = models.CharField(max_length=15, blank=True, null=True)  ##登录IP
-    login_mac = models.CharField(max_length=20, blank=True, null=True)  ##mac地址
-    taobao = models.CharField(max_length=30, default='none')  ##淘宝账号
+    user_slug = models.CharField(max_length=10, unique=True, verbose_name="用户描述", default="12345")
+    taobao = models.CharField(max_length=30, default='none', blank=True)  ##淘宝账号
+    telephone = models.CharField(max_length=11, unique=True, default='12345678901')
+    email = models.EmailField(blank=True, null=True)
 
+    def __str__(self):
+        return "{0} 手机号: {1}".format(self.user_slug, self.telephone)
 
+#软件------------------------------------------------------------------
 ##购买激活码的订单
 class Consumer_software(models.Model):
     order_number = models.CharField(max_length=40)  ##表示订单来源，可以用于找回密码
@@ -53,6 +52,48 @@ class Identify_code(models.Model):
         else:
             return False
 
+##设置为undefined可以获取pageNumber，pageSize，searchText，sortName，sortOrder
+def query_identify_code_by_args(params):
+    pageSize = int(params.get('limit', None))  ##每页数量
+    pageNumber = int(params.get('page', None)) # 当前页数
+    searchText = params.get('searchText', None)
+    sortName = str(params.get('sortName', 'id'))
+    sortOrder = str(params.get('sortOrder'))
+    # django orm '-' -> desc
+    if sortOrder == 'desc':
+        sortName = '-' + sortName
+
+    queryset = Identify_code.objects.all()
+    total = queryset.count()
+    if searchText:
+        queryset = queryset.filter(
+            Q(id__icontains=searchText) |
+            Q(refer_time__icontains=searchText) |
+            Q(bid_time__icontains=searchText) |
+            Q(delay_time__icontains=searchText) |
+            Q(ahead_price__icontains=searchText) |
+            Q(hander_id__icontains=searchText) |
+            Q(action_date__icontains=searchText) |
+            Q(auction_id__icontains=searchText) |
+            Q(action_result__icontains=searchText))
+
+    count = queryset.count()
+    start = (pageNumber - 1) * pageSize
+    queryset = queryset.order_by(sortName)[start:start + pageSize]
+    return {
+        'items': queryset,
+        'count': count,
+        'total': total,
+    }
+
+
+##根据url参数获取query结果
+def query_identify_code_by_url(params):
+    id_list = params.get('id')
+    queryset = Bid_action.objects.filter(id__in=id_list)
+    return queryset
+
+
 
 class Invite_code(models.Model):
     invite_code = models.CharField(max_length=25)  # 邀请码
@@ -60,22 +101,28 @@ class Invite_code(models.Model):
     type = models.CharField(max_length=1, choices=(('0', '体验'), ('1', '软件折扣'), ('2', '友情价代拍'), ('3', '提成')))
 
 
+
+##代拍-----------------------------------------------------
+##定单
 class Consumer_bid(models.Model):
     status = models.CharField(max_length=1, choices=(('0', '未中标结束交易'), ('1', '完成交易'), ('2', '进行中'),
                                                      ('3', '等待客户提供新标书'), ('4', '中标后欠款中')))
     consumer = models.ForeignKey(Consumer, on_delete=models.CASCADE, related_name='consumer_bids')
-    order_money = models.PositiveIntegerField()  # 中标之后的应付价格
-    compensation = models.PositiveIntegerField()  # 赔偿金额
-    bid_number = models.PositiveSmallIntegerField()  # 合同中约定的拍牌次数
-    did_number = models.PositiveSmallIntegerField()  # 已经完成的拍牌次数
+    order_money = models.PositiveIntegerField(default=5000, blank=True)  # 中标之后的应付价格
+    compensation = models.PositiveIntegerField(default=0, blank=True)  # 赔偿金额
+    bid_number = models.PositiveSmallIntegerField(default=3, blank=True)  # 合同中约定的拍牌次数
+    did_number = models.PositiveSmallIntegerField(default=0, blank=True)  # 已经完成的拍牌次数
     order_date = models.DateField(auto_now_add=True)  ##订单时间
+
+    def __str__(self):
+        return "{0} {1} 订单时间{2}".format(self.consumer.user_slug, self.order_money, self.order_date)
 
 
 ##------------------------------------------------------------------------------------------
 ##代拍管理
-## 团队
-class Bid_group(models.Model):
-    group_name = models.CharField(max_length=15)  ##所属团队
+# ## 团队
+# class Bid_group(models.Model):
+#     group_name = models.CharField(max_length=15)  ##所属团队
 
 
 # 拍手
@@ -86,7 +133,6 @@ class Bid_hander(models.Model):
     basic_salary = models.FloatField(default=50)  # 底薪
     extra_bonus = models.FloatField(default=0)  # 奖金
     total_income = models.FloatField(default=0)  # 总收入
-    bid_group = models.ForeignKey(Bid_group, on_delete=models.CASCADE, related_name='group_hander', null=True)
 
     class Meta:
         permissions = (
@@ -114,7 +160,6 @@ class Bid_auction(models.Model):
     expired_date = models.DateField()  # 过期时间
     ##下单情况
     consumer_bid = models.ForeignKey(Consumer_bid, on_delete=models.CASCADE, related_name='bid_auctions', null=True)
-    bid_group = models.ForeignKey(Bid_group, on_delete=models.CASCADE, related_name='group_auctions', null=True)
 
     def __str__(self):
         return self.description
@@ -176,8 +221,7 @@ class Bid_action(models.Model):
     hander_id = models.ForeignKey(Bid_hander, on_delete=models.CASCADE, related_name='hander_actions')  # 对应拍手
     action_date = models.DateField()  # 拍牌时间
     auction_id = models.ForeignKey(Bid_auction, on_delete=models.CASCADE, related_name='auction_actions')
-    action_result = models.CharField(max_length=128, null=True)  # 结果记录
-    bid_group = models.ForeignKey(Bid_group, on_delete=models.CASCADE, related_name='group_actions', null=True)
+    action_result = models.CharField(max_length=128, null=True, blank=True)  # 结果记录
 
     def __str__(self):
         return '{0}秒加{1}提前{2}延迟{3}秒，截止时间{4}秒'.format(self.refer_time, self.diff, self.ahead_price,

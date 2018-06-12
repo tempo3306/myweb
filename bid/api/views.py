@@ -23,6 +23,7 @@ import time
 from tools.tasks import reset_identify_code
 from tools.utils import init_variable
 
+
 class ConsumerViewSet(viewsets.ModelViewSet):
     queryset = Consumer.objects.all()
     serializer_class = ConsumerSerializer
@@ -53,10 +54,7 @@ class Invite_codeViewSet(viewsets.ModelViewSet):
     permission_classes = (permissions.IsAuthenticated,)
 
 
-class Bid_groupViewSet(viewsets.ModelViewSet):
-    queryset = Bid_group.objects.all()
-    serializer_class = Bid_groupSerializer
-    permission_classes = (permissions.IsAuthenticated,)  # permissions.AllowAny  注册设置为这个
+
 
 
 class Bid_handerViewSet(viewsets.ModelViewSet):
@@ -170,9 +168,52 @@ def Bid_auction_manage(request):
 
 
 
+class Identify_code_serversideViewSet(viewsets.ModelViewSet):
+    queryset = Identify_code.objects.all()
+    serializer_class = Identify_codeSerializer
+    permission_classes = (permissions.IsAuthenticated,)
+    ##
+    def list(self, request, *args, **kwargs):
+        try:
+            data = request.query_params
+            identify_codes = query_identify_code_by_args(data)  #带参数查询
+            serializer = Identify_codeSerializer(identify_codes['items'], many=True)
+            result = dict()
+            result['rows'] = serializer.data
+            result['total'] = identify_codes['total']
+            return Response(result, status=status.HTTP_200_OK, template_name=None, content_type=None)
+        except Exception as e:
+            return Response(e, status=status.HTTP_404_NOT_FOUND, template_name=None, content_type=None)
+
+    def update(self, request, *args, **kwargs):
+        try:
+            data = request.data
+            identify_codes = Identify_code.objects.get(pk=data['pk'])
+            identity_code = data['identify_code']  # 激活码
+            purchase_date = data['purchase_date']  # 购买时间
+            expired_date = data['expired_date']  # 过期时间
+            bid_name = data['bid_name']  # 标书姓名
+
+            identify_codes.update(identity_code=identity_code, purchase_date=purchase_date, expired_date=expired_date,
+                                  bid_name=bid_name)
+        except:
+            return Response(status=status.HTTP_404_NOT_FOUND)
 
 
 
+    def create(self, request, *args, **kwargs):
+        try:
+            data = request.data
+            serializer = Identify_codeSerializer(data=data)
+            if serializer.is_valid(raise_exception=True):
+                serializer.save()
+            return Response(status=204)
+        except:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+
+#--------------------------------------
+##登录
 @api_view(['GET'])
 def get_guopaiurl(request):
     try:
