@@ -5,6 +5,7 @@ import {baseUrl} from '@/config/env';
 import router from '@/router/index';
 import * as types from '@/store/types';
 import store from '@/store/index';
+import {getToken} from '@/utils/auth';
 
 let cancel, promiseArr = {};
 const CancelToken = axios.CancelToken;
@@ -16,7 +17,11 @@ axios.interceptors.request.use(config => {
     config.headers.Authorization = `JWT ${store.state.token}`;
     config.headers['Content-Type'] = 'application/x-www-form-urlencoded';  //提交的数据按照 key1=val1&key2=val2 的方式进行编码，key 和 val 都进行了 URL 转码
     config.headers['X-Requested-With'] = 'XMLHttpRequest';
+    // let regex = /.*csrftoken=([^;.]*).*$/; // 用于从cookie中匹配 csrftoken值
     // config.headers['X-CSRFToken'] = document.cookie.match(regex) === null ? null : document.cookie.match(regex)[1];
+    let csrftoken = getToken();
+    console.log("fff", csrftoken);
+    config.headers['X-CSRFToken'] =  csrftoken;
 
     NProgress.start();
 
@@ -108,11 +113,10 @@ function checkCode(res) {
                 timeout: 30000,
             }).then(checkStatus).then(checkCode);
         },
-        delete(url, params) {
+        delete(url) {
             return axios({
                 method: 'delete',
                 url: baseUrl + url,
-                params: params,
                 timeout: 30000,
             }).then(checkStatus).then(checkCode);
         },

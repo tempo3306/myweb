@@ -8,6 +8,7 @@ from django.conf.urls import url, include
 from rest_framework import routers
 from .views import *
 import bid.api.views as views
+from django.views.decorators.csrf import csrf_exempt
 
 consumer_router = routers.DefaultRouter()
 consumer_router.register(r'', ConsumerViewSet)
@@ -30,8 +31,12 @@ auction_router.register(r'', Bid_auctionViewSet)
 auction_serverside_router = routers.DefaultRouter()
 auction_serverside_router.register(r'', Bid_auction_serversideViewSet)
 
-identify_code_serverside_router = routers.DefaultRouter()
-identify_code_serverside_router.register(r'', Identify_code_serversideViewSet)
+# identify_code_serverside_router = routers.DefaultRouter()
+# identify_code_serverside_router.register(r'', Identify_code_serversideViewSet)
+
+identify_code_list = Identify_code_serversideViewSet.as_view({'get': 'list', 'post': 'create'})
+identify_code_detail = Identify_code_serversideViewSet.as_view({'get': 'retrieve', 'patch': 'partial_update',
+                                                                'put': 'update', 'delete': 'destroy'})
 
 urlpatterns = [
     url('^consumer', include(consumer_router.urls)),
@@ -43,7 +48,7 @@ urlpatterns = [
     url('^group', include(group_router.urls)),
     url('^hander', include(hander_router.urls)),
     url('^action', include(action_router.urls)),
-    url('^auction', include(auction_router.urls)),
+    url('^auction/', include(auction_router.urls)),
     url('^auction_serverside', include(auction_serverside_router.urls)),
     url('^bid_auction_manage/$', views.Bid_auction_manage, name='api_bid_auction_manage'),
 
@@ -54,5 +59,11 @@ urlpatterns = [
     url('^bid_keeplogin/$', views.bid_keeplogin, name='bid_keeplogin'),
 
     ##管理操作
-    url('^identify_code_manage', include(identify_code_serverside_router.urls))
+    url(r'^ic_manage/$', identify_code_list),
+    url(r'^ic_manage/(?P<pk>[0-9]+)/$', identify_code_detail),
+
+
+    # url('^identify_code_manage/$', include(identify_code_serverside_router.urls)),
+    # url('^identify_code_manage', csrf_exempt(Identify_code_serversideViewSet.as_view({'get':'list', 'put': 'update',
+    #                                                                       'patch': 'partial_update', 'delete': 'destroy'})),
 ]

@@ -326,8 +326,9 @@
             },
             async handleDelete(index, row) {
                 try {
-                    const res = await deleteIdentify_code(row.id, {id: row.id});
-                    if (res.status === 200) {
+                    const res = await deleteIdentify_code(row.id);
+                    //删除和创建返回的都是204
+                    if (res.status === 204) {
                         this.$message({
                             type: 'success',
                             message: '删除激活码成功'
@@ -388,8 +389,9 @@
                     console.log(this.selectTable);
                     this.selectTable.purchase_date_str =this.selectTable.purchase_date.ymd();
                     this.selectTable.expired_date_str =this.selectTable.expired_date.ymd();
+                    this.selectTable.change_identify_code = this.change_identify_code;
                     const res = await updateIdentify_code(this.selectTable.id, this.selectTable);
-                    if (res.status === 200) {
+                    if (res.status === 204) {
                         this.$message({
                             type: 'success',
                             message: '更新激活码信息成功'

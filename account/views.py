@@ -1,7 +1,7 @@
 from django.shortcuts import render
 
 # Create your views here.
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
 from django.contrib.auth import login, authenticate
 from .forms import LoginForm, ChangePasswordForm, ResetPasswordForm, GetcodeForm
@@ -17,6 +17,14 @@ from django.urls import reverse
 #导入异步邮件
 from tools.tasks import confirm_email, reset_email
 from django.contrib.auth.decorators import login_required
+
+
+
+import django
+
+def get_csrf_token(request):
+    token = django.middleware.csrf.get_token(request)
+    return JsonResponse({'token': token})
 
 ##登录
 def user_login(request):

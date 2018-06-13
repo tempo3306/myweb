@@ -54,4 +54,9 @@ urlpatterns = [
     url(r'^test_email', views.test_email),
     url(r'^active_failure', views.ActiveFailView.as_view(), name="active_fail"),
     url(r'^reactive_email/$', views.ReActiveEmailView.as_view(), name="reactive_email"), #重新发邮件
+
+    ## 获取
+    url(r'^get-token/$', get_csrf_token)
+
+
 ]

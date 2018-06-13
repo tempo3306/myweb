@@ -22,13 +22,12 @@ from django.shortcuts import get_object_or_404
 import time
 from tools.tasks import reset_identify_code
 from tools.utils import init_variable
-
+from tools.utils import random_str
 
 class ConsumerViewSet(viewsets.ModelViewSet):
     queryset = Consumer.objects.all()
     serializer_class = ConsumerSerializer
     permission_classes = (permissions.IsAuthenticated,)  # permissions.AllowAny  注册设置为这个
-
 
 class Consumer_softwareViewSet(viewsets.ModelViewSet):
     queryset = Consumer_software.objects.all()
@@ -42,10 +41,7 @@ class Consumer_bidViewSet(viewsets.ModelViewSet):
     permissions_class = (permissions.IsAuthenticated,)
 
 
-class Identify_codeViewSet(viewsets.ModelViewSet):
-    queryset = Identify_code.objects.all()
-    serializer_class = Identify_codeSerializer
-    permissions_class = (permissions.IsAuthenticated,)
+
 
 
 class Invite_codeViewSet(viewsets.ModelViewSet):
@@ -122,6 +118,8 @@ class Bid_auction_serversideViewSet(viewsets.ModelViewSet):
         except:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
+
+
 @api_view(['GET', 'POST', 'PUT', 'DELETE'])
 def Bid_auction_manage(request):
     """
@@ -166,12 +164,100 @@ def Bid_auction_manage(request):
         except:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
+class Identify_codeViewSet(viewsets.ModelViewSet):
+    queryset = Identify_code.objects.all()
+    serializer_class = Identify_codeSerializer
+    permissions_class = (permissions.IsAuthenticated,)
 
 
+class Identify_code_serversideViewSet(viewsets.ViewSet):
+    queryset = Identify_code.objects.all()
+    serializer_class = Identify_codeSerializer
+    permission_classes = (permissions.IsAuthenticated,)
+    #
+    def list(self, request):
+        try:
+            print("fdsfsfsfsfs")
+            data = request.query_params
+            identify_codes = query_identify_code_by_args(data)  #带参数查询
+            serializer = Identify_codeSerializer(identify_codes['items'], many=True)
+            result = dict()
+            result['rows'] = serializer.data
+            result['total'] = identify_codes['total']
+            return Response(result, status=status.HTTP_200_OK, template_name=None, content_type=None)
+        except Exception as e:
+            return Response(e, status=status.HTTP_404_NOT_FOUND, template_name=None, content_type=None)
+
+    def retrieve(self, request, pk=None):
+        queryset = Identify_code.objects.all()
+        identify_code = get_object_or_404(queryset, pk=pk)
+        serializer = Identify_codeSerializer(identify_code)
+        return Response(serializer.data)
+
+    def destroy(self, request, pk=None, *args, **kwargs):
+        try:
+            identify_code = Identify_code.objects.get(pk=pk)
+            identify_code.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        except:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+    def update(self, request, pk=None, *args, **kwargs):
+        try:
+            data = request.data
+            identify_codes = Identify_code.objects.get(pk=data['pk'])
+            identity_code = data['identify_code']  # 激活码
+            purchase_date = data['purchase_date']  # 购买时间
+            expired_date = data['expired_date']  # 过期时间
+            bid_name = data['bid_name']  # 标书姓名
+
+            identify_codes.update(identity_code=identity_code, purchase_date=purchase_date, expired_date=expired_date,
+                                  bid_name=bid_name)
+        except:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+    def partial_update(self, request, pk=None, *args, **kwargs):
+        try:
+            data = request.data
+            identify_code = Identify_code.objects.get(pk=pk)
+            purchase_date = data['purchase_date_str']  # 购买时间
+            expired_date = data['expired_date_str']  # 过期时间
+            bid_name = data['bid_name']  # 标书姓名
+            change_identify_code = data['change_identify_code']
+            print("change_identify_code", change_identify_code)
+            identify_code.purchase_date = purchase_date
+            identify_code.expired_date = expired_date
+            identify_code.bid_name = bid_name
+            if change_identify_code == 'true':
+                new_iden_code = random_str(6)  # 创建更新
+                identify_code['new_iden_code'] = new_iden_code
+            identify_code.save()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+
+        except:
+            return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+
+    def create(self, request,  *args, **kwargs):
+        try:
+            data = request.data
+            serializer = Identify_codeSerializer(data=data)
+            if serializer.is_valid(raise_exception=True):
+                serializer.save()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        except:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+
+'''
 class Identify_code_serversideViewSet(viewsets.ModelViewSet):
     queryset = Identify_code.objects.all()
     serializer_class = Identify_codeSerializer
     permission_classes = (permissions.IsAuthenticated,)
+
+    # lookup_field = 'id'
+    # lookup_value_regex = '[0-9]{32}'
     ##
     def list(self, request, *args, **kwargs):
         try:
@@ -199,19 +285,44 @@ class Identify_code_serversideViewSet(viewsets.ModelViewSet):
         except:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
+    def partial_update(self, request, pk, *args, **kwargs):
+        print(pk)
+        print("fdsfsfsfs")
+        data = request.data
+        identify_codes = Identify_code.objects.get(pk=data['pk'])
+        identity_code = data['identify_code']  # 激活码
+        purchase_date = data['purchase_date_str']  # 购买时间
+        expired_date = data['expired_date_str']  # 过期时间
+        bid_name = data['bid_name']  # 标书姓名
 
+        identify_codes.update(identity_code=identity_code, purchase_date=purchase_date, expired_date=expired_date,
+                              bid_name=bid_name)
+        try:
+            data = request.data
+            identify_codes = Identify_code.objects.get(pk=data['pk'])
+            identity_code = data['identify_code']  # 激活码
+            purchase_date = data['purchase_date_str']  # 购买时间
+            expired_date = data['expired_date_str']  # 过期时间
+            bid_name = data['bid_name']  # 标书姓名
 
-    def create(self, request, *args, **kwargs):
+            identify_codes.update(identity_code=identity_code, purchase_date=purchase_date, expired_date=expired_date,
+                                  bid_name=bid_name)
+        except:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+    def create(self, request,  *args, **kwargs):
         try:
             data = request.data
             serializer = Identify_codeSerializer(data=data)
             if serializer.is_valid(raise_exception=True):
                 serializer.save()
-            return Response(status=204)
+            return Response(status=status.HTTP_204_NO_CONTENT)
         except:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
 
+
+'''
 #--------------------------------------
 ##登录
 @api_view(['GET'])

@@ -30,7 +30,7 @@
     import {setToken} from '@/utils/auth';
     import store from '@/store/index';
     import * as types from '@/store/types';
-
+    import {getCsrftoken} from '@/api/hpData';
 
     export default {
         data() {
@@ -54,6 +54,7 @@
         // mounted  页面元素加载完成后执行，对节点进行一定的操作
         // 登录成功  或者  读取到登录过   this.$router.push('manage');
         created() {
+            this.getCsrf();
             this.showLogin = true;
             let token = localStorage.getItem('token') || this.$store.state.token;
             this.autologin(token);
@@ -63,6 +64,14 @@
         },
         methods: {
             // ...mapActions(['getAdminData']),
+            async getCsrf() {
+                const res = await getCsrftoken();
+                if (res.status === 200) {
+                    setToken(res.data.token);
+                    console.log(res.data.token);
+                }
+            },
+
             async submitForm(formName) {
                 this.$refs[formName].validate(async (valid) => {
                     if (valid) {

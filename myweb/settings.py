@@ -100,14 +100,13 @@ CORS_ALLOW_HEADERS = (
     'Pragma',
 )
 
-##允许以下REFER
-# CSRF_TRUSTED_ORIGINS = (
-#     'http://hupai.pro',
-#     'http://localhost:8002'
-# )
+#允许以下REFER
+CSRF_TRUSTED_ORIGINS = (
+    'http://hupai.pro',
+    'http://localhost:8002'
+)
 
 #--------------------------------------------------------------
-
 
 
 
@@ -309,7 +308,7 @@ CACHES = {
 #           }
 
 # SESSION设置   二选一生效
-SESSION_COOKIE_AGE = 30 * 60  # 设置session过期时间为30分钟
+SESSION_COOKIE_AGE = 60 * 60  # 设置session过期时间为30分钟
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False  # 会话cookie可以在用户浏览器中保持有效期。True：关闭浏览器，则Cookie失效  即过期时间为当前会话
 
 '''配置session引擎SESSION_ENGINE为redis，配置此处session会存储在redis中，不会再去操作数据库了'''

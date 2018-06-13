@@ -20,7 +20,9 @@ export const AllauctionCount = (data) => http.get('', data);
 export const Allidentify_codeCount = (data) => http.get('', data);
 export const AlladminCount = (data) => http.get('', data);
 
-export const getIdentify_code = (data) => http.get('/api/bid/identify_code_manage', data);
-export const deleteIdentify_code = (id, data) => http.delete('/api/bid/identify_code_manage/'+id+'/', data);
-export const updateIdentify_code = (id, data) => http.patch('/api/bid/identify_code_manage/'+id+'/', data);
-export const addIdentify_code = (data) => http.post('/api/bid/identify_code_manage', data);
+export const getIdentify_code = (data) => http.get('/api/bid/ic_manage/', data);
+export const deleteIdentify_code = (id) => http.delete('/api/bid/ic_manage/'+id+'/');
+export const updateIdentify_code = (id, data) => http.patch('/api/bid/ic_manage/'+id+'/', data);
+export const addIdentify_code = (data) => http.post('/api/bid/ic_manage/', data);
+
+export const getCsrftoken = () => http.get('/account/get-token/');
