@@ -16,6 +16,7 @@ axios.interceptors.request.use(config => {
     config.headers.Authorization = `JWT ${store.state.token}`;
     config.headers['Content-Type'] = 'application/x-www-form-urlencoded';  //提交的数据按照 key1=val1&key2=val2 的方式进行编码，key 和 val 都进行了 URL 转码
     config.headers['X-Requested-With'] = 'XMLHttpRequest';
+    // config.headers['X-CSRFToken'] = document.cookie.match(regex) === null ? null : document.cookie.match(regex)[1];
 
     NProgress.start();
 
@@ -98,9 +99,10 @@ function checkCode(res) {
                 timeout: 30000,
             }).then(checkStatus).then(checkCode);
         },
-        put(url, params) {
+        patch(url, data) {
+            console.log(qs.stringify(data));
             return axios({
-                method: 'get',
+                method: 'patch',
                 url: baseUrl + url,
                 data: qs.stringify(data),
                 timeout: 30000,
@@ -108,7 +110,7 @@ function checkCode(res) {
         },
         delete(url, params) {
             return axios({
-                method: 'get',
+                method: 'delete',
                 url: baseUrl + url,
                 params: params,
                 timeout: 30000,

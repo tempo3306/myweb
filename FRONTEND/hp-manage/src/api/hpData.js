@@ -21,6 +21,6 @@ export const Allidentify_codeCount = (data) => http.get('', data);
 export const AlladminCount = (data) => http.get('', data);
 
 export const getIdentify_code = (data) => http.get('/api/bid/identify_code_manage', data);
-export const deleteIdentify_code = (data) => http.delete('/api/bid/identify_code_manage', data);
-export const updateIdentify_code = (data) => http.put('/api/bid/identify_code_manage', data);
+export const deleteIdentify_code = (id, data) => http.delete('/api/bid/identify_code_manage/'+id+'/', data);
+export const updateIdentify_code = (id, data) => http.patch('/api/bid/identify_code_manage/'+id+'/', data);
 export const addIdentify_code = (data) => http.post('/api/bid/identify_code_manage', data);

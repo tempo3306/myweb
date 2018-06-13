@@ -46,10 +46,10 @@
                                 <span>{{ props.row.bid_name }}</span>
                             </el-form-item>
                             <el-form-item label="购买日期">
-                                <span>{{ props.row.purchase_date }}</span>
+                                <span>{{ props.row.purchase_date_str }}</span>
                             </el-form-item>
                             <el-form-item label="到期时间">
-                                <span>{{ props.row.expired_date }}</span>
+                                <span>{{ props.row.expired_date_str }}</span>
                             </el-form-item>
                             <el-form-item label="激活码">
                                 <span>{{ props.row.identify_code }}</span>
@@ -67,11 +67,11 @@
                 </el-table-column>
                 <el-table-column
                     label="购买日期"
-                    prop="purchase_date">
+                    prop="purchase_date_str">
                 </el-table-column>
                 <el-table-column
                     label="到期时间"
-                    prop="expired_date">
+                    prop="expired_date_str">
                 </el-table-column>
                 <el-table-column
                     label="激活码"
@@ -115,16 +115,21 @@
                             <el-input v-model="selectTable.bid_name" auto-complete="off"></el-input>
                         </el-col>
                     </el-form-item>
-                    <el-form-item label="购买日期" label-width="100px" prop="date1">
+                    <el-form-item label="购买日期" label-width="100px">
                         <el-col :span="18">
-                            <el-date-picker type="date" placeholder="选择日期" v-model="selectTable.purchase_date"
-                                            style="width: 100%;"></el-date-picker>
+                            <el-form-item prop="purchase_date">
+                                <el-date-picker type="date" placeholder="选择日期" v-model="selectTable.purchase_date"
+                                                style="width: 100%;" ></el-date-picker>
+                            </el-form-item>
                         </el-col>
                     </el-form-item>
-                    <el-form-item label="过期时间" label-width="100px" prop="date2">
+                    <el-form-item label="过期时间" label-width="100px">
                         <el-col :span="18">
-                            <el-date-picker type="date" placeholder="选择日期" v-model="selectTable.expired_date"
-                                            style="width: 100%;"></el-date-picker>
+                            <el-form-item prop="expired_date">
+                                <el-date-picker  type="date" placeholder="选择日期"
+                                                v-model="selectTable.expired_date"
+                                                style="width: 100%;" ></el-date-picker>
+                            </el-form-item>
                         </el-col>
                     </el-form-item>
                     <el-form-item label="更换激活码" label-width="100px">
@@ -154,11 +159,34 @@
     } from '@/api/hpData';
     import waves from '@/directive/waves'; // 水波纹指令
 
+    Date.prototype.ymd = function() {
+        var mm = this.getMonth() + 1; // getMonth() is zero-based
+        var dd = this.getDate();
+
+        return [this.getFullYear(),
+            (mm>9 ? '' : '0') + mm,
+            (dd>9 ? '' : '0') + dd
+        ].join('-');
+    };
+
     export default {
         directives: {
             waves
         },
         data() {
+            var checkDate1 = (rule, value, callback) => {
+                console.log(value);
+                    if (!value) {
+                        return callback(new Error('年龄不能为空'));
+                    }
+            };
+            var checkDate2 = (rule, value, callback) => {
+                console.log(value);
+                if (!value) {
+                    return callback(new Error('年龄不能为空'));
+                }
+            };
+
             return {
                 baseUrl,
                 baseImgPath,
@@ -187,16 +215,17 @@
                 address: {},
                 downloadLoading: false,
                 change_identify_code: false,
+
                 rules: {
                     bid_name: [
-                        {required: true, message: '请输入活动名称', trigger: 'blur'},
+                        {required: true, message: '请输入名称', trigger: 'blur'},
                         {min: 2, max: 6, message: '长度在 2 到 6 个字符', trigger: 'blur'}
                     ],
-                    date1: [
+                    purchase_date: [
                         {type: 'date', required: true, message: '请选择日期', trigger: 'change'}
                     ],
-                    date2: [
-                        {type: 'date', required: true, message: '请选择日期', trigger: 'change'}
+                    expired_date: [
+                        {type: 'date', required: true,  message: '请选择日期', trigger: 'change'}
                     ],
                 },
             };
@@ -232,8 +261,10 @@
                         const tableData = {};
                         tableData.id = item.id;
                         tableData.bid_name = item.bid_name;
-                        tableData.purchase_date = item.purchase_date;
-                        tableData.expired_date = item.expired_date;
+                        tableData.purchase_date_str = item.purchase_date;
+                        tableData.expired_date_str = item.expired_date;
+                        tableData.purchase_date = new Date(item.purchase_date.replace(/-/g, "/"));
+                        tableData.expired_date = new Date(item.expired_date.replace(/-/g, "/"));
                         tableData.identify_code = item.identify_code;
                         this.tableData.push(tableData);
                     });
@@ -276,6 +307,7 @@
                 // },
             },
             submitForm(formName) {
+                console.log(this.selectTable);
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
                         this.updateData();
@@ -294,7 +326,7 @@
             },
             async handleDelete(index, row) {
                 try {
-                    const res = await deleteIdentify_code({id: row.id});
+                    const res = await deleteIdentify_code(row.id, {id: row.id});
                     if (res.status === 200) {
                         this.$message({
                             type: 'success',
@@ -302,12 +334,15 @@
                         });
                         this.tableData.splice(index, 1);
                     } else {
-                        throw new Error(res.message);
+                        this.$message({
+                            type: 'error',
+                            message: "操作失败"
+                        });
                     }
                 } catch (err) {
                     this.$message({
                         type: 'error',
-                        message: err.message
+                        message: "操作失败"
                     });
                     console.log('删除店铺失败');
                 }
@@ -351,11 +386,13 @@
                 this.dialogFormVisible = false;
                 try {
                     console.log(this.selectTable);
-                    const res = await updateIdentify_code(this.selectTable);
+                    this.selectTable.purchase_date_str =this.selectTable.purchase_date.ymd();
+                    this.selectTable.expired_date_str =this.selectTable.expired_date.ymd();
+                    const res = await updateIdentify_code(this.selectTable.id, this.selectTable);
                     if (res.status === 200) {
                         this.$message({
                             type: 'success',
-                            message: '更新店铺信息成功'
+                            message: '更新激活码信息成功'
                         });
                         this.getIdentify_code();
                     } else {
@@ -365,7 +402,7 @@
                         });
                     }
                 } catch (err) {
-                    console.log('更新餐馆信息失败', err);
+                    console.log('更新激活码信息失败', err);
                 }
             },
             cancelData() {
