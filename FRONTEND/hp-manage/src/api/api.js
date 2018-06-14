@@ -20,8 +20,8 @@ axios.interceptors.request.use(config => {
     // let regex = /.*csrftoken=([^;.]*).*$/; // 用于从cookie中匹配 csrftoken值
     // config.headers['X-CSRFToken'] = document.cookie.match(regex) === null ? null : document.cookie.match(regex)[1];
     let csrftoken = getToken();
-    console.log("fff", csrftoken);
-    config.headers['X-CSRFToken'] =  csrftoken;
+    console.log('fff', csrftoken);
+    config.headers['X-CSRFToken'] = csrftoken;
 
     NProgress.start();
 
@@ -41,16 +41,27 @@ axios.interceptors.response.use(response => response, error => Promise.resolve(e
 
 function checkStatus(response) {
     NProgress.done();
-    if (response.status === 200 || response.status === 304) {
-        return response;
-    }
-    return {
-        data: {
-            code: response.status,
-            message: response.statusText,
-            data: response.statusText,
+    try {
+        if (response.status === 200 || response.status === 304) {
+            return response;
         }
-    };
+        return {
+            data: {
+                code: response.status,
+                message: response.statusText,
+                data: response.statusText,
+            }
+        };
+    }
+    catch (e) {
+        return {
+            data: {
+                code: 404,
+                message: response.statusText,
+                data: response.statusText,
+            }
+        };
+    }
 }
 
 function checkCode(res) {
@@ -78,46 +89,46 @@ function checkCode(res) {
                 break;
             case 400:
                 //400 代表token过期
-                console.log("token 无效");
+                console.log('token 无效');
                 break;
             default:
-                console.log("NET ERROR");
+                console.log('NET ERROR');
         }
-        }
-        return res;
     }
+    return res;
+}
 
-    export default {
-        post(url, data) {
-            return axios({
-                method: 'post',
-                url: baseUrl + url,
-                data: qs.stringify(data),
-                timeout: 30000,
-            }).then(checkStatus).then(checkCode);
-        },
-        get(url, params) {
-            return axios({
-                method: 'get',
-                url: baseUrl + url,
-                params: params,
-                timeout: 30000,
-            }).then(checkStatus).then(checkCode);
-        },
-        patch(url, data) {
-            console.log(qs.stringify(data));
-            return axios({
-                method: 'patch',
-                url: baseUrl + url,
-                data: qs.stringify(data),
-                timeout: 30000,
-            }).then(checkStatus).then(checkCode);
-        },
-        delete(url) {
-            return axios({
-                method: 'delete',
-                url: baseUrl + url,
-                timeout: 30000,
-            }).then(checkStatus).then(checkCode);
-        },
-    };
+export default {
+    post(url, data) {
+        return axios({
+            method: 'post',
+            url: baseUrl + url,
+            data: qs.stringify(data),
+            timeout: 30000,
+        }).then(checkStatus).then(checkCode);
+    },
+    get(url, params) {
+        return axios({
+            method: 'get',
+            url: baseUrl + url,
+            params: params,
+            timeout: 30000,
+        }).then(checkStatus).then(checkCode);
+    },
+    patch(url, data) {
+        console.log(qs.stringify(data));
+        return axios({
+            method: 'patch',
+            url: baseUrl + url,
+            data: qs.stringify(data),
+            timeout: 30000,
+        }).then(checkStatus).then(checkCode);
+    },
+    delete(url) {
+        return axios({
+            method: 'delete',
+            url: baseUrl + url,
+            timeout: 30000,
+        }).then(checkStatus).then(checkCode);
+    },
+};

@@ -265,7 +265,7 @@ JWT_AUTH = {
     'JWT_VERIFY': True,
     'JWT_VERIFY_EXPIRATION': True,
     'JWT_LEEWAY': 0,
-    'JWT_EXPIRATION_DELTA': datetime.timedelta(seconds=3600),  # 过期时间
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(days=1),  # 过期时间
     'JWT_AUDIENCE': None,
     'JWT_ISSUER': None,
 
@@ -308,7 +308,7 @@ CACHES = {
 #           }
 
 # SESSION设置   二选一生效
-SESSION_COOKIE_AGE = 60 * 60  # 设置session过期时间为30分钟
+SESSION_COOKIE_AGE = 60 * 60  # 设置session过期时间为60分钟
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False  # 会话cookie可以在用户浏览器中保持有效期。True：关闭浏览器，则Cookie失效  即过期时间为当前会话
 
 '''配置session引擎SESSION_ENGINE为redis，配置此处session会存储在redis中，不会再去操作数据库了'''
@@ -325,6 +325,8 @@ CRISPY_TEMPLATE_PACK = 'bootstrap3'
 ##celery
 BROKER_URL = 'redis://localhost:6379'
 CELERY_RESULT_BACKEND = 'django-cache'
+# BROKER_URL= 'amqp://guest@localhost//'
+# CELERY_RESULT_BACKEND = 'amqp://guest@localhost//'
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'

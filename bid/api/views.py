@@ -96,7 +96,7 @@ class Bid_auction_serversideViewSet(viewsets.ModelViewSet):
                 data = json.loads(deleteorget)  ##转json
                 auctions = query_auction_by_url(data)
                 auctions.delete()
-                return Response(status=status.HTTP_204_NO_CONTENT)
+                return Response(status=status.HTTP_200_OK)
         except Exception as e:
             return Response(e, status=status.HTTP_404_NOT_FOUND, template_name=None, content_type=None)
 
@@ -151,7 +151,7 @@ def Bid_auction_manage(request):
             data = json.loads(data)  ##转json
             auctions = query_auction_by_url(data)
             auctions.delete()
-            return Response(status=status.HTTP_204_NO_CONTENT)
+            return Response(status=status.HTTP_200_OK)
         except:
             return Response(status=status.HTTP_404_NOT_FOUND)
     elif request.method == 'POST':
@@ -160,7 +160,7 @@ def Bid_auction_manage(request):
             serializer = Bid_auctionSerializer(data=data)
             if serializer.is_valid():
                 serializer.save()
-            return Response(status=status.HTTP_204_NO_CONTENT)
+            return Response(status=status.HTTP_200_OK)
         except:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
@@ -172,7 +172,7 @@ class Identify_codeViewSet(viewsets.ModelViewSet):
 
 class Identify_code_serversideViewSet(viewsets.ViewSet):
     queryset = Identify_code.objects.all()
-    serializer_class = Identify_codeSerializer
+    # serializer_class = Identify_codeSerializer
     permission_classes = (permissions.IsAuthenticated,)
     #
     def list(self, request):
@@ -198,7 +198,7 @@ class Identify_code_serversideViewSet(viewsets.ViewSet):
         try:
             identify_code = Identify_code.objects.get(pk=pk)
             identify_code.delete()
-            return Response(status=status.HTTP_204_NO_CONTENT)
+            return Response(status=status.HTTP_200_OK)
         except:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
@@ -232,7 +232,7 @@ class Identify_code_serversideViewSet(viewsets.ViewSet):
                 new_iden_code = random_str(6)  # 创建更新
                 identify_code['new_iden_code'] = new_iden_code
             identify_code.save()
-            return Response(status=status.HTTP_204_NO_CONTENT)
+            return Response(status=status.HTTP_200_OK)
 
         except:
             return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
@@ -240,12 +240,15 @@ class Identify_code_serversideViewSet(viewsets.ViewSet):
 
 
     def create(self, request,  *args, **kwargs):
+
         try:
             data = request.data
-            serializer = Identify_codeSerializer(data=data)
-            if serializer.is_valid(raise_exception=True):
-                serializer.save()
-            return Response(status=status.HTTP_204_NO_CONTENT)
+            identify_code = random_str(6)
+            ic = Identify_code(identify_code=identify_code, expired_date=data['expired_date'], purchase_date=data['purchase_date'],
+                               bid_name=data['bid_name'])
+            ic.save()
+
+            return Response(status=status.HTTP_200_OK)
         except:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
@@ -316,7 +319,7 @@ class Identify_code_serversideViewSet(viewsets.ModelViewSet):
             serializer = Identify_codeSerializer(data=data)
             if serializer.is_valid(raise_exception=True):
                 serializer.save()
-            return Response(status=status.HTTP_204_NO_CONTENT)
+            return Response(status=status.HTTP_200_OK)
         except:
             return Response(status=status.HTTP_404_NOT_FOUND)
 

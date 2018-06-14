@@ -78,6 +78,7 @@
                     prop="identify_code">
                 </el-table-column>
                 <el-table-column label="操作" width="200">
+                    <!--scope 对 父元素遍历，scope返回的值是slot标签上返回的所有属性值，并且是一个对象的形式保存起来，获取的是一个对象-->
                     <template scope="scope">
                         <el-button
                             size="mini"
@@ -119,16 +120,16 @@
                         <el-col :span="18">
                             <el-form-item prop="purchase_date">
                                 <el-date-picker type="date" placeholder="选择日期" v-model="selectTable.purchase_date"
-                                                style="width: 100%;" ></el-date-picker>
+                                                style="width: 100%;"></el-date-picker>
                             </el-form-item>
                         </el-col>
                     </el-form-item>
                     <el-form-item label="过期时间" label-width="100px">
                         <el-col :span="18">
                             <el-form-item prop="expired_date">
-                                <el-date-picker  type="date" placeholder="选择日期"
+                                <el-date-picker type="date" placeholder="选择日期"
                                                 v-model="selectTable.expired_date"
-                                                style="width: 100%;" ></el-date-picker>
+                                                style="width: 100%;"></el-date-picker>
                             </el-form-item>
                         </el-col>
                     </el-form-item>
@@ -159,15 +160,7 @@
     } from '@/api/hpData';
     import waves from '@/directive/waves'; // 水波纹指令
 
-    Date.prototype.ymd = function() {
-        var mm = this.getMonth() + 1; // getMonth() is zero-based
-        var dd = this.getDate();
 
-        return [this.getFullYear(),
-            (mm>9 ? '' : '0') + mm,
-            (dd>9 ? '' : '0') + dd
-        ].join('-');
-    };
 
     export default {
         directives: {
@@ -176,9 +169,9 @@
         data() {
             var checkDate1 = (rule, value, callback) => {
                 console.log(value);
-                    if (!value) {
-                        return callback(new Error('年龄不能为空'));
-                    }
+                if (!value) {
+                    return callback(new Error('年龄不能为空'));
+                }
             };
             var checkDate2 = (rule, value, callback) => {
                 console.log(value);
@@ -225,7 +218,7 @@
                         {type: 'date', required: true, message: '请选择日期', trigger: 'change'}
                     ],
                     expired_date: [
-                        {type: 'date', required: true,  message: '请选择日期', trigger: 'change'}
+                        {type: 'date', required: true, message: '请选择日期', trigger: 'change'}
                     ],
                 },
             };
@@ -263,8 +256,8 @@
                         tableData.bid_name = item.bid_name;
                         tableData.purchase_date_str = item.purchase_date;
                         tableData.expired_date_str = item.expired_date;
-                        tableData.purchase_date = new Date(item.purchase_date.replace(/-/g, "/"));
-                        tableData.expired_date = new Date(item.expired_date.replace(/-/g, "/"));
+                        tableData.purchase_date = new Date(item.purchase_date.replace(/-/g, '/'));
+                        tableData.expired_date = new Date(item.expired_date.replace(/-/g, '/'));
                         tableData.identify_code = item.identify_code;
                         this.tableData.push(tableData);
                     });
@@ -323,12 +316,13 @@
             },
             handleAdd() {
                 this.$router.push({path: 'addIdentify_code'});
+                // this.selectTable = Object.assign({}, row); //深拷贝
+                // this.dialogFormVisible = true;  //弹出对话框
             },
             async handleDelete(index, row) {
                 try {
                     const res = await deleteIdentify_code(row.id);
-                    //删除和创建返回的都是204
-                    if (res.status === 204) {
+                    if (res.status === 200) {
                         this.$message({
                             type: 'success',
                             message: '删除激活码成功'
@@ -337,13 +331,13 @@
                     } else {
                         this.$message({
                             type: 'error',
-                            message: "操作失败"
+                            message: '操作失败'
                         });
                     }
                 } catch (err) {
                     this.$message({
                         type: 'error',
-                        message: "操作失败"
+                        message: '操作失败'
                     });
                     console.log('删除店铺失败');
                 }
@@ -387,11 +381,12 @@
                 this.dialogFormVisible = false;
                 try {
                     console.log(this.selectTable);
-                    this.selectTable.purchase_date_str =this.selectTable.purchase_date.ymd();
-                    this.selectTable.expired_date_str =this.selectTable.expired_date.ymd();
+                    this.selectTable.purchase_date_str = this.selectTable.purchase_date.ymd();
+                    this.selectTable.expired_date_str = this.selectTable.expired_date.ymd();
                     this.selectTable.change_identify_code = this.change_identify_code;
                     const res = await updateIdentify_code(this.selectTable.id, this.selectTable);
-                    if (res.status === 204) {
+                    console.log(res.status);
+                    if (res.status === 200) {
                         this.$message({
                             type: 'success',
                             message: '更新激活码信息成功'

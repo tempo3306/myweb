@@ -3,10 +3,23 @@ import Router from 'vue-router';
 import store from '@/store/index';
 import * as types from '@/store/types';
 // 页面刷新时，重新赋值token
-if (window.localStorage.getItem('token')) {
-    store.commit(types.LOGIN, window.localStorage.getItem('token'));
+try{
+    if (window.localStorage.getItem('token')) {
+        store.commit(types.LOGIN, window.localStorage.getItem('token'));
+        let tem = window.localStorage.getItem('codetable');
+        console.log(tem);
+        if (tem) {
+            let data = {'codetable': JSON.parse(tem)};
+            console.log(data);
+            store.dispatch("resetadd", data);
+        }
+    }
+}
+catch (e) {
+    console.log(e);
 }
 
+//初始化Router
 Vue.use(Router);
 
 const login = r => require.ensure([], () => r(require('@/page/login')), 'login');
@@ -76,19 +89,31 @@ const routes = [
             }, {
                 path: '/addHander',
                 component: addHander,
-                meta: ['添加数据', '添加拍手'],
+                meta: {
+                    requireAuth: true,
+                    nav: ['添加数据', '添加拍手']
+                },
             }, {
                 path: '/addAuction',
                 component: addAuction,
-                meta: ['添加数据', '添加标书'],
+                meta: {
+                    requireAuth: true,
+                    nav: ['添加数据', '添加标书']
+                },
             }, {
                 path: '/addAction',
                 component: addAction,
-                meta: ['添加数据', '添加策略'],
+                meta: {
+                    requireAuth: true,
+                    nav: ['添加数据', '添加策略']
+                },
             }, {
                 path: '/addIdentify_code',
                 component: addIdentify_code,
-                meta: ['添加数据', '添加激活码'],
+                meta: {
+                    requireAuth: true,
+                    nav: ['添加数据', '添加激活码']
+                },
             }, {
                 path: '/adminSet',
                 component: adminSet,

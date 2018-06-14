@@ -31,7 +31,7 @@ class Identify_code(models.Model):
     identify_code = models.CharField(max_length=6, unique=True)  # 激活码
     purchase_date = models.DateField()
     expired_date = models.DateField()  # 过期时间,激活开始计算相应的时间
-    bid_name = models.CharField(max_length=10, default='one')  # 标书姓名  one表示只有一次使用机会
+    bid_name = models.CharField(max_length=10, default='one', unique=True)  # 标书姓名  one表示只有一次使用机会
     ##一个订单可以 生成多个激活码
     consumer_software = models.ForeignKey(Consumer_software, on_delete=models.CASCADE, related_name='identify_codes',
                                           blank=True, null=True) ##空值表示免费试用
