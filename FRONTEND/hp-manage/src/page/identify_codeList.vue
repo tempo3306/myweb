@@ -24,7 +24,7 @@
                     <el-option v-for="item in sortOptions" :key="item.key" :label="item.label" :value="item.key">
                     </el-option>
                 </el-select>
-                <el-input @keyup.enter.native="handleFilter" style="width: 200px;float: right" class="filter-item"
+                <el-input @keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item"
                           :placeholder="label.search" v-model="listQuery.search">
                 </el-input>
 
@@ -192,13 +192,15 @@
                     importance: undefined,
                     search: undefined,
                     type: undefined,
-                    sort: '+id'
+                    sort: 'id'
                 },
                 label: {
                     search: '搜索',
                 },
-                sortOptions: [{label: '购买日期 +', key: '+purchase_date'}, {label: '到期时间 +', key: '+expired_date'},
-                    {label: '购买日期 +', key: '-purchase_date'}, {label: '到期时间 +', key: '-expired_date'}],
+                sortOptions: [{label: '购买日期 +', key: 'purchase_date'}, {label: '到期时间 +', key: 'expired_date'},
+                    {label: '购买日期 +', key: '-purchase_date'}, {label: '到期时间 +', key: '-expired_date'},
+                    {label: 'id +', key: 'id'}, {label: 'id -', key: '-id'}
+                ],
                 tableData: [],
                 currentPage: 1,
                 selectTable: {},
@@ -239,9 +241,10 @@
                 }
             },
             async getIdentify_code() {
+                console.log(this.listQuery);
                 const identify_codes = await getIdentify_code({
                     page: this.listQuery.page, limit: this.listQuery.limit,
-                    format: 'json'
+                    format: 'json', search: this.listQuery.search, sort: this.listQuery.sort
                 });
                 if (identify_codes.status >= 400) {
                     this.$router.push('login');
@@ -249,7 +252,7 @@
                 else if (identify_codes.status === 200) ;
                 {
                     this.tableData = [];
-                    this.count = identify_codes.data.total;
+                    this.count = identify_codes.data.count;
                     identify_codes.data.rows.forEach(item => {
                         const tableData = {};
                         tableData.id = item.id;

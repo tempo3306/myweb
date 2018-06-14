@@ -183,7 +183,7 @@ class Identify_code_serversideViewSet(viewsets.ViewSet):
             serializer = Identify_codeSerializer(identify_codes['items'], many=True)
             result = dict()
             result['rows'] = serializer.data
-            result['total'] = identify_codes['total']
+            result['count'] = identify_codes['count']
             return Response(result, status=status.HTTP_200_OK, template_name=None, content_type=None)
         except Exception as e:
             return Response(e, status=status.HTTP_404_NOT_FOUND, template_name=None, content_type=None)

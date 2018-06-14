@@ -56,34 +56,27 @@ class Identify_code(models.Model):
 def query_identify_code_by_args(params):
     pageSize = int(params.get('limit', None))  ##每页数量
     pageNumber = int(params.get('page', None)) # 当前页数
-    searchText = params.get('searchText', None)
-    sortName = str(params.get('sortName', 'id'))
-    sortOrder = str(params.get('sortOrder'))
+    searchText = params.get('search', None)
+    sortName = str(params.get('sort', 'id'))
+    # sortOrder = str(params.get('sortOrder'))
     # django orm '-' -> desc
-    if sortOrder == 'desc':
-        sortName = '-' + sortName
 
     queryset = Identify_code.objects.all()
-    total = queryset.count()
+    # total = queryset.count()
     if searchText:
         queryset = queryset.filter(
             Q(id__icontains=searchText) |
-            Q(refer_time__icontains=searchText) |
-            Q(bid_time__icontains=searchText) |
-            Q(delay_time__icontains=searchText) |
-            Q(ahead_price__icontains=searchText) |
-            Q(hander_id__icontains=searchText) |
-            Q(action_date__icontains=searchText) |
-            Q(auction_id__icontains=searchText) |
-            Q(action_result__icontains=searchText))
+            Q(bid_name__icontains=searchText))
+
 
     count = queryset.count()
+    print("count=", count)
+
     start = (pageNumber - 1) * pageSize
     queryset = queryset.order_by(sortName)[start:start + pageSize]
     return {
         'items': queryset,
         'count': count,
-        'total': total,
     }
 
 
