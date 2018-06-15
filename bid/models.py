@@ -52,7 +52,6 @@ class Identify_code(models.Model):
         else:
             return False
 
-##设置为undefined可以获取pageNumber，pageSize，searchText，sortName，sortOrder
 def query_identify_code_by_args(params):
     pageSize = int(params.get('limit', None))  ##每页数量
     pageNumber = int(params.get('page', None)) # 当前页数
@@ -139,6 +138,32 @@ class Bid_hander(models.Model):
 
     def __str__(self):
         return self.hander_name
+
+def query_hander_by_args(params):
+    pageSize = int(params.get('limit', None))  ##每页数量
+    pageNumber = int(params.get('page', None)) # 当前页数
+    searchText = params.get('search', None)
+    sortName = str(params.get('sort', 'id'))
+    # sortOrder = str(params.get('sortOrder'))
+    # django orm '-' -> desc
+
+    queryset = Bid_hander.objects.all()
+    # total = queryset.count()
+    if searchText:
+        queryset = queryset.filter(
+            Q(hander_name__icontains=searchText))
+
+    count = queryset.count()
+    print("count=", count)
+
+    start = (pageNumber - 1) * pageSize
+    queryset = queryset.order_by(sortName)[start:start + pageSize]
+    return {
+        'items': queryset,
+        'count': count,
+    }
+
+
 
 
 # 标书信息

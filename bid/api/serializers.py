@@ -28,11 +28,12 @@ class Bid_handerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Bid_hander
         fields = [
-            'hander_actions',  # 外键
             'id',
+            'user_id',
             'hander_name',
             'basic_salary',
-            'total_income'
+            'total_income',
+            'hander_actions',  # 外键
         ]
 
 

@@ -38,6 +38,11 @@ identify_code_list = Identify_code_serversideViewSet.as_view({'get': 'list', 'po
 identify_code_detail = Identify_code_serversideViewSet.as_view({'get': 'retrieve', 'patch': 'partial_update',
                                                                 'put': 'update', 'delete': 'destroy'})
 
+hander_list = Hander_serversideViewSet.as_view({'get': 'list', 'post': 'create'})
+hander_detail = Hander_serversideViewSet.as_view({'get': 'retrieve', 'patch': 'partial_update',
+                                                                'put': 'update', 'delete': 'destroy'})
+
+
 urlpatterns = [
     url('^consumer', include(consumer_router.urls)),
     url('^consumer_software', include(consumer_software_router.urls)),
@@ -60,8 +65,9 @@ urlpatterns = [
 
     ##管理操作
     url(r'^ic_manage/$', identify_code_list),
-    url(r'^ic_manage/(?P<pk>[0-9]+)/$', identify_code_detail),
-
+    url(r'^ic_manage/(?P<pk>[0-9]+)/', identify_code_detail),
+    url(r'^hd_manage/$', hander_list),
+    url(r'^hd_manage/(?P<pk>[0-9]+)/', hander_detail),
 
     # url('^identify_code_manage/$', include(identify_code_serverside_router.urls)),
     # url('^identify_code_manage', csrf_exempt(Identify_code_serversideViewSet.as_view({'get':'list', 'put': 'update',

@@ -16,6 +16,11 @@ export default new Vuex.Store({
             'purchase_date': new Date(),
             'bid_name': '',
         },
+        handertable: {
+            'hander_name': '',
+            'basic_salary': 0,
+            'total_income': '',
+        },
     },
     mutations: {
         [types.LOGIN]: (state, data) => {
@@ -32,21 +37,31 @@ export default new Vuex.Store({
         },
 
         ADDCODE(state, data) {
-            let tem = JSON.stringify(data.codetable);
+            let tem = JSON.stringify(data);
             localStorage.codetable = tem;
             console.log(data);
             state.codetable = data;
         },
-
+        ADDHANDER(state, data) {
+            let tem = JSON.stringify(data);
+            localStorage.handertable = tem;
+            state.handertable = data;
+        },
     },
     actions: {
         resetadd(context, data){
             if (data.codetable){
-                context.commit("ADDCODE", tem);
+                context.commit("ADDCODE", data.codetable);
+            }
+            if (data.handertable){
+                context.commit("ADDHANDER", data.handertable);
             }
         },
         addCode(context, tem){
             context.commit("ADDCODE", tem)
         },
+        addHander(context, tem){
+            context.commit("ADDHANDER", tem)
+        }
     }
 })

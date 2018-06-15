@@ -6,14 +6,17 @@ import * as types from '@/store/types';
 try{
     if (window.localStorage.getItem('token')) {
         store.commit(types.LOGIN, window.localStorage.getItem('token'));
-        let tem = window.localStorage.getItem('codetable');
-        console.log(tem);
-        if (tem) {
-            let data = {'codetable': JSON.parse(tem)};
-            console.log(data);
-            store.dispatch("resetadd", data);
+        let codetable = window.localStorage.getItem('codetable');
+        let handertable = window.localStorage.getItem('handertable');
+        console.log(codetable);
+        console.log('handertable', handertable);
+        let data = {};
+        (codetable)?data.codetable = JSON.parse(codetable):console.log("");
+        (handertable)?data.handertable = JSON.parse(handertable):console.log("");
+
+        console.log(data);
+        store.dispatch("resetadd", data);
         }
-    }
 }
 catch (e) {
     console.log(e);

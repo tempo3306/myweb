@@ -23,6 +23,11 @@ export const AlladminCount = (data) => http.get('', data);
 export const getIdentify_code = (data) => http.get('/api/bid/ic_manage/', data);
 export const deleteIdentify_code = (id) => http.delete('/api/bid/ic_manage/'+id+'/');
 export const updateIdentify_code = (id, data) => http.patch('/api/bid/ic_manage/'+id+'/', data);
-export const addIdentify_code = (data) => http.post('/api/bid/ic_manage/', data);
+export const postIdentify_code = (data) => http.post('/api/bid/ic_manage/', data);
+
+export const getHander = (data) => http.get('/api/bid/hd_manage/', data);
+export const deleteHander = (id) => http.delete('/api/bid/hd_manage/'+id+'/');
+export const updateHander = (id, data) => http.patch('/api/bid/hd_manage/'+id+'/', data);
+export const postHander = (data) => http.post('/api/bid/hd_manage/', data);
 
 export const getCsrftoken = () => http.get('/account/get-token/');

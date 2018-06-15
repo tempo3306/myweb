@@ -37,7 +37,7 @@
 </template>
 
 <script>
-    import {addIdentify_code} from '@/api/hpData';
+    import {postIdentify_code} from '@/api/hpData';
     import {mapState, mapActions} from 'vuex';
     import headTop from '@/components/headTop';
 
@@ -86,7 +86,7 @@
                 let data = Object.assign({}, this.selectTable);
                 data.expired_date = this.selectTable.expired_date.ymd();
                 data.purchase_date = this.selectTable.purchase_date.ymd();
-                const res = await addIdentify_code(data);
+                const res = await postIdentify_code(data);
                 if (res.status === 200) {
                     this.$message({
                         type: 'success',

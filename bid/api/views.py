@@ -170,6 +170,83 @@ class Identify_codeViewSet(viewsets.ModelViewSet):
     permissions_class = (permissions.IsAuthenticated,)
 
 
+
+class Hander_serversideViewSet(viewsets.ViewSet):
+    queryset = Bid_hander.objects.all()
+    permission_classes = (permissions.IsAuthenticated,)
+    #
+    def list(self, request):
+        try:
+            print("fdsfsfsfsfs")
+            data = request.query_params
+            handers = query_hander_by_args(data)  #带参数查询
+            serializer = Bid_handerSerializer(handers['items'], many=True)
+            result = dict()
+            result['rows'] = serializer.data
+            result['count'] = handers['count']
+            return Response(result, status=status.HTTP_200_OK, template_name=None, content_type=None)
+        except Exception as e:
+            return Response(e, status=status.HTTP_404_NOT_FOUND, template_name=None, content_type=None)
+
+    def retrieve(self, request, pk=None):
+        queryset = Bid_hander.objects.all()
+        hander = get_object_or_404(queryset, pk=pk)
+        serializer = Bid_handerSerializer(hander)
+        return Response(serializer.data)
+
+    def destroy(self, request, pk=None, *args, **kwargs):
+        try:
+            hander = Bid_hander.objects.get(pk=pk)
+            hander.delete()
+            return Response(status=status.HTTP_200_OK)
+        except:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+    def update(self, request, pk=None, *args, **kwargs):
+        try:
+            data = request.data
+            hander = Bid_hander.objects.get(pk=pk)
+            hander_name = data['hander_name']
+            basic_salary = data['basic_salary']
+            total_income = data['total_income']
+            hander.hander_name = hander_name
+            hander.basic_salary = basic_salary
+            hander.total_income = total_income
+            hander.save()
+            return Response(status=status.HTTP_200_OK)
+        except:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+    def partial_update(self, request, pk=None, *args, **kwargs):
+        try:
+            data = request.data
+            hander = Bid_hander.objects.get(pk=pk)
+            hander_name = data['hander_name']
+            basic_salary = data['basic_salary']
+            total_income = data['total_income']
+            hander.hander_name = hander_name
+            hander.basic_salary = basic_salary
+            hander.total_income = total_income
+            hander.save()
+            return Response(status=status.HTTP_200_OK)
+        except:
+            return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    def create(self, request,  *args, **kwargs):
+        try:
+            data = request.data
+            hander_name = data['hander_name']
+            basic_salary = data['basic_salary']
+            total_income = data['total_income']
+            hander = Bid_hander(hander_name=hander_name, basic_salary=basic_salary, total_income=total_income)
+            hander.save()
+            return Response(status=status.HTTP_200_OK)
+        except:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+
+
+
 class Identify_code_serversideViewSet(viewsets.ViewSet):
     queryset = Identify_code.objects.all()
     # serializer_class = Identify_codeSerializer
@@ -205,14 +282,20 @@ class Identify_code_serversideViewSet(viewsets.ViewSet):
     def update(self, request, pk=None, *args, **kwargs):
         try:
             data = request.data
-            identify_codes = Identify_code.objects.get(pk=data['pk'])
-            identity_code = data['identify_code']  # 激活码
-            purchase_date = data['purchase_date']  # 购买时间
-            expired_date = data['expired_date']  # 过期时间
+            identify_code = Identify_code.objects.get(pk=pk)
+            purchase_date = data['purchase_date_str']  # 购买时间
+            expired_date = data['expired_date_str']  # 过期时间
             bid_name = data['bid_name']  # 标书姓名
-
-            identify_codes.update(identity_code=identity_code, purchase_date=purchase_date, expired_date=expired_date,
-                                  bid_name=bid_name)
+            change_identify_code = data['change_identify_code']
+            print("change_identify_code", change_identify_code)
+            identify_code.purchase_date = purchase_date
+            identify_code.expired_date = expired_date
+            identify_code.bid_name = bid_name
+            if change_identify_code == 'true':
+                new_iden_code = random_str(6)  # 创建更新
+                identify_code['new_iden_code'] = new_iden_code
+            identify_code.save()
+            return Response(status=status.HTTP_200_OK)
         except:
             return Response(status=status.HTTP_404_NOT_FOUND)
 

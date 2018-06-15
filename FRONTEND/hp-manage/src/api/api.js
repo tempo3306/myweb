@@ -57,8 +57,7 @@ function checkStatus(response) {
         return {
             data: {
                 code: 404,
-                message: response.statusText,
-                data: response.statusText,
+                message: e,
             }
         };
     }
