@@ -246,6 +246,153 @@ class Hander_serversideViewSet(viewsets.ViewSet):
 
 
 
+class Auction_serversideViewSet(viewsets.ViewSet):
+    queryset = Bid_hander.objects.all()
+    permission_classes = (permissions.IsAuthenticated,)
+    #
+    def list(self, request):
+        try:
+            data = request.query_params
+            auctions = query_auction_by_args(data)  #带参数查询
+            serializer = Bid_auctionSerializer(auctions['items'], many=True)
+            result = dict()
+            result['rows'] = serializer.data
+            result['count'] = auctions['count']
+            return Response(result, status=status.HTTP_200_OK, template_name=None, content_type=None)
+        except Exception as e:
+            return Response(e, status=status.HTTP_404_NOT_FOUND, template_name=None, content_type=None)
+
+    def retrieve(self, request, pk=None):
+        queryset = Bid_auction.objects.all()
+        auction = get_object_or_404(queryset, pk=pk)
+        serializer = Bid_auctionSerializer(auction)
+        return Response(serializer.data)
+
+    def destroy(self, request, pk=None, *args, **kwargs):
+        try:
+            auction = Bid_auction.objects.get(pk=pk)
+            auction.delete()
+            return Response(status=status.HTTP_200_OK)
+        except:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+    def update(self, request, pk=None, *args, **kwargs):
+        try:
+            auction = Bid_auction.objects.get(pk=pk)
+            serializer = Bid_auctionSerializer(auction, data=request.data, partial=True)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_200_OK)
+        except:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+    def partial_update(self, request, pk=None, *args, **kwargs):
+        try:
+            auction = Bid_auction.objects.get(pk=pk)
+            serializer = Bid_auctionSerializer(auction, data=request.data, partial=True)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_200_OK)
+        except:
+            return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    def create(self, request,  *args, **kwargs):
+        try:
+            data = request.data
+            serializer = Bid_auctionSerializer(data=data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            else:
+                print(serializer.error_messages)
+                print(serializer.errors)
+                return Response(status=status.HTTP_404_NOT_FOUND)
+        except:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+
+    # def get_permissions(self):
+    #     """
+    #     Instantiates and returns the list of permissions that this view requires.
+    #     """
+    #     if self.action == 'list':
+    #         permission_classes = [IsAuthenticated]
+    #     else:
+    #         permission_classes = [IsAdmin]
+    #     return [permission() for permission in permission_classes]
+
+
+class Action_serversideViewSet(viewsets.ViewSet):
+    queryset = Bid_hander.objects.all()
+    permission_classes = (permissions.IsAuthenticated,)
+    #
+    def list(self, request):
+        try:
+            data = request.query_params
+            auctions = query_auction_by_args(data)  #带参数查询
+            serializer = Bid_auctionSerializer(auctions['items'], many=True)
+            result = dict()
+            result['rows'] = serializer.data
+            result['count'] = auctions['count']
+            return Response(result, status=status.HTTP_200_OK, template_name=None, content_type=None)
+        except Exception as e:
+            return Response(e, status=status.HTTP_404_NOT_FOUND, template_name=None, content_type=None)
+
+    def retrieve(self, request, pk=None):
+        queryset = Bid_auction.objects.all()
+        auction = get_object_or_404(queryset, pk=pk)
+        serializer = Bid_auctionSerializer(auction)
+        return Response(serializer.data)
+
+    def destroy(self, request, pk=None, *args, **kwargs):
+        try:
+            auction = Bid_auction.objects.get(pk=pk)
+            auction.delete()
+            return Response(status=status.HTTP_200_OK)
+        except:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+    def update(self, request, pk=None, *args, **kwargs):
+        try:
+            data = request.data
+            auction = Bid_auction.objects.get(pk=pk)
+            auction_name = data['auction_name']
+            basic_salary = data['basic_salary']
+            total_income = data['total_income']
+            auction.auction_name = auction_name
+            auction.basic_salary = basic_salary
+            auction.total_income = total_income
+            auction.save()
+            return Response(status=status.HTTP_200_OK)
+        except:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+    def partial_update(self, request, pk=None, *args, **kwargs):
+        try:
+            data = request.data
+            auction = Bid_auction.objects.get(pk=pk)
+            auction_name = data['auction_name']
+            basic_salary = data['basic_salary']
+            total_income = data['total_income']
+            auction.auction_name = auction_name
+            auction.basic_salary = basic_salary
+            auction.total_income = total_income
+            auction.save()
+            return Response(status=status.HTTP_200_OK)
+        except:
+            return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    def create(self, request,  *args, **kwargs):
+        try:
+            data = request.data
+            auction_name = data['auction_name']
+            basic_salary = data['basic_salary']
+            total_income = data['total_income']
+            auction = Bid_auction(auction_name=auction_name, basic_salary=basic_salary, total_income=total_income)
+            auction.save()
+            return Response(status=status.HTTP_200_OK)
+        except:
+            return Response(status=status.HTTP_404_NOT_FOUND)
 
 class Identify_code_serversideViewSet(viewsets.ViewSet):
     queryset = Identify_code.objects.all()

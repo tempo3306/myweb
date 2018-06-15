@@ -11,7 +11,7 @@ from django.http import HttpResponse
 from django.contrib.auth import login, authenticate
 from .models import Bid_hander
 from django.http import HttpResponse, Http404
-from bid.models import query_auction_by_url, query_auction_by_args, query_action_by_args, query_action_by_url
+from bid.models import query_auction_by_args, query_action_by_args, query_action_by_url
 from bid.api.serializers import Bid_auctionSerializer, Bid_actionSerializer
 
 import json
@@ -348,24 +348,24 @@ def Bid_auction_manage(request):
             return HttpResponse(status=204)
         except:
             return HttpResponse(status=404)
-    elif request.method == 'DELETE':
-        try:
-            data = request.GET.get('data')
-            data = json.loads(data)  ##转json
-            print(data)
-            auctions = query_auction_by_url(data)
-            auctions.delete()
-            return HttpResponse(status=204)
-        except:
-            return HttpResponse(status=404)
-    elif request.method == 'POST':
-        data = request.POST
-        serializer = Bid_auctionSerializer(data=data)
-        if serializer.is_valid(raise_exception=True):
-            serializer.save()
-        return HttpResponse(status=204)
-    else:
-        return HttpResponse(status=404)
+    # elif request.method == 'DELETE':
+    #     try:
+    #         data = request.GET.get('data')
+    #         data = json.loads(data)  ##转json
+    #         print(data)
+    #         auctions = query_auction_by_url(data)
+    #         auctions.delete()
+    #         return HttpResponse(status=204)
+    #     except:
+    #         return HttpResponse(status=404)
+    # elif request.method == 'POST':
+    #     data = request.POST
+    #     serializer = Bid_auctionSerializer(data=data)
+    #     if serializer.is_valid(raise_exception=True):
+    #         serializer.save()
+    #     return HttpResponse(status=204)
+    # else:
+    #     return HttpResponse(status=404)
 
 
 @login_required

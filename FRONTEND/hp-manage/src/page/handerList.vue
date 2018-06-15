@@ -5,7 +5,7 @@
             <div class="filter-container" style="padding-bottom: 45px">
                 <el-button class="filter-item" type="primary" :loading="downloadLoading"
                            style="margin-left: 10px; float: right"
-                           v-waves icon="el-icon-download" @click="handleDownload">导出
+                            icon="el-icon-download" @click="handleDownload">导出
                 </el-button>
                 <el-select @change='handleFilter' style="width: 140px;float: right" class="filter-item"
                            v-model="listQuery.sort">
@@ -15,6 +15,7 @@
                 <el-input @keyup.enter.native="handleFilter" style="width: 140px;float: right" class="filter-item"
                           :placeholder="label.search" v-model="listQuery.search">
                 </el-input>
+                <!--<el-button type="primary" icon="el-icon-delete"></el-button>-->
             </div>
             <el-table
                 :data="tableData"
@@ -24,7 +25,7 @@
                     <template scope="props">
                         <el-form label-position="left" inline class="demo-table-expand">
                             <el-form-item label="ID">
-                                <span>{{ props.row.user_id }}</span>
+                                <span>{{ props.row.id }}</span>
                             </el-form-item>
                             <el-form-item label="拍手姓名">
                                 <span>{{ props.row.hander_name }}</span>
@@ -40,7 +41,7 @@
                 </el-table-column>
                 <el-table-column
                     label="ID"
-                    prop="user_id">
+                    prop="id">
                 </el-table-column>
                 <el-table-column
                     label="拍手姓名"
@@ -125,9 +126,9 @@
     import waves from '@/directive/waves'; // 水波纹指令
 
     export default {
-        directives: {
-            waves
-        },
+        // directives: {
+        //     waves
+        // },
         data() {
             var checkDate1 = (rule, value, callback) => {
                 console.log(value);
@@ -150,14 +151,14 @@
                     importance: undefined,
                     search: undefined,
                     type: undefined,
-                    sort: 'user_id'
+                    sort: 'id'
                 },
                 label: {
                     search: '搜索',
                 },
                 sortOptions: [{label: '底薪 +', key: 'basic_salary'}, {label: '累计收入 +', key: 'total_income'},
                     {label: '底薪 -', key: '-basic_salary'}, {label: '累计收入 -', key: '-total_income'},
-                    {label: 'id +', key: 'user_id'}, {label: 'id -', key: '-user_id'}
+                    {label: 'id +', key: 'id'}, {label: 'id -', key: '-id'}
                 ],
                 tableData: [],
                 currentPage: 1,
@@ -214,7 +215,6 @@
                     handers.data.rows.forEach(item => {
                         const tableData = {};
                         tableData.id = item.id;
-                        tableData.user_id = item.user_id;
                         tableData.hander_name = item.hander_name;
                         tableData.basic_salary = item.basic_salary;
                         tableData.total_income = item.total_income;
@@ -234,6 +234,9 @@
             },
             handleFilter() {
                 this.listQuery.page = 1;
+                this.getHander();
+            },
+            handleRefresh() {
                 this.getHander();
             },
             handleCreate() {

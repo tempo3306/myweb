@@ -3,14 +3,16 @@
         <transition name="form-fade" mode="in-out">
             <section class="form_contianer" v-show="showLogin">
                 <div class="manage_tip">
-                    <p>elm后台管理系统</p>
+                    <p>沪牌一号后台管理系统</p>
                 </div>
                 <el-form :model="loginForm" :rules="rules" ref="loginForm">
                     <el-form-item prop="username">
-                        <el-input v-model="loginForm.username" placeholder="用户名"><span>dsfsf</span></el-input>
+                        <el-input v-model="loginForm.username" placeholder="用户名"
+                                  @keyup.enter.native="submitForm('loginForm')"><span></span></el-input>
                     </el-form-item>
                     <el-form-item prop="password">
-                        <el-input type="password" placeholder="密码" v-model="loginForm.password"></el-input>
+                        <el-input type="password" placeholder="密码" v-model="loginForm.password"
+                                  @keyup.enter.native="submitForm('loginForm')"></el-input>
                     </el-form-item>
                     <el-form-item>
                         <el-button type="primary" @click="submitForm('loginForm')" class="submit_btn">登陆</el-button>
@@ -30,7 +32,6 @@
     import {setToken} from '@/utils/auth';
     import store from '@/store/index';
     import * as types from '@/store/types';
-    import {getCsrftoken} from '@/api/hpData';
 
     export default {
         data() {
@@ -54,7 +55,7 @@
         // mounted  页面元素加载完成后执行，对节点进行一定的操作
         // 登录成功  或者  读取到登录过   this.$router.push('manage');
         created() {
-            this.getCsrf();
+            // this.getCsrf();
             this.showLogin = true;
             let token = localStorage.getItem('token') || this.$store.state.token;
             this.autologin(token);

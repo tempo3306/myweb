@@ -9,13 +9,12 @@
 					<el-submenu index="2">
 						<template slot="title"><i class="el-icon-document"></i>数据管理</template>
 						<el-menu-item index="handerList">拍手列表</el-menu-item>
-						<el-menu-item index="userList">标书列表</el-menu-item>
+						<el-menu-item index="auctionList">标书列表</el-menu-item>
 						<el-menu-item index="userList">策略列表</el-menu-item>
                         <el-menu-item index="identify_codeList">激活码列表</el-menu-item>
 					</el-submenu>
 					<el-submenu index="3">
-						<template slot="title"><i class="el-ic
-						on-plus"></i>添加数据</template>
+						<template slot="title"><i class="el-icon-plus"></i>添加数据</template>
                         <!--index属性直接书写的路由-->
                         <el-menu-item index="addHander">添加拍手</el-menu-item>
                         <el-menu-item index="addAuction">添加标书</el-menu-item>

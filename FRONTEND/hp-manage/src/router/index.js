@@ -8,11 +8,14 @@ try{
         store.commit(types.LOGIN, window.localStorage.getItem('token'));
         let codetable = window.localStorage.getItem('codetable');
         let handertable = window.localStorage.getItem('handertable');
-        console.log(codetable);
-        console.log('handertable', handertable);
+        let auctiontable = window.localStorage.getItem('auctiontable');
+        let actiontable = window.localStorage.getItem('actiontable');
         let data = {};
+        console.log(auctiontable);
         (codetable)?data.codetable = JSON.parse(codetable):console.log("");
         (handertable)?data.handertable = JSON.parse(handertable):console.log("");
+        (auctiontable)?data.auctiontable = JSON.parse(auctiontable):console.log("");
+        (actiontable)?data.actiontable = JSON.parse(actiontable):console.log("");
 
         console.log(data);
         store.dispatch("resetadd", data);
@@ -77,7 +80,7 @@ const routes = [
                 },
             }, {
                 path: '/actionList',
-                component: actionList,
+                component: auctionList,
                 meta: {
                     requireAuth: true,
                     nav: ['数据管理', '查看策略'],
@@ -105,7 +108,7 @@ const routes = [
                 },
             }, {
                 path: '/addAction',
-                component: addAction,
+                component: addAuction,
                 meta: {
                     requireAuth: true,
                     nav: ['添加数据', '添加策略']

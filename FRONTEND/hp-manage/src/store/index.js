@@ -21,6 +21,12 @@ export default new Vuex.Store({
             'basic_salary': 0,
             'total_income': '',
         },
+        auctiontable: {
+            'expired_date': new Date(),
+        },
+        actiontable: {
+
+        },
     },
     mutations: {
         [types.LOGIN]: (state, data) => {
@@ -47,6 +53,16 @@ export default new Vuex.Store({
             localStorage.handertable = tem;
             state.handertable = data;
         },
+        ADDAUCTION(state, data) {
+            let tem = JSON.stringify(data);
+            localStorage.auctiontable = tem;
+            state.auctiontable = data;
+        },
+        ADDACTION(state, data) {
+            let tem = JSON.stringify(data);
+            localStorage.actiontable = tem;
+            state.actiontable = data;
+        },
     },
     actions: {
         resetadd(context, data){
@@ -56,12 +72,24 @@ export default new Vuex.Store({
             if (data.handertable){
                 context.commit("ADDHANDER", data.handertable);
             }
+            if (data.auctiontable){
+                context.commit("ADDAUCTION", data.auctiontable);
+            }
+            if (data.actiontable){
+                context.commit("ADDACTION", data.actiontable);
+            }
         },
         addCode(context, tem){
             context.commit("ADDCODE", tem)
         },
         addHander(context, tem){
             context.commit("ADDHANDER", tem)
+        },
+        addAuction(context, tem){
+            context.commit("ADDAUCTION", tem)
+        },
+        addAction(context, tem){
+            context.commit("ADDACTION", tem)
         }
     }
 })

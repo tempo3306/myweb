@@ -30,4 +30,14 @@ export const deleteHander = (id) => http.delete('/api/bid/hd_manage/'+id+'/');
 export const updateHander = (id, data) => http.patch('/api/bid/hd_manage/'+id+'/', data);
 export const postHander = (data) => http.post('/api/bid/hd_manage/', data);
 
+export const getAuction = (data) => http.get('/api/bid/au_manage/', data);
+export const deleteAuction = (id) => http.delete('/api/bid/au_manage/'+id+'/');
+export const updateAuction = (id, data) => http.patch('/api/bid/au_manage/'+id+'/', data);
+export const postAuction = (data) => http.post('/api/bid/au_manage/', data);
+
+export const getAction = (data) => http.get('/api/bid/ac_manage/', data);
+export const deleteAction = (id) => http.delete('/api/bid/ac_manage/'+id+'/');
+export const updateAction = (id, data) => http.patch('/api/bid/ac_manage/'+id+'/', data);
+export const postAction = (data) => http.post('/api/bid/ac_manage/', data);
+
 export const getCsrftoken = () => http.get('/account/get-token/');

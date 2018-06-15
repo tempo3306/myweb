@@ -173,6 +173,8 @@ class Bid_auction(models.Model):
     ID_number = models.CharField(max_length=18)  # 身份证号
     Bid_number = models.CharField(max_length=8)  # 标书号
     Bid_password = models.CharField(max_length=4)  # 密码
+    #(('0', '未中标结束交易'), ('1', '中标完成交易'), ('2', '正常进行中'),
+    # ('3', '标书失效'), ('4', '中标未完成交易'))
     status = models.CharField(max_length=8)  # 标书状态
     count = models.IntegerField()  # 参拍次数
     expired_date = models.DateField()  # 过期时间
@@ -188,18 +190,13 @@ class Bid_auction(models.Model):
 
 ##设置为undefined可以获取pageNumber，pageSize，searchText，sortName，sortOrder
 def query_auction_by_args(params):
-    pageSize = int(params.get('pageSize', None))  ##每页数量
-    pageNumber = int(params.get('pageNumber'))  # 当前页数
-    searchText = params.get('searchText', None)
-    sortName = str(params.get('sortName', 'id'))
-    sortOrder = str(params.get('sortOrder'))
-    print(searchText)
-    # django orm '-' -> desc
-    if sortOrder == 'desc':
-        sortName = '-' + sortName
+    pageSize = int(params.get('limit', None))  ##每页数量
+    pageNumber = int(params.get('page', None)) # 当前页数
+    searchText = params.get('search', None)
+    sortName = str(params.get('sort', 'id'))
+
 
     queryset = Bid_auction.objects.all()
-    total = queryset.count()
     if searchText:
         queryset = queryset.filter(
             Q(id__icontains=searchText) |
@@ -218,15 +215,14 @@ def query_auction_by_args(params):
     return {
         'items': queryset,
         'count': count,
-        'total': total,
     }
 
 
-##根据url参数获取query结果
-def query_auction_by_url(params):
-    id_list = params.get('id')
-    queryset = Bid_auction.objects.filter(id__in=id_list)
-    return queryset
+# ##根据url参数获取query结果
+# def query_auction_by_url(params):
+#     id_list = params.get('id')
+#     queryset = Bid_auction.objects.filter(id__in=id_list)
+#     return queryset
 
 
 # 基础策略
