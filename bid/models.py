@@ -52,6 +52,10 @@ class Identify_code(models.Model):
         else:
             return False
 
+    def __str__(self):
+        return self.identify_code
+
+
 def query_identify_code_by_args(params):
     pageSize = int(params.get('limit', None))  ##每页数量
     pageNumber = int(params.get('page', None)) # 当前页数

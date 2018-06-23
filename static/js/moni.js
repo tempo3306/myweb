@@ -313,6 +313,9 @@ function Reset() {
     query_time = -10;   //查询间隔
     //随机创建随机数
     lowestprice = 82000 + parseInt((Math.random() - 0.35) * 50) * 100;
+                $('#li1').html("您第一次出价");
+            $('#li2').html("出价金额:" + 100);
+            $('#li3').html("出价时间:" + today + " 10:30:51");
 //系统模块
 //随机种子，影响跳价情况
     var x1 = Math.random() < 0.5 ? 1 : (-1)   //随机+-
@@ -385,7 +388,7 @@ function Read_price() {
             count = 1;
             $('#li1').html("您第二次出价");
             $('#li2').html("出价金额:" + userprice1);
-            $('#li3').html("出价时间:" + today + " 10:30:5" + parseInt(usertime1));
+            $('#li3').html("出价时间:" + today + " 11:29:" + parseInt(usertime1));
         }
         else if (temp_price === userprice1) {
             $('#price-same').dialog('open');
