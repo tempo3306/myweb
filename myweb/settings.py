@@ -122,7 +122,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [os.path.join(BASE_DIR, 'templates'),
-                 os.path.join(BASE_DIR, 'FRONTEND/hp-manage/dist')],
+                 os.path.join(BASE_DIR, 'hp-manage/dist')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -194,7 +194,7 @@ STATICFILES_DIRS = (
     ("js", os.path.join(STATIC_ROOT, 'js')),
     ("assets", os.path.join(STATIC_ROOT, 'assets')),
     ("main", os.path.join(STATIC_ROOT, 'main')),
-    os.path.join(BASE_DIR, 'FRONTEND/hp-manage/dist/static'),
+    os.path.join(BASE_DIR, 'hp-manage/dist/static'),
 )
 
 
