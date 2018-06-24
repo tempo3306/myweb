@@ -1,0 +1,3 @@
+[submodule "hp-manage"]
+	path = hp-manage
+	url = git@github.com:zs3189/hp-manage.git
