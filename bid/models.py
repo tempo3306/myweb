@@ -4,43 +4,28 @@ from django.contrib.auth.models import User
 from model_utils import Choices
 
 import datetime
-##------------------------------------------------------------------------------------------
-##完成商业场景下的模型搭建
-###创建消费者用户
-class Consumer(models.Model):
-    user_slug = models.CharField(max_length=10, unique=True, verbose_name="用户描述", default="12345")
-    taobao = models.CharField(max_length=30, default='none', blank=True)  ##淘宝账号
-    telephone = models.CharField(max_length=11, unique=True, default='12345678901')
-    email = models.EmailField(blank=True, null=True)
-
-    def __str__(self):
-        return "{0} 手机号: {1}".format(self.user_slug, self.telephone)
-
-#软件------------------------------------------------------------------
-##购买激活码的订单
-class Consumer_software(models.Model):
-    order_number = models.CharField(max_length=40)  ##表示订单来源，可以用于找回密码
-    consumer = models.ForeignKey(Consumer, on_delete=models.CASCADE, related_name='consumer_softwares', blank=True,
-                                 null=True)
-    order_date = models.DateField(auto_now_add=True)  ##订单时间
-
-
 
 ## 激活码直接可用于登录
+strategy = {"0": [0, 48.0, 700, 100, 0.5, 55, 1],
+            "1": [1, 40.0, 500, 0, 0.5, 48, 1, 50, 700, 100, 0.5, 56, 1],
+            "2": [2, 50.0, 700, 0, 0, 54, 100, 0.6, 55, 200, 0.5, 56, 56.5],
+            "3": [3, 40.0, 500, 0, 0.5, 48, 1, 50, 700, 0, 0, 54, 100, 0.6, 55, 200, 0.5, 56, 56.5],
+            "4": [4, 48.0, 700],
+            "yanzhengma_scale": True,
+            "strategy_description": "单枪  48秒加700截止56秒提前100",
+            "strategy_type": "0", "enter_on": True}
+import json
 class Identify_code(models.Model):
     identify_code = models.CharField(max_length=6, unique=True)  # 激活码
     purchase_date = models.DateField()
     expired_date = models.DateField()  # 过期时间,激活开始计算相应的时间
-    bid_name = models.CharField(max_length=10, default='one', unique=True)  # 标书姓名  one表示只有一次使用机会
-    ##一个订单可以 生成多个激活码
-    consumer_software = models.ForeignKey(Consumer_software, on_delete=models.CASCADE, related_name='identify_codes',
-                                          blank=True, null=True) ##空值表示免费试用
+    bid_name = models.CharField(max_length=10, default='沪牌一号')  # 标书姓名  one表示只有一次使用机会
     uuuid_type = models.CharField(max_length=15, default='diskid')
-    uuuid = models.CharField(max_length=40, default='none', blank=True)    ###激活码
+    uuuid = models.CharField(max_length=40, default='none', blank=True)  ###激活码
     last_uuuid = models.CharField(max_length=40, default='none', blank=True)  ###最近的一个激活码
     # login_status = models.SmallIntegerField(default=0, blank=True)   ##登录状态 默认为0 代表未登录  代表登录
 
-    strategy_dick = models.TextField(default='none', blank=True)  ##保存用户设置的策略
+    strategy_dick = models.TextField(default=json.dumps(strategy), blank=True)  ##保存用户设置的策略
 
     def can_bid(self):
         ##计算是否过期
@@ -58,7 +43,7 @@ class Identify_code(models.Model):
 
 def query_identify_code_by_args(params):
     pageSize = int(params.get('limit', None))  ##每页数量
-    pageNumber = int(params.get('page', None)) # 当前页数
+    pageNumber = int(params.get('page', None))  # 当前页数
     searchText = params.get('search', None)
     sortName = str(params.get('sort', 'id'))
     # sortOrder = str(params.get('sortOrder'))
@@ -71,7 +56,6 @@ def query_identify_code_by_args(params):
             Q(id__icontains=searchText) |
             Q(bid_name__icontains=searchText))
 
-
     count = queryset.count()
     print("count=", count)
 
@@ -83,11 +67,19 @@ def query_identify_code_by_args(params):
     }
 
 
-##根据url参数获取query结果
-def query_identify_code_by_url(params):
-    id_list = params.get('id')
-    queryset = Bid_action.objects.filter(id__in=id_list)
-    return queryset
+##------------------------------------------------------------------------------------------
+##完成商业场景下的模型搭建
+###创建消费者用户
+class Consumer(models.Model):
+    user_slug = models.CharField(max_length=10, unique=True, verbose_name="用户描述", default="12345")
+    taobao = models.CharField(max_length=30, default='none', blank=True)  ##淘宝账号
+    telephone = models.CharField(max_length=11, unique=True, default='12345678901')
+    email = models.EmailField(blank=True, null=True)
+
+    def __str__(self):
+        return "{0} 手机号: {1}".format(self.user_slug, self.telephone)
+
+
 
 
 
@@ -101,17 +93,29 @@ class Invite_code(models.Model):
 ##代拍-----------------------------------------------------
 ##定单
 class Consumer_bid(models.Model):
-    status = models.CharField(max_length=1, choices=(('0', '未中标结束交易'), ('1', '完成交易'), ('2', '进行中'),
-                                                     ('3', '等待客户提供新标书'), ('4', '中标后欠款中')))
-    consumer = models.ForeignKey(Consumer, on_delete=models.CASCADE, related_name='consumer_bids')
-    order_money = models.PositiveIntegerField(default=5000, blank=True)  # 中标之后的应付价格
+    status_choices = (('0', '未中标结束交易'), ('1', '完成交易'), ('2', '进行中'),
+                        ('3', '等待客户提供新标书'), ('4', '中标后欠款中'),
+                        ('11', '软件正常'), ('12', '软件过期'))
+
+    status = models.CharField(max_length=2, choices=status_choices)  ##软件的定单
+    ##软件订单才有的
+    order_money = models.PositiveIntegerField(default=0, blank=True)  # 中标之后的应付价格
     compensation = models.PositiveIntegerField(default=0, blank=True)  # 赔偿金额
-    bid_number = models.PositiveSmallIntegerField(default=3, blank=True)  # 合同中约定的拍牌次数
+    bid_number = models.PositiveSmallIntegerField(default=0, blank=True)  # 合同中约定的拍牌次数
     did_number = models.PositiveSmallIntegerField(default=0, blank=True)  # 已经完成的拍牌次数
+    ##都有
     order_date = models.DateField(auto_now_add=True)  ##订单时间
+    order_str = models.CharField(max_length=50, blank=True, default='hupaiyihao')
+    ##用户信息
+    user_slug = models.CharField(max_length=10, unique=True, verbose_name="用户描述", default="hupaiyihao", blank=True)
+    telephone = models.CharField(max_length=11, unique=True, default='', null=True, blank=True)
+    email = models.EmailField(blank=True, null=True)
+    #外键
+    identify_code = models.ForeignKey(Identify_code, on_delete=models.CASCADE, related_name='consumer_bids',
+                                      null=True, blank=True)
 
     def __str__(self):
-        return "{0} {1} 订单时间{2}".format(self.consumer.user_slug, self.order_money, self.order_date)
+        return "{0} {1} 订单时间{2}".format(self.user_slug, self.get_status_display(), self.order_date)
 
 
 ##------------------------------------------------------------------------------------------
@@ -182,8 +186,9 @@ class Bid_auction(models.Model):
     status = models.CharField(max_length=8)  # 标书状态
     count = models.IntegerField()  # 参拍次数
     expired_date = models.DateField()  # 过期时间
-    ##下单情况
-    consumer_bid = models.ForeignKey(Consumer_bid, on_delete=models.CASCADE, related_name='bid_auctions', null=True)
+    ##绑定的标书
+    identify_code = models.ForeignKey(Identify_code, on_delete=models.SET_NULL, related_name='auction',
+                                         blank=True, null=True, unique=True)
 
     def __str__(self):
         return self.description
@@ -198,7 +203,6 @@ def query_auction_by_args(params):
     pageNumber = int(params.get('page', None)) # 当前页数
     searchText = params.get('search', None)
     sortName = str(params.get('sort', 'id'))
-
 
     queryset = Bid_auction.objects.all()
     if searchText:
@@ -219,6 +223,17 @@ def query_auction_by_args(params):
     return {
         'items': queryset,
         'count': count,
+    }
+
+def query_available_auction() -> object:
+    # users_without_reports = User.objects.filter(report__isnull=True)
+    # users_with_reports = User.objects.filter(report__isnull=False).distinct()
+
+    queryset = Bid_auction.objects.all()
+    queryset = queryset.filter(identify_code__isnull=True)
+
+    return {
+        'items': queryset
     }
 
 
@@ -299,3 +314,4 @@ class Yanzhengma(models.Model):
     # class Meta:
     #     unique_together = ('album', 'order')
     #     ordering = ['order']
+

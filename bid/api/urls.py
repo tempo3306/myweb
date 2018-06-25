@@ -12,8 +12,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 consumer_router = routers.DefaultRouter()
 consumer_router.register(r'', ConsumerViewSet)
-consumer_software_router = routers.DefaultRouter()
-consumer_software_router.register(r'', Consumer_softwareViewSet)
+
 consumer_bid_router = routers.DefaultRouter()
 consumer_bid_router.register(r'', Consumer_bidViewSet)
 identify_code_router = routers.DefaultRouter()
@@ -53,7 +52,6 @@ action_detail = Hander_serversideViewSet.as_view({'get': 'retrieve', 'patch': 'p
 
 urlpatterns = [
     url('^consumer', include(consumer_router.urls)),
-    url('^consumer_software', include(consumer_software_router.urls)),
     url('^consumer_bid', include(consumer_bid_router.urls)),
     url('^identify_code', include(identify_code_router.urls)),
     url('^invite_code', include(invite_code_router.urls)),

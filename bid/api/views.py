@@ -24,15 +24,16 @@ from tools.tasks import reset_identify_code
 from tools.utils import init_variable
 from tools.utils import random_str
 
+import logging
+logger = logging.getLogger(__name__)
+
+
 class ConsumerViewSet(viewsets.ModelViewSet):
     queryset = Consumer.objects.all()
     serializer_class = ConsumerSerializer
     permission_classes = (permissions.IsAuthenticated,)  # permissions.AllowAny  注册设置为这个
 
-class Consumer_softwareViewSet(viewsets.ModelViewSet):
-    queryset = Consumer_software.objects.all()
-    serializer_class = Consumer_softwareSerializer
-    permissions_class = (permissions.IsAuthenticated,)
+
 
 
 class Consumer_bidViewSet(viewsets.ModelViewSet):
@@ -253,12 +254,19 @@ class Auction_serversideViewSet(viewsets.ViewSet):
     def list(self, request):
         try:
             data = request.query_params
-            auctions = query_auction_by_args(data)  #带参数查询
-            serializer = Bid_auctionSerializer(auctions['items'], many=True)
-            result = dict()
-            result['rows'] = serializer.data
-            result['count'] = auctions['count']
-            return Response(result, status=status.HTTP_200_OK, template_name=None, content_type=None)
+            ##带available 表示 是创建激活码 SELECT下拉表单所用
+            if not data.get('available', None):
+                auctions = query_auction_by_args(data) #带参数查询
+                serializer = Bid_auctionSerializer(auctions['items'], many=True)
+                result = dict()
+                result['rows'] = serializer.data
+                result['count'] = auctions['count']
+                return Response(result, status=status.HTTP_200_OK, template_name=None, content_type=None)
+            else:
+                auctions = query_available_auction()
+                serializer = Bid_auctionAvailableSerializer(auctions['items'], many=True)
+                result = serializer.data
+                return Response(result, status=status.HTTP_200_OK, template_name=None, content_type=None)
         except Exception as e:
             return Response(e, status=status.HTTP_404_NOT_FOUND, template_name=None, content_type=None)
 
@@ -401,7 +409,6 @@ class Identify_code_serversideViewSet(viewsets.ViewSet):
     #
     def list(self, request):
         try:
-            print("fdsfsfsfsfs")
             data = request.query_params
             identify_codes = query_identify_code_by_args(data)  #带参数查询
             serializer = Identify_codeSerializer(identify_codes['items'], many=True)
@@ -454,32 +461,38 @@ class Identify_code_serversideViewSet(viewsets.ViewSet):
             expired_date = data['expired_date_str']  # 过期时间
             bid_name = data['bid_name']  # 标书姓名
             change_identify_code = data['change_identify_code']
-            print("change_identify_code", change_identify_code)
             identify_code.purchase_date = purchase_date
             identify_code.expired_date = expired_date
             identify_code.bid_name = bid_name
             if change_identify_code == 'true':
                 new_iden_code = random_str(6)  # 创建更新
                 identify_code['new_iden_code'] = new_iden_code
+                print(data['changeauction'])
+            if data['changeauction']:
+                print("fff")
+                auction = Bid_auction.objects.get(pk=data['auction_name'])  ##用ID查找
+                if identify_code.auction:
+                    identify_code.auction.clear()  # 清除所有关系
+                auction.identify_code = identify_code
+                auction.save()
             identify_code.save()
             return Response(status=status.HTTP_200_OK)
-
         except:
             return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-
-
     def create(self, request,  *args, **kwargs):
-
         try:
             data = request.data
             identify_code = random_str(6)
             ic = Identify_code(identify_code=identify_code, expired_date=data['expired_date'], purchase_date=data['purchase_date'],
                                bid_name=data['bid_name'])
+            auction = Bid_auction.objects.get(pk=data['auction_name'])
+            auction.identify_code = ic
             ic.save()
-
+            auction.save()
             return Response(status=status.HTTP_200_OK)
         except:
+            logger.exception('error message')
             return Response(status=status.HTTP_404_NOT_FOUND)
 
 

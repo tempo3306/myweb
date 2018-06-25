@@ -56,35 +56,34 @@ class Bid_auctionSerializer(serializers.ModelSerializer):
             'expired_date'
         ]
 
+##筛选未绑定的标书
+class Bid_auctionAvailableSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Bid_auction
+        fields = [
+            'id',
+            'auction_name',
+        ]
+
+
 ## 
 class ConsumerSerializer(serializers.ModelSerializer):
-    consumer_softwares = serializers.PrimaryKeyRelatedField(many=True,
-                                        queryset=Consumer_software.objects.all()) #related_name
+
     consumer_bids = serializers.PrimaryKeyRelatedField(many=True,
                                         queryset=Consumer_bid.objects.all()) #related_name
     class Meta:
         model = Consumer
         fields = [
-            'consumer_softwares',
             'consumer_bids',
         ]
 
 
 
 
-##购买激活码的用户
-class Consumer_softwareSerializer(serializers.ModelSerializer):
-    identify_codes = serializers.PrimaryKeyRelatedField(many=True,
-                                                        queryset=Identify_code.objects.all())
-    class Meta:
-        model = Consumer_software
-        fields = [
-            'order_number',
-            'identify_codes',
-        ]
-
 
 class Identify_codeSerializer(serializers.ModelSerializer):
+    auction = Bid_auctionSerializer(many=True)
+
     class Meta:
         model = Identify_code
         fields = [
@@ -93,6 +92,7 @@ class Identify_codeSerializer(serializers.ModelSerializer):
             'purchase_date',
             'expired_date',
             'bid_name',
+            'auction',
         ]
 
 

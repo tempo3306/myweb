@@ -6,6 +6,7 @@ from myweb.settings import DEBUG
 from bid.models import Identify_code
 import time
 
+
 # 生成随机字符串
 def random_str(randomlength=12):
     str = ''
@@ -69,9 +70,8 @@ def send_control_email(email, send_type="register", **kwargs):
         if send_status:
             pass
     elif send_type == "send_once_identify_code":
-        identify_code = random_str(randomlength=6)   ##生成6位数的随机验证码
+        identify_code = random_str(randomlength=6)  ##生成6位数的随机验证码
         Identify_code.objects.create(identify_code, )
-
 
 
 ##上传文件控制
@@ -88,7 +88,7 @@ def handle_uploaded_file(f):
                 destination.write(chunk)
             destination.close()
     except Exception as e:
-        print (e)
+        print(e)
 
     return file_name
 
@@ -112,15 +112,22 @@ def handle_fileupload(file, p):  ##file: request.FILES['file']    p: MEDIA下的
 
 
 ##初始化软件
+# {"0": ["0", 40.0, 700, 0, 0.5, 55.8, true, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+# "1": ["1", 35.0, 300, 0, 0.0, 48.0, true, 50.0, 700, 100, 0.4, 56.0, true, 0, 0, 0, 0, 0, 0, 0],
+# "2": ["2", 40.0, 500, 0, 0.0, 53.0, 100, 0.6, 54.0, 200, 0.5, 56.0, 56.5, 0, 0, 0, 0, 0, 0, 0],
+# "3": ["3", 40.0, 500, 0, 0.5, 46.0, true, 51.0, 700, 0, 0.0, 54.4, 100, 0.6, 55.6, 100, 0.5, 56.5, 57.5, 0],
+# "4": [4, 48.0, 700], "yanzhengma_scale": true,
+# "strategy_description": "\u5355\u67aa\u7b56\u7565 \u667a\u80fd\u63d0\u4ea4",
+# "strategy_type": "2", "enter_on": true}
+
 def init_variable():
     ##用于计算 最低成交价位置
     data = {}
     data['px_relative'] = 118  # 查找出来位置反算相对位置
-    data['py_relative'] =  1
+    data['py_relative'] = 1
     ##计算时间位置
     data['px_timerelative'] = 94
     data['py_timerelative'] = 3
-
 
     ## 相对于最低成交价位置
     #   ## 0:加价  1：出价 2：提交  3：刷新   4 ：确认   5：价格输入框    6:验证码输入框     7：取消
@@ -142,10 +149,13 @@ def init_variable():
 
     return data
 
+
 '''
 target_time 11:30:1 策略还原的时间戳
 final_time  11:29:56.5 智能出价的戴上时间
 '''
+
+
 def get_timebase():
     currenttime = time.time()
     timebase_str = time.strftime("%Y-%m-%d", time.localtime(currenttime))
