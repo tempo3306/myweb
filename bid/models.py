@@ -6,15 +6,24 @@ from model_utils import Choices
 import datetime
 
 ## 激活码直接可用于登录
-strategy = {"0": [0, 48.0, 700, 100, 0.5, 55, 1],
-            "1": [1, 40.0, 500, 0, 0.5, 48, 1, 50, 700, 100, 0.5, 56, 1],
-            "2": [2, 50.0, 700, 0, 0, 54, 100, 0.6, 55, 200, 0.5, 56, 56.5],
-            "3": [3, 40.0, 500, 0, 0.5, 48, 1, 50, 700, 0, 0, 54, 100, 0.6, 55, 200, 0.5, 56, 56.5],
-            "4": [4, 48.0, 700],
-            "yanzhengma_scale": True,
-            "strategy_description": "单枪  48秒加700截止56秒提前100",
-            "strategy_type": "0", "enter_on": True}
+
+strategy = {
+    "0": ["0", 50.0, 700, 0, 0.5, 55.0, True, True, 50.0, 700, 100, 0.5, 56.0, True, 0, 0, 54.0, 100, 0.6, 55, 200, 0.5, 56.0,
+          56.5],
+    "1": ["1", 40.0, 500, 0, 0.5, 48.0, True, True, 50.0, 700, 100, 0.5, 56.0, True, 0, 0, 54.0, 100, 0.6, 55, 200, 0.5, 56.0,
+          56.5],
+    "2": ["2", 50.0, 700, 0, 0.5, 55.0, True, True, 50.0, 700, 100, 0.5, 56.0, True, 0, 0, 54.0, 100, 0.6, 55, 200, 0.5, 56.0,
+          56.5],
+    "3": ["3", 40.0, 500, 0, 0.5, 48.0, True, True, 50.0, 700, 100, 0.5, 56.0, True, 0, 0, 54.0, 100, 0.6, 55, 200, 0.5, 56.0,
+          56.5],
+    "4": ["4", 40.0, 500, 0, 0.5, 48.0, True, True, 50.0, 700, 100, 0.5, 56.0, True, 0, 0, 54.0, 100, 0.6, 55, 200, 0.5, 56.0,
+          56.5],
+    "yanzhengma_scale": True,
+    "strategy_description": "单枪  50秒加700截止55秒提前100",
+    "strategy_type": "0", "enter_on": True}
 import json
+
+
 class Identify_code(models.Model):
     identify_code = models.CharField(max_length=6, unique=True)  # 激活码
     purchase_date = models.DateField()
@@ -40,12 +49,44 @@ class Identify_code(models.Model):
     def __str__(self):
         return self.identify_code
 
+class Strategy(models.Model):
+    strategytype = models.CharField(max_length=1, unique=True)
+    chujia_time1 = models.FloatField()
+    chujia_price1 = models.PositiveIntegerField()
+    tijiao_diff = models.PositiveIntegerField()
+    tijiao_time1 = models.FloatField()
+    tijiao_yanchi1 = models.FloatField()
+    forcetijiao1 = models.BooleanField()
+    # // 补枪
+    autoprice = models.BooleanField()
+    # // 第二枪
+    chujia_time2 = models.FloatField()
+    chujia_price2 = models.PositiveIntegerField()
+    tijiao_diff2 = models.PositiveIntegerField()
+    tijiao_time2 = models.FloatField()
+    tijiao_yanchi2 = models.FloatField()
+    forcetijiao2 = models.BooleanField()
+    # // 动态
+    smart_diff1 = models.PositiveIntegerField()
+    smart_yanchi1 = models.FloatField()
+    smart_time1 = models.FloatField()
+    smart_diff2 = models.PositiveIntegerField()
+    smart_yanchi2 = models.FloatField()
+    smart_time2 = models.FloatField()
+    smart_diff3 = models.PositiveIntegerField()
+    smart_yanchi3 = models.FloatField()
+    smart_time3 = models.FloatField()
+    smart_time = models.FloatField()
+
+
+
 
 def query_identify_code_by_args(params):
     pageSize = int(params.get('limit', None))  ##每页数量
     pageNumber = int(params.get('page', None))  # 当前页数
     searchText = params.get('search', None)
     sortName = str(params.get('sort', 'id'))
+
     # sortOrder = str(params.get('sortOrder'))
     # django orm '-' -> desc
 
@@ -80,22 +121,18 @@ class Consumer(models.Model):
         return "{0} 手机号: {1}".format(self.user_slug, self.telephone)
 
 
-
-
-
 class Invite_code(models.Model):
     invite_code = models.CharField(max_length=25)  # 邀请码
     offer_name = models.ForeignKey(User, on_delete=models.CASCADE, related_name='offer_names')
     type = models.CharField(max_length=1, choices=(('0', '体验'), ('1', '软件折扣'), ('2', '友情价代拍'), ('3', '提成')))
 
 
-
 ##代拍-----------------------------------------------------
 ##定单
 class Consumer_bid(models.Model):
     status_choices = (('0', '未中标结束交易'), ('1', '完成交易'), ('2', '进行中'),
-                        ('3', '等待客户提供新标书'), ('4', '中标后欠款中'),
-                        ('11', '软件正常'), ('12', '软件过期'))
+                      ('3', '等待客户提供新标书'), ('4', '中标后欠款中'),
+                      ('11', '软件正常'), ('12', '软件过期'))
 
     status = models.CharField(max_length=2, choices=status_choices)  ##软件的定单
     ##软件订单才有的
@@ -110,7 +147,7 @@ class Consumer_bid(models.Model):
     user_slug = models.CharField(max_length=10, unique=True, verbose_name="用户描述", default="hupaiyihao", blank=True)
     telephone = models.CharField(max_length=11, unique=True, default='', null=True, blank=True)
     email = models.EmailField(blank=True, null=True)
-    #外键
+    # 外键
     identify_code = models.ForeignKey(Identify_code, on_delete=models.CASCADE, related_name='consumer_bids',
                                       null=True, blank=True)
 
@@ -147,9 +184,10 @@ class Bid_hander(models.Model):
     def __str__(self):
         return self.hander_name
 
+
 def query_hander_by_args(params):
     pageSize = int(params.get('limit', None))  ##每页数量
-    pageNumber = int(params.get('page', None)) # 当前页数
+    pageNumber = int(params.get('page', None))  # 当前页数
     searchText = params.get('search', None)
     sortName = str(params.get('sort', 'id'))
     # sortOrder = str(params.get('sortOrder'))
@@ -172,8 +210,6 @@ def query_hander_by_args(params):
     }
 
 
-
-
 # 标书信息
 class Bid_auction(models.Model):
     description = models.TextField()  # 描述来源
@@ -181,14 +217,14 @@ class Bid_auction(models.Model):
     ID_number = models.CharField(max_length=18)  # 身份证号
     Bid_number = models.CharField(max_length=8)  # 标书号
     Bid_password = models.CharField(max_length=4)  # 密码
-    #(('0', '未中标结束交易'), ('1', '中标完成交易'), ('2', '正常进行中'),
+    # (('0', '未中标结束交易'), ('1', '中标完成交易'), ('2', '正常进行中'),
     # ('3', '标书失效'), ('4', '中标未完成交易'))
     status = models.CharField(max_length=8)  # 标书状态
     count = models.IntegerField()  # 参拍次数
     expired_date = models.DateField()  # 过期时间
     ##绑定的标书
     identify_code = models.ForeignKey(Identify_code, on_delete=models.SET_NULL, related_name='auction',
-                                         blank=True, null=True, unique=True)
+                                      blank=True, null=True, unique=True)
 
     def __str__(self):
         return self.description
@@ -200,7 +236,7 @@ class Bid_auction(models.Model):
 ##设置为undefined可以获取pageNumber，pageSize，searchText，sortName，sortOrder
 def query_auction_by_args(params):
     pageSize = int(params.get('limit', None))  ##每页数量
-    pageNumber = int(params.get('page', None)) # 当前页数
+    pageNumber = int(params.get('page', None))  # 当前页数
     searchText = params.get('search', None)
     sortName = str(params.get('sort', 'id'))
 
@@ -224,6 +260,7 @@ def query_auction_by_args(params):
         'items': queryset,
         'count': count,
     }
+
 
 def query_available_auction() -> object:
     # users_without_reports = User.objects.filter(report__isnull=True)
@@ -314,4 +351,3 @@ class Yanzhengma(models.Model):
     # class Meta:
     #     unique_together = ('album', 'order')
     #     ordering = ['order']
-

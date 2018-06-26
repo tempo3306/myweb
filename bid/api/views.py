@@ -24,6 +24,9 @@ from tools.tasks import reset_identify_code
 from tools.utils import init_variable
 from tools.utils import random_str
 
+from django.core import serializers
+
+
 import logging
 logger = logging.getLogger(__name__)
 
@@ -455,7 +458,11 @@ class Identify_code_serversideViewSet(viewsets.ViewSet):
 
     def partial_update(self, request, pk=None, *args, **kwargs):
         try:
-            data = request.data
+            data = request.data['data']
+            data = json.loads(data)
+            print(data['strategy'])
+            strategy = data['strategy']
+
             identify_code = Identify_code.objects.get(pk=pk)
             purchase_date = data['purchase_date_str']  # 购买时间
             expired_date = data['expired_date_str']  # 过期时间
@@ -464,12 +471,16 @@ class Identify_code_serversideViewSet(viewsets.ViewSet):
             identify_code.purchase_date = purchase_date
             identify_code.expired_date = expired_date
             identify_code.bid_name = bid_name
+            ##处理策略
+            strategy_dick = json.loads(identify_code.strategy_dick)
+            strategy_dick[strategy[0]] =strategy
+            identify_code.strategy_dick = json.dumps(strategy_dick)
+
+
             if change_identify_code == 'true':
                 new_iden_code = random_str(6)  # 创建更新
                 identify_code['new_iden_code'] = new_iden_code
-                print(data['changeauction'])
-            if data['changeauction']:
-                print("fff")
+            if data['changeauction']  == 'true':
                 auction = Bid_auction.objects.get(pk=data['auction_name'])  ##用ID查找
                 if identify_code.auction:
                     identify_code.auction.clear()  # 清除所有关系
@@ -478,7 +489,8 @@ class Identify_code_serversideViewSet(viewsets.ViewSet):
             identify_code.save()
             return Response(status=status.HTTP_200_OK)
         except:
-            return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            logger.exception("ERROR MESSAGE")
+            return Response(status=status.HTTP_404_NOT_FOUND)
 
     def create(self, request,  *args, **kwargs):
         try:

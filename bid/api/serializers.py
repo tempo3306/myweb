@@ -93,7 +93,15 @@ class Identify_codeSerializer(serializers.ModelSerializer):
             'expired_date',
             'bid_name',
             'auction',
+            'strategy_dick',
         ]
+
+class StrategySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Strategy
+        fields = '__all__'
+
+
 
 
 
