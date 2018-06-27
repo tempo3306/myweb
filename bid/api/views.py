@@ -607,6 +607,15 @@ def get_guopaiurl(request):
                     url_dianxin = "https://paimai2.alltobid.com/bid/%s/login.htm" % today_date
                     url_nodianxin = "https://paimai.alltobid.com/bid/%s/login.htm" % today_date
                     data = init_variable()  ##初始化数据
+
+                    auction = identify.auction
+                    if auction:
+                        account = {'account': auction.Bid_number,
+                               'password': auction.Bid_password,
+                               'idcard': auction.ID_number}
+                    else:
+                        account = None
+
                     strategy_dick = identify.strategy_dick
                     if identify_code == '123456':
                         res = {'result': 'login success',
@@ -614,6 +623,7 @@ def get_guopaiurl(request):
                                'url_nodianxin': "http://51hupai.org/moni",
                                'ip_address': ip_address,
                                'data': data,
+                               'account': account,
                                'test': True,
                                'strategy_dick': strategy_dick,
                                }
@@ -625,6 +635,7 @@ def get_guopaiurl(request):
                                'ip_address': ip_address,
                                'data': data,
                                'test': False,
+                               'account': account,
                                'strategy_dick': strategy_dick,
                                }
                         return Response(res, status=status.HTTP_200_OK, template_name=None, content_type=None)
@@ -661,6 +672,8 @@ def bid_logout(request):
         return Response(status=status.HTTP_404_NOT_FOUND)
 
 
+
+##保持登录状态  传递数据
 @api_view(['GET'])
 def bid_keeplogin(request):
     try:
@@ -674,14 +687,26 @@ def bid_keeplogin(request):
                 res = {'result': 'keep success'}
                 reset_identify_code.delay(identify_code)  ##异步还原identify_code
                 identify.strategy_dick = request.GET['strategy_dick']
-                identify.save()
-                return Response(res, status=status.HTTP_200_OK, template_name=None, content_type=None)
             elif uuuid == 'none':
                 if identify_code == '123456':
                     identify.uuuid = diskid
                     identify.strategy_dick = request.GET['strategy_dick']
-                    identify.save()
                 res = {'result': 'keep success'}
+            ##保存 标书信息
+            account = request.GET['account', None]
+            if account:
+                Bid_number = account['account']
+                Bid_password = account['password']
+                ID_number = account['idcard']
+                auction = Bid_auction.objects.get(Bid_number=Bid_number)
+                if auction:
+                    identify_code.auction.clear()  # 清除所有关系
+                    auction.identify_code = identify_code
+                else:
+                    auction = Bid_auction(Bid_number=Bid_number, Bid_password=Bid_password, ID_number=ID_number,
+                                          identify_code=identify_code)
+                auction.save()
+                identify_code.save()
                 return Response(res, status=status.HTTP_200_OK, template_name=None, content_type=None)
             else:
                 res = {'result': 'keep failure'}
