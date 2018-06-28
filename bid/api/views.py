@@ -475,8 +475,6 @@ class Identify_code_serversideViewSet(viewsets.ViewSet):
             strategy_dick = json.loads(identify_code.strategy_dick)
             strategy_dick[strategy[0]] =strategy
             identify_code.strategy_dick = json.dumps(strategy_dick)
-
-
             if change_identify_code == 'true':
                 new_iden_code = random_str(6)  # 创建更新
                 identify_code['new_iden_code'] = new_iden_code
@@ -608,8 +606,10 @@ def get_guopaiurl(request):
                     url_nodianxin = "https://paimai.alltobid.com/bid/%s/login.htm" % today_date
                     data = init_variable()  ##初始化数据
 
-                    auction = identify.auction
+                    ##返回标书信息
+                    auction = identify.auction.all()  ##获取标书实例
                     if auction:
+                        auction = auction[0]
                         account = {'account': auction.Bid_number,
                                'password': auction.Bid_password,
                                'idcard': auction.ID_number}
@@ -651,6 +651,7 @@ def get_guopaiurl(request):
         else:
             return Response(status=status.HTTP_404_NOT_FOUND)
     except:
+        logger.exception("ERROR MESSAGE")
         return Response(status=status.HTTP_404_NOT_FOUND)
 
 
