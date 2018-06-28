@@ -26,8 +26,8 @@ from tools.utils import random_str
 
 from django.core import serializers
 
-
 import logging
+
 logger = logging.getLogger(__name__)
 
 
@@ -37,24 +37,16 @@ class ConsumerViewSet(viewsets.ModelViewSet):
     permission_classes = (permissions.IsAuthenticated,)  # permissions.AllowAny  注册设置为这个
 
 
-
-
 class Consumer_bidViewSet(viewsets.ModelViewSet):
     queryset = Consumer_bid.objects.all()
     serializer_class = Consumer_bidSerializer
     permissions_class = (permissions.IsAuthenticated,)
 
 
-
-
-
 class Invite_codeViewSet(viewsets.ModelViewSet):
     queryset = Invite_code.objects.all()
     serializer_class = Invite_codeSerializer
     permission_classes = (permissions.IsAuthenticated,)
-
-
-
 
 
 class Bid_handerViewSet(viewsets.ModelViewSet):
@@ -123,7 +115,6 @@ class Bid_auction_serversideViewSet(viewsets.ModelViewSet):
             return Response(status=status.HTTP_404_NOT_FOUND)
 
 
-
 @api_view(['GET', 'POST', 'PUT', 'DELETE'])
 def Bid_auction_manage(request):
     """
@@ -168,22 +159,23 @@ def Bid_auction_manage(request):
         except:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
+
 class Identify_codeViewSet(viewsets.ModelViewSet):
     queryset = Identify_code.objects.all()
     serializer_class = Identify_codeSerializer
     permissions_class = (permissions.IsAuthenticated,)
 
 
-
 class Hander_serversideViewSet(viewsets.ViewSet):
     queryset = Bid_hander.objects.all()
     permission_classes = (permissions.IsAuthenticated,)
+
     #
     def list(self, request):
         try:
             print("fdsfsfsfsfs")
             data = request.query_params
-            handers = query_hander_by_args(data)  #带参数查询
+            handers = query_hander_by_args(data)  # 带参数查询
             serializer = Bid_handerSerializer(handers['items'], many=True)
             result = dict()
             result['rows'] = serializer.data
@@ -236,7 +228,7 @@ class Hander_serversideViewSet(viewsets.ViewSet):
         except:
             return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-    def create(self, request,  *args, **kwargs):
+    def create(self, request, *args, **kwargs):
         try:
             data = request.data
             hander_name = data['hander_name']
@@ -249,17 +241,18 @@ class Hander_serversideViewSet(viewsets.ViewSet):
             return Response(status=status.HTTP_404_NOT_FOUND)
 
 
-
 class Auction_serversideViewSet(viewsets.ViewSet):
     queryset = Bid_hander.objects.all()
     permission_classes = (permissions.IsAuthenticated,)
+
     #
     def list(self, request):
         try:
             data = request.query_params
             ##带available 表示 是创建激活码 SELECT下拉表单所用
-            if not data.get('available', None):
-                auctions = query_auction_by_args(data) #带参数查询
+            available = data.get('available', None)
+            if not available or available == '0':
+                auctions = query_auction_by_args(data)  # 带参数查询
                 serializer = Bid_auctionSerializer(auctions['items'], many=True)
                 result = dict()
                 result['rows'] = serializer.data
@@ -307,7 +300,7 @@ class Auction_serversideViewSet(viewsets.ViewSet):
         except:
             return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-    def create(self, request,  *args, **kwargs):
+    def create(self, request, *args, **kwargs):
         try:
             data = request.data
             serializer = Bid_auctionSerializer(data=data)
@@ -320,7 +313,6 @@ class Auction_serversideViewSet(viewsets.ViewSet):
                 return Response(status=status.HTTP_404_NOT_FOUND)
         except:
             return Response(status=status.HTTP_404_NOT_FOUND)
-
 
     # def get_permissions(self):
     #     """
@@ -336,11 +328,12 @@ class Auction_serversideViewSet(viewsets.ViewSet):
 class Action_serversideViewSet(viewsets.ViewSet):
     queryset = Bid_hander.objects.all()
     permission_classes = (permissions.IsAuthenticated,)
+
     #
     def list(self, request):
         try:
             data = request.query_params
-            auctions = query_auction_by_args(data)  #带参数查询
+            auctions = query_auction_by_args(data)  # 带参数查询
             serializer = Bid_auctionSerializer(auctions['items'], many=True)
             result = dict()
             result['rows'] = serializer.data
@@ -393,7 +386,7 @@ class Action_serversideViewSet(viewsets.ViewSet):
         except:
             return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-    def create(self, request,  *args, **kwargs):
+    def create(self, request, *args, **kwargs):
         try:
             data = request.data
             auction_name = data['auction_name']
@@ -405,15 +398,17 @@ class Action_serversideViewSet(viewsets.ViewSet):
         except:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
+
 class Identify_code_serversideViewSet(viewsets.ViewSet):
     queryset = Identify_code.objects.all()
     # serializer_class = Identify_codeSerializer
     permission_classes = (permissions.IsAuthenticated,)
+
     #
     def list(self, request):
         try:
             data = request.query_params
-            identify_codes = query_identify_code_by_args(data)  #带参数查询
+            identify_codes = query_identify_code_by_args(data)  # 带参数查询
             serializer = Identify_codeSerializer(identify_codes['items'], many=True)
             result = dict()
             result['rows'] = serializer.data
@@ -473,12 +468,12 @@ class Identify_code_serversideViewSet(viewsets.ViewSet):
             identify_code.bid_name = bid_name
             ##处理策略
             strategy_dick = json.loads(identify_code.strategy_dick)
-            strategy_dick[strategy[0]] =strategy
+            strategy_dick[strategy[0]] = strategy
             identify_code.strategy_dick = json.dumps(strategy_dick)
             if change_identify_code == 'true':
                 new_iden_code = random_str(6)  # 创建更新
                 identify_code['new_iden_code'] = new_iden_code
-            if data['changeauction']  == 'true':
+            if data['changeauction'] == 'true':
                 auction = Bid_auction.objects.get(pk=data['auction_name'])  ##用ID查找
                 if identify_code.auction:
                     identify_code.auction.clear()  # 清除所有关系
@@ -490,11 +485,12 @@ class Identify_code_serversideViewSet(viewsets.ViewSet):
             logger.exception("ERROR MESSAGE")
             return Response(status=status.HTTP_404_NOT_FOUND)
 
-    def create(self, request,  *args, **kwargs):
+    def create(self, request, *args, **kwargs):
         try:
             data = request.data
             identify_code = random_str(6)
-            ic = Identify_code(identify_code=identify_code, expired_date=data['expired_date'], purchase_date=data['purchase_date'],
+            ic = Identify_code(identify_code=identify_code, expired_date=data['expired_date'],
+                               purchase_date=data['purchase_date'],
                                bid_name=data['bid_name'])
             auction = Bid_auction.objects.get(pk=data['auction_name'])
             auction.identify_code = ic
@@ -579,7 +575,9 @@ class Identify_code_serversideViewSet(viewsets.ModelViewSet):
 
 
 '''
-#--------------------------------------
+
+
+# --------------------------------------
 ##登录
 @api_view(['GET'])
 def get_guopaiurl(request):
@@ -591,12 +589,12 @@ def get_guopaiurl(request):
             if identify.can_bid():
                 diskid = request.GET['diskid']
                 uuuid = identify.uuuid
-                if  uuuid == 'none' or diskid == uuuid:
+                if uuuid == 'none' or diskid == uuuid:
                     ip_address = request.META.get("REMOTE_ADDR", None)
                     if identify_code != '123456':
                         identify.uuuid = diskid
-                        identify.save()  #更新uuuid
-                        reset_identify_code.delay(identify_code)   ##异步更新数据库
+                        identify.save()  # 更新uuuid
+                        reset_identify_code.delay(identify_code)  ##异步更新数据库
                     version = request.GET.get('version', None)
                     debug = request.GET.get('debug', None)
                     time1 = time.localtime(time.time())
@@ -611,8 +609,8 @@ def get_guopaiurl(request):
                     if auction:
                         auction = auction[0]
                         account = {'account': auction.Bid_number,
-                               'password': auction.Bid_password,
-                               'idcard': auction.ID_number}
+                                   'password': auction.Bid_password,
+                                   'idcard': auction.ID_number}
                     else:
                         account = None
 
@@ -664,14 +662,28 @@ def bid_logout(request):
             identify = get_object_or_404(Identify_code, identify_code=identify_code)
             identify.uuuid = 'none'
             identify.strategy_dick = request.GET['strategy_dick']
+            ##保存 标书信息
+            account = request.GET['account']
+            if account:
+                account = json.loads(account)
+                Bid_number = account['account']
+                Bid_password = account['password']
+                ID_number = account['idcard']
+                identify.auction.clear()  # 清除所有关系
+                auction = Bid_auction.objects.filter(Bid_number=Bid_number)
+                if auction:
+                    auction[0].identify_code = identify
+                else:
+                    Bid_auction.objects.create(Bid_number=Bid_number, Bid_password=Bid_password,
+                                               ID_number=ID_number, identify_code=identify)
             identify.save()
             res = {'result': 'logout success'}
             return Response(res, status=status.HTTP_200_OK, template_name=None, content_type=None)
         else:
             return Response(status=status.HTTP_404_NOT_FOUND)
     except:
+        logger.exception("ERROR MESSAGE")
         return Response(status=status.HTTP_404_NOT_FOUND)
-
 
 
 ##保持登录状态  传递数据
@@ -694,31 +706,26 @@ def bid_keeplogin(request):
                     identify.strategy_dick = request.GET['strategy_dick']
                 res = {'result': 'keep success'}
             ##保存 标书信息
-            account = request.GET['account', None]
+            account = request.GET['account']
             if account:
+                account = json.loads(account)
                 Bid_number = account['account']
                 Bid_password = account['password']
                 ID_number = account['idcard']
-                auction = Bid_auction.objects.get(Bid_number=Bid_number)
+                identify.auction.clear()  # 清除所有关系
+                auction = Bid_auction.objects.filter(Bid_number=Bid_number)
                 if auction:
-                    identify_code.auction.clear()  # 清除所有关系
-                    auction.identify_code = identify_code
+                    auction[0].identify_code = identify
                 else:
-                    auction = Bid_auction(Bid_number=Bid_number, Bid_password=Bid_password, ID_number=ID_number,
-                                          identify_code=identify_code)
-                auction.save()
-                identify_code.save()
-                return Response(res, status=status.HTTP_200_OK, template_name=None, content_type=None)
-            else:
-                res = {'result': 'keep failure'}
-                return Response(res, status=status.HTTP_200_OK, template_name=None, content_type=None)
+                    Bid_auction.objects.create(Bid_number=Bid_number, Bid_password=Bid_password,
+                                                      ID_number=ID_number, identify_code=identify)
+            identify.save()
         else:
-            return Response(status=status.HTTP_404_NOT_FOUND)
+            res = {'result': 'keep failure'}
+        return Response(res, status=status.HTTP_200_OK, template_name=None, content_type=None)
+
     except:
         return Response(status=status.HTTP_404_NOT_FOUND)
-
-
-
 
 
 # @permission_classes((IsAuthenticated, CanBid))
@@ -752,9 +759,6 @@ def bid_keeplogin(request):
 #         return Response(status=status.HTTP_404_NOT_FOUND)
 
 
-
-
-
 ##返回时间
 @api_view(['GET'])
 def get_remotetime(request):
@@ -774,4 +778,3 @@ def create_identify_code(request):
         pass
     except:
         return Response(status=status.HTTP_404_NOT_FOUND)
-

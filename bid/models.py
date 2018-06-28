@@ -8,15 +8,20 @@ import datetime
 ## 激活码直接可用于登录
 
 strategy = {
-    "0": ["0", 50.0, 700, 0, 0.5, 55.0, True, True, 50.0, 700, 100, 0.5, 56.0, True, 0, 0, 54.0, 100, 0.6, 55, 200, 0.5, 56.0,
+    "0": ["0", 50.0, 700, 0, 0.5, 55.0, True, True, 50.0, 700, 100, 0.5, 56.0, True, 0, 0, 54.0, 100, 0.6, 55, 200, 0.5,
+          56.0,
           56.5],
-    "1": ["1", 40.0, 500, 0, 0.5, 48.0, True, True, 50.0, 700, 100, 0.5, 56.0, True, 0, 0, 54.0, 100, 0.6, 55, 200, 0.5, 56.0,
+    "1": ["1", 40.0, 500, 0, 0.5, 48.0, True, True, 50.0, 700, 100, 0.5, 56.0, True, 0, 0, 54.0, 100, 0.6, 55, 200, 0.5,
+          56.0,
           56.5],
-    "2": ["2", 50.0, 700, 0, 0.5, 55.0, True, True, 50.0, 700, 100, 0.5, 56.0, True, 0, 0, 54.0, 100, 0.6, 55, 200, 0.5, 56.0,
+    "2": ["2", 50.0, 700, 0, 0.5, 55.0, True, True, 50.0, 700, 100, 0.5, 56.0, True, 0, 0, 54.0, 100, 0.6, 55, 200, 0.5,
+          56.0,
           56.5],
-    "3": ["3", 40.0, 500, 0, 0.5, 48.0, True, True, 50.0, 700, 100, 0.5, 56.0, True, 0, 0, 54.0, 100, 0.6, 55, 200, 0.5, 56.0,
+    "3": ["3", 40.0, 500, 0, 0.5, 48.0, True, True, 50.0, 700, 100, 0.5, 56.0, True, 0, 0, 54.0, 100, 0.6, 55, 200, 0.5,
+          56.0,
           56.5],
-    "4": ["4", 40.0, 500, 0, 0.5, 48.0, True, True, 50.0, 700, 100, 0.5, 56.0, True, 0, 0, 54.0, 100, 0.6, 55, 200, 0.5, 56.0,
+    "4": ["4", 40.0, 500, 0, 0.5, 48.0, True, True, 50.0, 700, 100, 0.5, 56.0, True, 0, 0, 54.0, 100, 0.6, 55, 200, 0.5,
+          56.0,
           56.5],
     "yanzhengma_scale": True,
     "strategy_description": "单枪  50秒加700截止55秒提前100",
@@ -49,6 +54,7 @@ class Identify_code(models.Model):
     def __str__(self):
         return self.identify_code
 
+
 class Strategy(models.Model):
     strategytype = models.CharField(max_length=1, unique=True)
     chujia_time1 = models.FloatField()
@@ -77,8 +83,6 @@ class Strategy(models.Model):
     smart_yanchi3 = models.FloatField()
     smart_time3 = models.FloatField()
     smart_time = models.FloatField()
-
-
 
 
 def query_identify_code_by_args(params):
@@ -213,15 +217,15 @@ def query_hander_by_args(params):
 # 标书信息
 class Bid_auction(models.Model):
     description = models.TextField()  # 描述来源
-    auction_name = models.CharField(max_length=10)  # 标书姓名
+    auction_name = models.CharField(max_length=10, default='temp')  # 标书姓名   temp代表软件用户
     ID_number = models.CharField(max_length=18)  # 身份证号
     Bid_number = models.CharField(max_length=8)  # 标书号
     Bid_password = models.CharField(max_length=4)  # 密码
     # (('0', '未中标结束交易'), ('1', '中标完成交易'), ('2', '正常进行中'),
-    # ('3', '标书失效'), ('4', '中标未完成交易'))
-    status = models.CharField(max_length=8)  # 标书状态
-    count = models.IntegerField()  # 参拍次数
-    expired_date = models.DateField()  # 过期时间
+    # ('3', '标书失效'), ('4', '中标未完成交易') ， ('14', '软件用户使用')
+    status = models.CharField(max_length=8, default='14')  # 标书状态
+    count = models.IntegerField(default=0)  # 参拍次数
+    expired_date = models.DateField(default=datetime.datetime.now() + datetime.timedelta(days=120))  # 过期时间
     ##绑定的标书
     identify_code = models.ForeignKey(Identify_code, on_delete=models.SET_NULL, related_name='auction',
                                       blank=True, null=True, unique=True)
