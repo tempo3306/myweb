@@ -21,3 +21,7 @@ def purchase_software(request):
 ##购买代拍视图
 def purchase_bid(request):
     return render(request, 'bid/purchase_bid.html')
+
+##软件教程
+def course(request):
+    return render(request, 'news/course.html')

@@ -4,11 +4,14 @@
 @contact: 810909753@q.com
 @time: 2018/2/5 9:23
 '''
+import pickle
+
 from myweb.wsgi import *
 from django.contrib.auth.models import User, Group
 from bid.models import Bid_hander, Bid_auction
 from forums.models import Topic, Board, ForumUser
 from django.contrib.auth.models import Group, Permission
+from bid.models import Yanzhengma
 
 '''
         permissions = (('read', '阅读'),
@@ -147,23 +150,49 @@ def init_yanzhengma():
     answers = sheet.col_values(3)[1:]
     questions = sheet.col_values(4)[1:]
 
-    from bid.models import Yanzhengma
 
     query_list = []
 
     for i in range(1000):
+        if len(str(int(answers[i]))) < 4:
+            answer = '0' + str(int(answers[i]))
         query_list.append(Yanzhengma(picture='yan{0}.jpg'.format(i + 1),
                                      question=str(questions[i]),
                                      answer=str(int(answers[i])),
                                      ))
     Yanzhengma.objects.bulk_create(query_list)
 
+    with open('1001.txt', 'rb') as file:
+        qa = pickle.load(file)
+
+    query_list = []
+    for i in range(500):
+        query_list.append(Yanzhengma(picture='yan{0}.jpg'.format(i + 1001),
+                                     question=str(qa[i][1]),
+                                     answer=str(qa[i][0]),
+                                     ))
+    Yanzhengma.objects.bulk_create(query_list)
+
+
+# 1001~1500
+def continue_yanzhengma():
+    with open('1001.txt', 'rb') as file:
+        qa = pickle.load(file)
+
+    query_list = []
+    for i in range(500):
+        query_list.append(Yanzhengma(picture='yan{0}.jpg'.format(i + 1001),
+                                     question=str(qa[i][1]),
+                                     answer=str(qa[i][0]),
+                                     ))
+    Yanzhengma.objects.bulk_create(query_list)
+
 
 if __name__ == '__main__':
-    for role, per in role_permissions.items():
-        init_group(role)
-    shooter_init()
-    admin_init()
-    board_init()
+    # for role, per in role_permissions.items():
+    #     init_group(role)
+    # shooter_init()
+    # admin_init()
+    # board_init()
     init_yanzhengma()
-    print("Done!")
+    # print("Done!")
