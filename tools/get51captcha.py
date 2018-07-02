@@ -44,7 +44,7 @@ def saveimg(url, i):
     global num
     html = requests.get(url, headers=headers)
     if html.status_code == 200:
-        with open('pic/yan{0}.bmp'.format(num + 1001), 'wb') as file:
+        with open('pic/yan{0}.jpg'.format(num + 1001), 'wb') as file:
             print(html.text)
             print(html.content)
             time.sleep(0.1)
