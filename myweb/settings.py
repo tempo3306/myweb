@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/2.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.0/ref/settings/
 """
-from myweb.config import LOCAL_DEBUG
+from myweb.config import LOCAL_DEBUG, DEVELOPMENT
 
 import os, datetime
 
@@ -49,7 +49,6 @@ INSTALLED_APPS = [
     'django_filters',
     'django_celery_results',
     'wx_zhuoqiuzhibo',
-
 ]
 
 
@@ -57,12 +56,15 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',  # 跨域
+    'django.middleware.cache.UpdateCacheMiddleware',          # 注意位置，在前   全站缓存
     'django.middleware.common.CommonMiddleware',
+    'django.middleware.cache.FetchFromCacheMiddleware',       # 注意位置，在后
     'django.middleware.csrf.CsrfViewMiddleware',  # 防跨站伪造请求
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
 
 #--------------------------------------------------------------
 #跨域增加忽略
@@ -283,15 +285,29 @@ JWT_AUTH = {
 
 # 将SESSION改用Redis存储
 # 设置 redis 缓存    key由前缀，版本号，真正的key组成
-CACHES = {
-    "default": {
-        "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "redis://127.0.0.1:6379/1",
-        "OPTIONS": {
-            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+
+
+if DEVELOPMENT:
+    ##开发模式
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
         }
     }
-}
+else:
+    CACHES = {
+        "default": {
+            "BACKEND": "django_redis.cache.RedisCache",
+            "LOCATION": "redis://127.0.0.1:6379/1",
+            "OPTIONS": {
+                "CLIENT_CLASS": "django_redis.client.DefaultClient",
+                'MAX_ENTRIES': 1000,  #The maximum number of entries allowed in the cache before old values are deleted. This argument defaults to 300.
+                'server_max_value_length': 1024 * 1024 * 2,
+            }
+        }
+    }
+CACHE_MIDDLEWARE_SECONDS = 15   # 每个页面应该被缓存的秒数
+
 
 # CACHES = {"default": {"BACKEND": "django_redis.cache.RedisCache",
 #                       "LOCATION": "redis://127.0.0.1:6379/0",

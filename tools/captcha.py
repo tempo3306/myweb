@@ -1,6 +1,6 @@
 import random
 import string
-import StringIO
+from io import StringIO
 from PIL import Image, ImageDraw, ImageFont, ImageFilter
 
 flag = 1  # 标记
@@ -8,13 +8,13 @@ charset = ""  # 符号源
 img_size = (250, 40)  # 图片大小
 width, height = img_size  # 长，宽
 font_size = 22  # 字体大小
-font_type = 'D:/calibri.ttf'  # 字体类型
+font_type = 'Calibri.ttf'  # 字体类型
 bg_color = (255, 255, 255)  # 背景颜色
 fg_color = (0, 0, 255)  # 字体颜色
 d_color = (0, 0, 0)  # 干扰颜色
-dir = 'D:/'  # 保存路径
+dir = './'  # 保存路径
 length = 5  # 验证码的字符数
-lnum = 5  # 干扰线条数
+lnum = 10  # 干扰线条数
 pnum = 100  # 干扰点数
 proba = 2  # 随机概率因子
 pic = Image.new('RGB', img_size, bg_color)  # 图片
@@ -32,12 +32,11 @@ def init():
     charset = "".join(random.sample(lower + upper + num, length))
 
 
-def MlxTeachuDraw():
+def MlxTeachuDraw(charset='2011'):
     """
     画画
     """
-    global charset, flag, pic, draw
-    charset = '2011Memory'
+    global flag, pic, draw
     charset = charset[0] + "".join([' ' + charset[x] for x in range(1, len(charset))])
     hold = ImageFont.truetype(font_type, font_size)
     draw.text((10, 2), charset, font=hold, fill=fg_color)
@@ -111,7 +110,7 @@ def store():
     存储图片
     """
     global pic
-    mem = StringIO.StringIO()
+    mem = StringIO()
     pic.save(mem, "GIF")
 
 
@@ -119,6 +118,6 @@ if __name__ == '__main__':
     init()
     MlxTeachuDraw()
     chaos()
-    store()
+    # store()
     pic.show()
     input()

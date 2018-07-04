@@ -2,7 +2,7 @@ html, body {
     -webkit-user-select: none; /* Chrome all / Safari all */
     -moz-user-select: none; /* Firefox all */
     -ms-user-select: none; /* IE 10+ */
-    -khtml-user-select: none;   /*早期浏览器*/
+    -khtml-user-select: none; /*早期浏览器*/
     user-select: none; /* Likely future */
     cursor: default;
 }
@@ -687,7 +687,6 @@ textarea.userwriteprice {
     left: 64px;
 }
 
-
 .inputyanzhengma {
     width: 125px;
     height: 32px;
@@ -744,4 +743,11 @@ p.question {
 
 input[type=text]::-ms-clear {
     display: none
+}
+
+#practicestatus {
+    position: absolute;
+    font-size: 16px;
+    top: 40px;
+    left: 32px;
 }
