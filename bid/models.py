@@ -228,7 +228,7 @@ class Bid_auction(models.Model):
     count = models.IntegerField(default=0)  # 参拍次数
     expired_date = models.DateField(default=datetime.datetime.now() + datetime.timedelta(days=120))  # 过期时间
     ##绑定的激活码
-    identify_code = models.ForeignKey(Identify_code, on_delete=models.SET_NULL, related_name='auction',
+    identify_code = models.ForeignKey(Identify_code, on_delete=models.CASCADE, related_name='auction',
                                       blank=True, null=True, unique=True)
 
     def __str__(self):
