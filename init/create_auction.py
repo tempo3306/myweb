@@ -1,10 +1,6 @@
 import pickle
 from myweb.wsgi import *
-from django.contrib.auth.models import User, Group
 from bid.models import Bid_hander, Bid_auction, Identify_code
-from forums.models import Topic, Board, ForumUser
-from django.contrib.auth.models import Group, Permission
-from bid.models import Yanzhengma
 import xlrd
 from django.db import transaction
 
@@ -112,8 +108,8 @@ def create_identify_code(rows):
 
 def init_auction(file):
     rows = open_excel(file)
-    create_auction(rows)
+    # create_auction(rows)
 
 
 if __name__ == '__main__':
-    init_auction('create_auction.xlsx')
+    init_auction(r'init/create_auction.xlsx')
