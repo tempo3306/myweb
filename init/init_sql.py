@@ -155,10 +155,13 @@ def init_yanzhengma():
 
     for i in range(1000):
         if len(str(int(answers[i]))) < 4:
-            answer = '0' + str(int(answers[i]))
+            # answer = '0' + str(int(answers[i]))
+            print(answers[i])
+        if sheet[i][3].ctype == 2:  ##导入进来 ctype 2会变成符点数
+            answers[i] == int(answers[i])
         query_list.append(Yanzhengma(picture='yan{0}.jpg'.format(i + 1),
                                      question=str(questions[i]),
-                                     answer=str(int(answers[i])),
+                                     answer=str(answers[i]),
                                      ))
     Yanzhengma.objects.bulk_create(query_list)
 

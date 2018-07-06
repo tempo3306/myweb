@@ -30,15 +30,14 @@ import json
 
 
 class Identify_code(models.Model):
-    identify_code = models.CharField(max_length=6, unique=True)  # 激活码
-    purchase_date = models.DateField()
-    expired_date = models.DateField()  # 过期时间,激活开始计算相应的时间
+    identify_code = models.CharField(max_length=8, unique=True)  # 激活码   用标书号代替
+    purchase_date = models.DateField(default=datetime.date.today())
+    expired_date = models.DateField(default=datetime.date.today()+datetime.timedelta(days=30))  # 过期时间,激活开始计算相应的时间
     bid_name = models.CharField(max_length=10, default='沪牌一号')  # 标书姓名  one表示只有一次使用机会
     uuuid_type = models.CharField(max_length=15, default='diskid')
     uuuid = models.CharField(max_length=40, default='none', blank=True)  ###激活码
     last_uuuid = models.CharField(max_length=40, default='none', blank=True)  ###最近的一个激活码
     # login_status = models.SmallIntegerField(default=0, blank=True)   ##登录状态 默认为0 代表未登录  代表登录
-
     strategy_dick = models.TextField(default=json.dumps(strategy), blank=True)  ##保存用户设置的策略
 
     def can_bid(self):
@@ -172,8 +171,10 @@ class Bid_hander(models.Model):
     hander_name = models.CharField(max_length=32, default='a')
     hander_passwd = models.CharField(max_length=32, default='123456')
     basic_salary = models.FloatField(default=50)  # 底薪
-    extra_bonus = models.FloatField(default=0)  # 奖金
+    extra_bonus = models.FloatField(default=500)  # 奖金
     total_income = models.FloatField(default=0)  # 总收入
+
+
 
     class Meta:
         permissions = (
@@ -219,14 +220,14 @@ class Bid_auction(models.Model):
     description = models.TextField()  # 描述来源
     auction_name = models.CharField(max_length=10, default='temp')  # 标书姓名   temp代表软件用户
     ID_number = models.CharField(max_length=18)  # 身份证号
-    Bid_number = models.CharField(max_length=8)  # 标书号
+    Bid_number = models.CharField(max_length=8, unique=True)  # 标书号
     Bid_password = models.CharField(max_length=4)  # 密码
     # (('0', '未中标结束交易'), ('1', '中标完成交易'), ('2', '正常进行中'),
     # ('3', '标书失效'), ('4', '中标未完成交易') ， ('14', '软件用户使用')
-    status = models.CharField(max_length=8, default='14')  # 标书状态
+    status = models.CharField(max_length=8, default='软件用户使用')  # 标书状态
     count = models.IntegerField(default=0)  # 参拍次数
     expired_date = models.DateField(default=datetime.datetime.now() + datetime.timedelta(days=120))  # 过期时间
-    ##绑定的标书
+    ##绑定的激活码
     identify_code = models.ForeignKey(Identify_code, on_delete=models.SET_NULL, related_name='auction',
                                       blank=True, null=True, unique=True)
 
@@ -349,7 +350,7 @@ def query_action_by_url(params):
 class Yanzhengma(models.Model):
     picture = models.CharField(max_length=30)  # 文件名 始终位于media/code下
     question = models.CharField(max_length=15)  # 问题
-    answer = models.CharField(max_length=4)  # 答案
+    answer = models.CharField(max_length=6)  # 答案
     type = models.CharField(max_length=20)  # 类别s
 
     # class Meta:

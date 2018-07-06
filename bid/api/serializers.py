@@ -33,6 +33,7 @@ class Bid_handerSerializer(serializers.ModelSerializer):
             'hander_name',
             'basic_salary',
             'total_income',
+            'extra_bonus',
             'hander_actions',  # 外键
         ]
 
