@@ -151,7 +151,7 @@ class Consumer_bid(models.Model):
     telephone = models.CharField(max_length=11, unique=True, default='', null=True, blank=True)
     email = models.EmailField(blank=True, null=True)
     # 外键
-    identify_code = models.ForeignKey(Identify_code, on_delete=models.SET_NULL, related_name='consumer_bids',
+    identify_code = models.ForeignKey(Identify_code, on_delete=models.CASCADE, related_name='consumer_bids',
                                       null=True, blank=True)
 
     def __str__(self):
@@ -167,7 +167,7 @@ class Consumer_bid(models.Model):
 
 # 拍手
 class Bid_hander(models.Model):
-    user_id = models.OneToOneField(User, on_delete=models.SET_NULL, unique=True, related_name='user_handers', null=True)
+    user_id = models.OneToOneField(User, on_delete=models.CASCADE, unique=True, related_name='user_handers', null=True)
     hander_name = models.CharField(max_length=32, default='a')
     hander_passwd = models.CharField(max_length=32, default='123456')
     basic_salary = models.FloatField(default=50)  # 底薪
@@ -293,9 +293,9 @@ class Bid_action(models.Model):
     bid_time = models.FloatField()  # 截止时间
     delay_time = models.FloatField()  # 出价延迟时间
     ahead_price = models.FloatField()  # 出价提前价格
-    hander_id = models.ForeignKey(Bid_hander, on_delete=models.SET_NULL, related_name='hander_actions', null=True)  # 对应拍手
+    hander_id = models.ForeignKey(Bid_hander, on_delete=models.CASCADE, related_name='hander_actions', null=True)  # 对应拍手
     action_date = models.DateField()  # 拍牌时间
-    auction_id = models.ForeignKey(Bid_auction, on_delete=models.SET_NULL, related_name='auction_actions', null=True)
+    auction_id = models.ForeignKey(Bid_auction, on_delete=models.CASCADE, related_name='auction_actions', null=True)
     action_result = models.CharField(max_length=128, null=True, blank=True)  # 结果记录
 
     def __str__(self):
