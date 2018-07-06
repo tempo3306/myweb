@@ -108,7 +108,7 @@ def create_identify_code(rows):
 
 def init_auction(file):
     rows = open_excel(file)
-    # create_auction(rows)
+    create_auction(rows)
 
 
 if __name__ == '__main__':

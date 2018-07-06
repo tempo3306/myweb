@@ -45,6 +45,7 @@ class Topic(models.Model):
         Board,
         on_delete=models.CASCADE,
         related_name='topics',
+        null=True,
     )
     ##帖子创建者
     starter = models.ForeignKey(
