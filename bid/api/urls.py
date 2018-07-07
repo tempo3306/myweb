@@ -45,24 +45,11 @@ auction_list = Auction_serversideViewSet.as_view({'get': 'list', 'post': 'create
 auction_detail = Auction_serversideViewSet.as_view({'get': 'retrieve', 'patch': 'partial_update',
                                                                 'put': 'update', 'delete': 'destroy'})
 
-action_list = Hander_serversideViewSet.as_view({'get': 'list', 'post': 'create'})
-action_detail = Hander_serversideViewSet.as_view({'get': 'retrieve', 'patch': 'partial_update',
+record_list = Record_serversideViewset.as_view({'get': 'list', 'post': 'create'})
+record_detail = Record_serversideViewset.as_view({'get': 'retrieve', 'patch': 'partial_update',
                                                                 'put': 'update', 'delete': 'destroy'})
 
-
 urlpatterns = [
-    # url('^consumer', include(consumer_router.urls)),
-    # url('^consumer_bid', include(consumer_bid_router.urls)),
-    # url('^identify_code', include(identify_code_router.urls)),
-    # url('^invite_code', include(invite_code_router.urls)),
-    #
-    # url('^group', include(group_router.urls)),
-    # url('^hander', include(hander_router.urls)),
-    # url('^action', include(action_router.urls)),
-    # url('^auction/', include(auction_router.urls)),
-    # url('^auction_serverside', include(auction_serverside_router.urls)),
-    # url('^bid_auction_manage/$', views.Bid_auction_manage, name='api_bid_auction_manage'),
-
     ##登录
     url('^get_guopaiurl/$', views.get_guopaiurl, name='get_guopaiurl'),
     url('^get_remotetime/$', views.get_remotetime, name='get_remotetime'),
@@ -76,11 +63,12 @@ urlpatterns = [
     url(r'^hd_manage/(?P<pk>[0-9]+)/', hander_detail),
     url(r'^au_manage/$', auction_list),
     url(r'^au_manage/(?P<pk>[0-9]+)/', auction_detail),
-    url(r'^ac_manage/$', action_list),
-    url(r'^ac_manage/(?P<pk>[0-9]+)/', action_detail),
+    url(r'^rc_manage/$', record_list),
+    url(r'^rc_manage/(?P<pk>[0-9]+)/', record_detail),
 
 
     # url('^identify_code_manage/$', include(identify_code_serverside_router.urls)),
     # url('^identify_code_manage', csrf_exempt(Identify_code_serversideViewSet.as_view({'get':'list', 'put': 'update',
-    #                                                                       'patch': 'partial_update', 'delete': 'destroy'})),
+    #
+    #                     'patch': 'partial_update', 'delete': 'destroy'})),
 ]

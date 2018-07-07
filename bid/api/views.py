@@ -288,7 +288,7 @@ class Identify_code_serversideViewSet(viewsets.ViewSet):
         serializer = Identify_codeSerializer(identify_code)
         return Response(serializer.data)
 
-    def destroy(self, request, pk=None, *args, **kwargs):
+    def destroy(self, request, pk=None):
         try:
             identify_code = Identify_code.objects.get(pk=pk)
             identify_code.delete()
@@ -296,7 +296,7 @@ class Identify_code_serversideViewSet(viewsets.ViewSet):
         except:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
-    def update(self, request, pk=None, *args, **kwargs):
+    def update(self, request, pk=None):
         try:
             data = request.data
             identify_code = Identify_code.objects.get(pk=pk)
@@ -316,7 +316,7 @@ class Identify_code_serversideViewSet(viewsets.ViewSet):
         except:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
-    def partial_update(self, request, pk=None, *args, **kwargs):
+    def partial_update(self, request, pk=None):
         try:
             data = request.data['data']
             data = json.loads(data)
@@ -350,7 +350,7 @@ class Identify_code_serversideViewSet(viewsets.ViewSet):
             logger.exception("ERROR MESSAGE")
             return Response(status=status.HTTP_404_NOT_FOUND)
 
-    def create(self, request, *args, **kwargs):
+    def create(self, request):
         try:
             data = request.data
             identify_code = random_str(6)
@@ -367,8 +367,113 @@ class Identify_code_serversideViewSet(viewsets.ViewSet):
             return Response(status=status.HTTP_404_NOT_FOUND)
 
 
+class Record_serversideViewset(viewsets.ViewSet):
+    query_set = Bid_record.objects.all()
+    permission_classes = (permissions.IsAuthenticated, )
 
-## --------------------------------------
+    def list(self, request):
+        try:
+            data = request.query_params
+            records = query_record_by_args(data)  # 带参数查询
+            print(records)
+
+            serializer = Bid_recordSerializer(records['items'], many=True)
+            result = dict()
+            result['rows'] = serializer.data
+            result['count'] = records['count']
+
+            print(result)
+
+
+            return Response(result, status=status.HTTP_200_OK, template_name=None, content_type=None)
+        except Exception as e:
+            return Response(e, status=status.HTTP_404_NOT_FOUND, template_name=None, content_type=None)
+
+    def retrieve(self, request, pk=None):
+        queryset = Bid_record.objects.all()
+        record = get_object_or_404(queryset, pk=pk)
+        serializer = Bid_recordSerializer(record)
+        return Response(serializer.data)
+
+    def destroy(self, request, pk=None):
+        try:
+            record = Bid_record.objects.get(pk=pk)
+            record.delete()
+            return Response(status=status.HTTP_200_OK)
+        except:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+    def update(self, request, pk=None):
+        try:
+            data = request.data
+            record = Bid_record.objects.get(pk=pk)
+            purchase_date = data['purchase_date_str']  # 购买时间
+            expired_date = data['expired_date_str']  # 过期时间
+            bid_name = data['bid_name']  # 标书姓名
+            change_record = data['change_record']
+            print("change_record", change_record)
+            record.purchase_date = purchase_date
+            record.expired_date = expired_date
+            record.bid_name = bid_name
+            if change_record == 'true':
+                new_iden_code = random_str(6)  # 创建更新
+                record['new_iden_code'] = new_iden_code
+            record.save()
+            return Response(status=status.HTTP_200_OK)
+        except:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+    def partial_update(self, request, pk=None):
+        try:
+            data = request.data['data']
+            data = json.loads(data)
+            print(data['strategy'])
+            strategy = data['strategy']
+
+            record = Bid_record.objects.get(pk=pk)
+            purchase_date = data['purchase_date_str']  # 购买时间
+            expired_date = data['expired_date_str']  # 过期时间
+            bid_name = data['bid_name']  # 标书姓名
+            change_record = data['change_record']
+            record.purchase_date = purchase_date
+            record.expired_date = expired_date
+            record.bid_name = bid_name
+            ##处理策略
+            strategy_dick = json.loads(record.strategy_dick)
+            strategy_dick[strategy[0]] = strategy
+            record.strategy_dick = json.dumps(strategy_dick)
+            if change_record == 'true':
+                new_iden_code = random_str(6)  # 创建更新
+                record['new_iden_code'] = new_iden_code
+            if data['changeauction'] == 'true':
+                auction = Bid_auction.objects.get(pk=data['auction_name'])  ##用ID查找
+                if record.auction:
+                    record.auction.clear()  # 清除所有关系
+                auction.record = record
+                auction.save()
+            record.save()
+            return Response(status=status.HTTP_200_OK)
+        except:
+            logger.exception("ERROR MESSAGE")
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+    def create(self, request):
+        try:
+            data = request.data
+            record = random_str(6)
+            ic = record(record=record, expired_date=data['expired_date'],
+                               purchase_date=data['purchase_date'],
+                               bid_name=data['bid_name'])
+            auction = Bid_auction.objects.get(pk=data['auction_name'])
+            auction.record = ic
+            ic.save()
+            auction.save()
+            return Response(status=status.HTTP_200_OK)
+        except:
+            logger.exception('error message')
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+## ----------------------------------------------------------------------------
 # 软件控制
 ##登录
 @api_view(['GET'])

@@ -3,8 +3,8 @@ from django.core.mail import send_mail  # 发送邮件模块
 from account.models import EmailVerifyRecord  # 邮箱验证model
 from myweb.settings import EMAIL_FROM  # setting.py添加的的配置信息
 from myweb.settings import DEBUG
-from bid.models import Identify_code
 import time
+
 
 
 # 生成随机字符串
@@ -70,6 +70,7 @@ def send_control_email(email, send_type="register", **kwargs):
         if send_status:
             pass
     elif send_type == "send_once_identify_code":
+        from bid.models import Identify_code
         identify_code = random_str(randomlength=6)  ##生成6位数的随机验证码
         Identify_code.objects.create(identify_code, )
 

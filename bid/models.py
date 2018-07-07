@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from model_utils import Choices
 
 import datetime
-
+from tools.utils import random_str
 ## 激活码直接可用于登录
 
 strategy = {
@@ -40,6 +40,7 @@ class Identify_code(models.Model):
     # login_status = models.SmallIntegerField(default=0, blank=True)   ##登录状态 默认为0 代表未登录  代表登录
     strategy_dick = models.TextField(default=json.dumps(strategy), blank=True)  ##保存用户设置的策略
 
+    @property
     def can_bid(self):
         ##计算是否过期
         import datetime
@@ -168,7 +169,7 @@ class Consumer_bid(models.Model):
 # 拍手
 class Bid_hander(models.Model):
     user_id = models.OneToOneField(User, on_delete=models.CASCADE, unique=True, related_name='user_handers', null=True)
-    hander_name = models.CharField(max_length=32, default='a')
+    hander_name = models.CharField(max_length=6, default=random_str(4), unique=True)
     hander_passwd = models.CharField(max_length=32, default='123456')
     basic_salary = models.FloatField(default=50)  # 底薪
     extra_bonus = models.FloatField(default=500)  # 奖金
@@ -285,6 +286,38 @@ def query_available_auction() -> object:
 #     queryset = Bid_auction.objects.filter(id__in=id_list)
 #     return queryset
 
+##拍牌前一周完成这周拍牌的记录
+##绑定 人员与标书，激活码
+class Bid_record(models.Model):
+    auction = models.ForeignKey(Bid_auction, on_delete=models.CASCADE, related_name='records')
+    # auto_now无论是你添加还是修改对象，时间为你添加或者修改的时间。
+    # auto_now_add为添加时的时间，更新对象时不会有变动。
+    date = models.DateField(auto_now_add=True)
+    hander = models.ForeignKey(Bid_hander, on_delete=models.CASCADE, related_name='records')
+    strategy_dick = models.TextField(default=json.dumps(strategy), blank=True)  ##此次的策略信息
+    result = models.CharField(max_length=100, verbose_name='结果说明', default='等待拍牌')
+
+def query_record_by_args(params):
+    pageSize = int(params.get('limit', None))  ##每页数量
+    pageNumber = int(params.get('page', None))  # 当前页数
+    searchText = params.get('search', None)
+    sortName = str(params.get('sort', 'id'))
+
+    queryset = Bid_record.objects.all()
+    if searchText:
+        queryset = queryset.filter(
+            Q(id__icontains=searchText) |
+            Q(result__icontains=searchText) |
+            Q(date__icontains=searchText))
+
+    count = queryset.count()
+    start = (pageNumber - 1) * pageSize
+    queryset = queryset.order_by(sortName)[start:start + pageSize]
+    return {
+        'items': queryset,
+        'count': count,
+    }
+
 
 # 基础策略
 class Bid_action(models.Model):
@@ -301,6 +334,9 @@ class Bid_action(models.Model):
     def __str__(self):
         return '{0}秒加{1}提前{2}延迟{3}秒，截止时间{4}秒'.format(self.refer_time, self.diff, self.ahead_price,
                                                      self.delay_time, self.bid_time)
+
+
+
 
 
 ##设置为undefined可以获取pageNumber，pageSize，searchText，sortName，sortOrder

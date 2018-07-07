@@ -23,8 +23,6 @@ class Bid_actionSerializer(serializers.ModelSerializer):
         # ]
 
 class Bid_handerSerializer(serializers.ModelSerializer):
-    hander_actions = serializers.PrimaryKeyRelatedField(many=True,
-                                        queryset=Bid_action.objects.all())  #related_name
     class Meta:
         model = Bid_hander
         fields = [
@@ -34,9 +32,25 @@ class Bid_handerSerializer(serializers.ModelSerializer):
             'basic_salary',
             'total_income',
             'extra_bonus',
-            'hander_actions',  # 外键
         ]
 
+class Bid_recordSerializer(serializers.ModelSerializer):
+    # auction_name = serializers.RelatedField(source='auction', read_only=True)
+    # hander = serializers.RelatedField(source='hander', read_only=True)
+    auction_name = serializers.CharField(source='auction.auction_name')
+    Bid_number = serializers.CharField(source='auction.Bid_number')
+    hander_name = serializers.CharField(source='hander.hander_name')
+
+    class Meta:
+        model = Bid_record
+        fields = [
+            'hander_name',
+            'Bid_number',
+            'auction_name',
+            'date',
+            'strategy_dick',
+            'result'
+        ]
 
 
 class Bid_auctionSerializer(serializers.ModelSerializer):
@@ -57,19 +71,11 @@ class Bid_auctionSerializer(serializers.ModelSerializer):
             'expired_date'
         ]
 
-##筛选未绑定的标书
-class Bid_auctionAvailableSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Bid_auction
-        fields = [
-            'id',
-            'auction_name',
-        ]
+
 
 
 ## 
 class ConsumerSerializer(serializers.ModelSerializer):
-
     consumer_bids = serializers.PrimaryKeyRelatedField(many=True,
                                         queryset=Consumer_bid.objects.all()) #related_name
     class Meta:
@@ -85,6 +91,15 @@ class ConsumerSerializer(serializers.ModelSerializer):
 class Identify_codeSerializer(serializers.ModelSerializer):
     auction = Bid_auctionSerializer(many=True)
 
+    # canbid = serializers.CharField(source='can_bid', read_only=True)
+    # likescount = serializers.SerializerMethodField('get_popularity')
+    # def popularity(self, obj):
+    #     likes = obj.post.count
+    #     time =  # hours since created
+    #     return likes / time if time > 0 else likes
+
+    can_bid = serializers.Field(source='can_bid')
+
     class Meta:
         model = Identify_code
         fields = [
@@ -95,6 +110,7 @@ class Identify_codeSerializer(serializers.ModelSerializer):
             'bid_name',
             'auction',
             'strategy_dick',
+            'can_bid'
         ]
 
 class StrategySerializer(serializers.ModelSerializer):
