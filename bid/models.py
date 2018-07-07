@@ -30,7 +30,7 @@ import json
 
 
 class Identify_code(models.Model):
-    identify_code = models.CharField(max_length=8, unique=True)  # 激活码   用标书号代替
+    identify_code = models.CharField(max_length=10, unique=True)  # 激活码   用标书号代替
     purchase_date = models.DateField(default=datetime.date.today())
     expired_date = models.DateField(default=datetime.date.today()+datetime.timedelta(days=30))  # 过期时间,激活开始计算相应的时间
     bid_name = models.CharField(max_length=10, default='沪牌一号')  # 标书姓名  one表示只有一次使用机会

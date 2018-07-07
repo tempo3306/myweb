@@ -29,7 +29,7 @@ def create_auction(rows):
     # 用标书号创建激活码
     for row in rows:
         print(row)
-        Identify_code.objects.get_or_create(identify_code=row['激活码'])
+        Identify_code.objects.get_or_create(identify_code='h' + row['激活码'])  ## h 开头表示拍手
     for row in rows:
         description = row['标书说明']  # 描述来源
         auction_name = row['姓名']  # 标书姓名
