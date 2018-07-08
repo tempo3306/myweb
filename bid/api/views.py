@@ -483,7 +483,7 @@ def get_guopaiurl(request):
         if type == 'identify_code':
             identify_code = request.GET['identify_code']
             identify = get_object_or_404(Identify_code, identify_code=identify_code)
-            if identify.can_bid():
+            if identify.can_bid:
                 diskid = request.GET['diskid']
                 uuuid = identify.uuuid
                 if uuuid == 'none' or diskid == uuuid:
@@ -560,7 +560,7 @@ def monitest(request):
     url_dianxin = "https://paimai2.alltobid.com/bid/%s/login.htm" % today_date
     url_nodianxin = "https://paimai.alltobid.com/bid/%s/login.htm" % today_date
     data = init_variable()  ##初始化数据
-    res = {'result': 'login success',
+    res = {'result': 'moni success',
            'url_dianxin': url_dianxin,
            'url_nodianxin': url_nodianxin,
            'ip_address': ip_address,
@@ -640,41 +640,22 @@ def bid_keeplogin(request):
         else:
             res = {'result': 'keep failure'}
         return Response(res, status=status.HTTP_200_OK, template_name=None, content_type=None)
-
     except:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
 
-# @permission_classes((IsAuthenticated, CanBid))
-# @api_view(['GET'])
-# def bid_login(request):
-#     try:
-#         username = request.GET['username']
-#         password = request.GET['password']
-#         version = request.GET['version']
-#         debug = request.GET['debug']
-#
-#         user = authenticate(username=username, password=password)
-#         if user:
-#             time1 = time.localtime(time.time())
-#             time2 = time.strftime("%Y%m%d", time1)
-#             today_date = time2 + "01"
-#             url_dianxin = "https://paimai2.alltobid.com/bid/%s/login.htm" % today_date
-#             url_nodianxin = "https://paimai.alltobid.com/bid/%s/login.htm" % today_date
-#             if version == '5.12s' or debug:
-#                 res = {'result': 'login success',
-#                        'url_dianxin': url_dianxin,
-#                        'url_nodianxin': url_nodianxin}
-#                 return Response(res, status=status.HTTP_200_OK, template_name=None, content_type=None)
-#             else:
-#                 res = {'result': 'wrong version'}
-#                 return Response(res, status=status.HTTP_200_OK, template_name=None, content_type=None)
-#         else:
-#             res = {'result': 'wrong account'}
-#             return Response(res, status=status.HTTP_200_OK, template_name=None, content_type=None)
-#     except:
-#         return Response(status=status.HTTP_404_NOT_FOUND)
-
+##确认第一次出价成功
+@api_view(['GET'])
+def bid_firstprice(request):
+    try:
+        type = request.GET['type']
+        if type == 'identify_code':
+            res = {'result': 'firstprice success'}
+        else:
+            res = {'result': 'keep failure'}
+        return Response(res, status=status.HTTP_200_OK, template_name=None, content_type=None)
+    except:
+        return Response(status=status.HTTP_404_NOT_FOUND)
 
 ##返回时间
 @api_view(['GET'])
