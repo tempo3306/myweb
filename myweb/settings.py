@@ -38,6 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'corsheaders',
+    'rest_framework_swagger',  ##api地图
+
     'bid',
     'images',
     'bbsapp',
@@ -306,6 +308,9 @@ else:
             }
         }
     }
+    '''配置session引擎SESSION_ENGINE为redis，配置此处session会存储在redis中，不会再去操作数据库了'''
+    SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
+
 CACHE_MIDDLEWARE_SECONDS = 15   # 每个页面应该被缓存的秒数
 
 
@@ -327,8 +332,7 @@ CACHE_MIDDLEWARE_SECONDS = 15   # 每个页面应该被缓存的秒数
 SESSION_COOKIE_AGE = 60 * 60  # 设置session过期时间为60分钟
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False  # 会话cookie可以在用户浏览器中保持有效期。True：关闭浏览器，则Cookie失效  即过期时间为当前会话
 
-'''配置session引擎SESSION_ENGINE为redis，配置此处session会存储在redis中，不会再去操作数据库了'''
-SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
+
 
 # 在登录函数中可以设置session有效期：request.session.set_expiry(30 * 60)
 

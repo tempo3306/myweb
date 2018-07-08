@@ -4,6 +4,7 @@ from bid.models import Bid_hander, Bid_auction, Identify_code
 import xlrd
 from django.db import transaction
 from tools.file_operation import open_excel
+import logging
 
 '''
 1 2
@@ -28,8 +29,8 @@ def create_auction(rows):
     query_list = []
     # 用标书号创建激活码
     for row in rows:
-        print(row)
-        Identify_code.objects.get_or_create(identify_code='h' + row['激活码'])  ## h 开头表示拍手
+        print(row['激活码'])
+        Identify_code.objects.get_or_create(identify_code='h' + str(row['标书号']))  ## h 开头表示拍手
     for row in rows:
         description = row['标书说明']  # 描述来源
         auction_name = row['姓名']  # 标书姓名
@@ -38,7 +39,7 @@ def create_auction(rows):
         Bid_password = row['标书密码']  # 密码
         status = row['状态']  # 标书状态
         count = int(row['参拍次数'])  # 参拍次数
-        identify_code = row['激活码']  # 过期时间
+        identify_code = 'h' + str(row['激活码'])  # 过期时间
         sid = transaction.savepoint()  # 开启SQL事务
         try:
             auction = Bid_auction(description=description, auction_name=auction_name,
@@ -75,15 +76,15 @@ strategy = {
 
 def create_identify_code(rows):
     query_list = []
-    for row in rows:
-        identify_code = row['激活码']  # 描述来源
-
-        sid = transaction.savepoint()  # 开启SQL事务
-        try:
+    try:
+        for row in rows:
+            identify_code = row['激活码']  # 描述来源
+            sid = transaction.savepoint()  # 开启SQL事务
             iden = Identify_code(identify_code=identify_code)
             query_list.append(iden)
-        except:
-            print("error")
+    except:
+        logging.exception("ERROR")
+        print("error")
     with transaction.atomic():
         Identify_code.objects.bulk_create(query_list)
 

@@ -28,7 +28,13 @@ from django.urls import path
 from rest_framework_jwt.views import obtain_jwt_token, refresh_jwt_token, verify_jwt_token
 from django.views.generic.base import TemplateView
 
+from rest_framework_swagger.views import get_swagger_view
+
+schema_view = get_swagger_view(title='myweb API')
+
 urlpatterns = [
+    url(r'^schema', schema_view),
+
     url(r'^admin/', admin.site.urls),
     url(r'^account/', include('account.urls')),
     url(r'^bid/', include('bid.urls', namespace='bid')),

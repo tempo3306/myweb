@@ -549,6 +549,26 @@ def get_guopaiurl(request):
         logger.exception("ERROR MESSAGE")
         return Response(status=status.HTTP_404_NOT_FOUND)
 
+@api_view(['GET'])
+def monitest(request):
+    ip_address = request.META.get("REMOTE_ADDR", None)
+    version = request.GET.get('version', None)
+    debug = request.GET.get('debug', None)
+    time1 = time.localtime(time.time())
+    time2 = time.strftime("%Y%m%d", time1)
+    today_date = time2 + "01"
+    url_dianxin = "https://paimai2.alltobid.com/bid/%s/login.htm" % today_date
+    url_nodianxin = "https://paimai.alltobid.com/bid/%s/login.htm" % today_date
+    data = init_variable()  ##初始化数据
+    res = {'result': 'login success',
+           'url_dianxin': url_dianxin,
+           'url_nodianxin': url_nodianxin,
+           'ip_address': ip_address,
+           'data': data,
+           'test': False,
+           }
+    return Response(res, status=status.HTTP_200_OK, template_name=None, content_type=None)
+
 
 @api_view(['GET'])
 def bid_logout(request):
