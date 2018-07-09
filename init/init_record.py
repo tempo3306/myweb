@@ -12,11 +12,13 @@ def create_record(rows):
     for row in rows:
         auction_bid_number = row['标书号']
         hander_name = row['拍手']
+        date = row['日期']
 
         sid = transaction.savepoint()  # 开启SQL事务
         try:
             record = Bid_record(auction=Bid_auction.objects.get(Bid_number=auction_bid_number),
-                                hander=Bid_hander.objects.get(hander_name=hander_name))
+                                hander=Bid_hander.objects.get(hander_name=hander_name),
+                                date=date)
             query_list.append(record)
         except:
             logging.exception("ERROR")

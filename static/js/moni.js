@@ -315,7 +315,7 @@ function Reset() {
     lowestprice = 82000 + parseInt((Math.random() - 0.35) * 50) * 100;
                 $('#li1').html("您第1次出价");
             $('#li2').html("出价金额:" + 100);
-            $('#li3').html("出价时间:" + today + " 10:30:51"
+            $('#li3').html("出价时间:" + today + " 10:30:51");
 //系统模块
 //随机种子，影响跳价情况
     var x1 = Math.random() < 0.5 ? 1 : (-1)   //随机+-

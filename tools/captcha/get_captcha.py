@@ -41,6 +41,28 @@ PROBA = 2  # 随机概率因子
 # pic = Image.new('RGB', IMG_SIZE, BG_COLOR)  # 图片
 # draw = ImageDraw.Draw(pic)  # 画笔
 
+class Create_pic():
+    num = 1
+
+    def get_redpic(self):
+        numstr = get_randnum()
+        pic = draw(charset=numstr, fg_color=RED_COLOR)
+        pic = transform(pic)
+        pic = rectangle(pic)
+        pic = circle(pic)
+        pic = bottom_circle(pic)
+        pic = addpoint(pic)
+        pic = addline(pic)
+        save(pic, self.num)
+        self.num += 1
+
+    def get_greenpic(self):
+        pass
+
+
+    def get_bluepic(self):
+        pass
+
 
 # 生成随机数字
 def get_randnum(num=6):
@@ -52,6 +74,12 @@ def get_randnum(num=6):
     print(randnum)
     return randnum
 
+def get_randcolor():
+    r= random.randint(0, 255)
+    g= random.randint(0, 255)
+    b= random.randint(0, 255)
+    return (r, g, b)
+
 
 def get_randstr(num=2):
     chars = string.ascii_letters
@@ -62,22 +90,6 @@ def get_randstr(num=2):
     print(randstr)
     return randstr
 
-
-def get_redpic():
-    numstr = get_randnum()
-    pic = draw(charset=numstr, fg_color=RED_COLOR)
-    pic = rectangle(pic)
-    pic = circle(pic)
-    pic = bottom_circle(pic)
-    save(pic, '11')
-
-
-def get_greenpic():
-    pass
-
-
-def get_bluepic():
-    pass
 
 
 def draw(charset='2011', size=IMG_SIZE1, fg_color=FG_COLOR, pos=POS1):
@@ -104,7 +116,7 @@ def transform(pic, size=IMG_SIZE1):
     return pic
 
 
-def addpoint(pic, size):
+def addpoint(pic, size=IMG_SIZE1):
     """
     增加干扰点
     """
@@ -114,11 +126,11 @@ def addpoint(pic, size):
         for j in range(height):
             tmp = random.randint(0, 100)
             if (tmp <= PROBA):
-                draw.point((i, j), D_COLOR)
+                draw.point((i, j), get_randcolor())
     return pic
 
 
-def addline(pic, size):
+def addline(pic, size=IMG_SIZE1):
     """
     增加干扰线
     """
@@ -129,7 +141,7 @@ def addline(pic, size):
         x2 = random.randint(0, width)
         y1 = random.randint(0, height)
         y2 = random.randint(0, height)
-        draw.line(((x1, y1), (x2, y2)), D_COLOR)
+        draw.line(((x1, y1), (x2, y2)), get_randcolor())
     return pic
 
 
@@ -178,4 +190,5 @@ def save(pic, name):
 
 
 if __name__ == '__main__':
-    get_redpic()
+    C = Create_pic()
+    C.get_redpic()

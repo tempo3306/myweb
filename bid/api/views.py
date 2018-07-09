@@ -488,7 +488,7 @@ def get_guopaiurl(request):
                 uuuid = identify.uuuid
                 if uuuid == 'none' or diskid == uuuid:
                     ip_address = request.META.get("REMOTE_ADDR", None)
-                    if identify_code != '123456':
+                    if identify_code != '12345678':
                         identify.uuuid = diskid
                         identify.save()  # 更新uuuid
                         reset_identify_code.delay(identify_code)  ##异步更新数据库
@@ -512,7 +512,7 @@ def get_guopaiurl(request):
                         account = None
 
                     strategy_dick = identify.strategy_dick
-                    if identify_code == '123456':
+                    if identify_code == '12345678':
                         res = {'result': 'login success',
                                'url_dianxin': "http://51hupai.org/moni",
                                'url_nodianxin': "http://51hupai.org/moni",
@@ -618,7 +618,7 @@ def bid_keeplogin(request):
                 reset_identify_code.delay(identify_code)  ##异步还原identify_code
                 identify.strategy_dick = request.GET['strategy_dick']
             elif uuuid == 'none':
-                if identify_code == '123456':
+                if identify_code == '12345678':
                     identify.uuuid = diskid
                     identify.strategy_dick = request.GET['strategy_dick']
                 res = {'result': 'keep success'}
@@ -650,12 +650,19 @@ def bid_firstprice(request):
     try:
         type = request.GET['type']
         if type == 'identify_code':
+            bid_number = request.GET['bid_number']
+            auction = Bid_auction.objects.get(Bid_number=bid_number)
+            date = datetime.date.today()
+            record = Bid_record.objects.filter(auction=auction, date=date)
+            record.firstprice = True
+            record.save()
             res = {'result': 'firstprice success'}
         else:
-            res = {'result': 'keep failure'}
+            res = {'result': 'error'}
         return Response(res, status=status.HTTP_200_OK, template_name=None, content_type=None)
     except:
-        return Response(status=status.HTTP_404_NOT_FOUND)
+        res = {'result': 'error'}
+        return Response(res, status=status.HTTP_404_NOT_FOUND)
 
 ##返回时间
 @api_view(['GET'])

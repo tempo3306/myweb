@@ -71,6 +71,16 @@ class Bid_auctionSerializer(serializers.ModelSerializer):
             'expired_date'
         ]
 
+##筛选未绑定的标书
+##筛选未绑定的标书
+class Bid_auctionAvailableSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Bid_auction
+        fields = [
+            'id',
+            'auction_name',
+        ]
+
 
 
 

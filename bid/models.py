@@ -292,10 +292,12 @@ class Bid_record(models.Model):
     auction = models.ForeignKey(Bid_auction, on_delete=models.CASCADE, related_name='records')
     # auto_now无论是你添加还是修改对象，时间为你添加或者修改的时间。
     # auto_now_add为添加时的时间，更新对象时不会有变动。
-    date = models.DateField(auto_now_add=True)
+    date = models.DateField()
     hander = models.ForeignKey(Bid_hander, on_delete=models.CASCADE, related_name='records')
     strategy_dick = models.TextField(default=json.dumps(strategy), blank=True)  ##此次的策略信息
     result = models.CharField(max_length=100, verbose_name='结果说明', default='等待拍牌')
+    firstprice = models.BooleanField(default=False)  #由拍手在软件上确认
+
 
 def query_record_by_args(params):
     pageSize = int(params.get('limit', None))  ##每页数量
