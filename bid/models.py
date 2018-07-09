@@ -299,6 +299,9 @@ class Bid_record(models.Model):
     firstprice = models.BooleanField(default=False)  #由拍手在软件上确认
 
 
+    def __str__(self):
+        return f"{self.date} {self.auction.Bid_number}"
+
 def query_record_by_args(params):
     pageSize = int(params.get('limit', None))  ##每页数量
     pageNumber = int(params.get('page', None))  # 当前页数

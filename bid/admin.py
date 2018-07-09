@@ -23,6 +23,14 @@ class Bid_auctionAdmin(admin.ModelAdmin):
     search_fields = ('auction_name', 'ID_number', 'Bid_number', 'status', 'count', 'expired_date')
     ordering = ['status', 'auction_name']
 
+class Bid_recordAdmin(admin.ModelAdmin):
+    list_display = '__all__'
+    list_filter = '__all__'
+    search_fields = '__all__'
+    ordering = '__all__'
+
+
+
 admin.site.register(Bid_hander, Bid_handerAdmin)
 admin.site.register(Bid_auction, Bid_auctionAdmin)
 admin.site.register(Bid_action, Bid_actionAdmin)
@@ -30,3 +38,4 @@ admin.site.register(Invite_code)
 admin.site.register(Identify_code)
 admin.site.register(Consumer_bid)
 admin.site.register(Consumer)
+admin.site.register(Bid_record)
