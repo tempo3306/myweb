@@ -653,7 +653,7 @@ def bid_firstprice(request):
             bid_number = request.GET['bid_number']
             auction = Bid_auction.objects.get(Bid_number=bid_number)
             date = datetime.date.today()
-            record = Bid_record.objects.filter(auction=auction, date=date)
+            record = Bid_record.objects.get(auction=auction, date=date)
             record.firstprice = True
             record.save()
             res = {'result': 'firstprice success'}
@@ -661,6 +661,7 @@ def bid_firstprice(request):
             res = {'result': 'error'}
         return Response(res, status=status.HTTP_200_OK, template_name=None, content_type=None)
     except:
+        logger.exception("ERROR MESSAGE")
         res = {'result': 'error'}
         return Response(res, status=status.HTTP_404_NOT_FOUND)
 
