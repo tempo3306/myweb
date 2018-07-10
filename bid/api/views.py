@@ -581,15 +581,19 @@ def bid_logout(request):
             identify.strategy_dick = request.GET['strategy_dick']
             ##保存 标书信息
             account = request.GET['account']
+            account = json.loads(account)
             if account:
-                account = json.loads(account)
                 Bid_number = account['account']
                 Bid_password = account['password']
                 ID_number = account['idcard']
+
+                print(Bid_number)
+
                 identify.auction.clear()  # 清除所有关系
                 auction = Bid_auction.objects.filter(Bid_number=Bid_number)
                 if auction:
                     auction[0].identify_code = identify
+                    auction[0].save()
                 else:
                     Bid_auction.objects.create(Bid_number=Bid_number, Bid_password=Bid_password,
                                                ID_number=ID_number, identify_code=identify)
