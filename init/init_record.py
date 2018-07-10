@@ -16,17 +16,23 @@ def create_record(rows):
                 auction_bid_number = row['标书号']
                 hander_name = row['拍手']
                 date = row['日期']
-                record, created = Bid_record.objects.create_or_update(
-                    default={'auction': Bid_auction.objects.get(Bid_number=auction_bid_number), 'date': date},
-                    others={'hander': Bid_hander.objects.get(hander_name=hander_name)}
-                )
+                try:
+                    record = Bid_record.objects.get(auction__Bid_number=auction_bid_number, date=date)
+                    record.hander = Bid_hander.objects.get(hander_name=hander_name)
+                    record.save()
+                except:
+                    Bid_record.objects.create(
+                        default={'auction__Bid_number': auction_bid_number, 'date': date},
+                        hander=Bid_hander.objects.get(hander_name=hander_name)
+                    )
 
     except:
         logging.exception("ERROR")
+
+
 def init_record(file):
     rows = open_excel(file)
     create_record(rows)
-
 
 
 if __name__ == '__main__':
