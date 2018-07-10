@@ -39,11 +39,11 @@ def change_strategy(row):
     templist = [
         type,
         float(row['one_time1']),
-        int(row['one_price']), int(row['one_diff']),
+        int(row['one_diff']), int(row['one_advance']),
         float(row['one_delay']),
         float(row['one_time2']), bool(row['force1']), bool(row['auto_price']),
-        float(row['second_time1']), int(row['second_price']), int(row['second_diff']), float(row['second_delay']),
-        float(row['second_time2']), bool(row['force1']), bool(row['auto_price']),
+        float(row['second_time1']), int(row['second_diff']), int(row['second_advance']), float(row['second_delay']),
+        float(row['second_time2']), bool(row['force1']),
         float(row['price1']), float(row['delay1']), float(row['time1']),
         float(row['price2']), float(row['delay2']), float(row['time2']),
         float(row['price3']), float(row['delay3']), float(row['time3']), float(row['finaltime'])

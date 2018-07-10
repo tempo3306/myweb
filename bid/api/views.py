@@ -280,7 +280,8 @@ class Identify_code_serversideViewSet(viewsets.ViewSet):
             result['count'] = identify_codes['count']
             return Response(result, status=status.HTTP_200_OK, template_name=None, content_type=None)
         except Exception as e:
-            return Response(e, status=status.HTTP_404_NOT_FOUND, template_name=None, content_type=None)
+            logger.exception("ERROR MESSAGE")
+            return Response(status=status.HTTP_404_NOT_FOUND, template_name=None, content_type=None)
 
     def retrieve(self, request, pk=None):
         queryset = Identify_code.objects.all()
@@ -304,7 +305,6 @@ class Identify_code_serversideViewSet(viewsets.ViewSet):
             expired_date = data['expired_date_str']  # 过期时间
             bid_name = data['bid_name']  # 标书姓名
             change_identify_code = data['change_identify_code']
-            print("change_identify_code", change_identify_code)
             identify_code.purchase_date = purchase_date
             identify_code.expired_date = expired_date
             identify_code.bid_name = bid_name

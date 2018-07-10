@@ -108,7 +108,7 @@ class Identify_codeSerializer(serializers.ModelSerializer):
     #     time =  # hours since created
     #     return likes / time if time > 0 else likes
 
-    can_bid = serializers.Field(source='can_bid')
+    bid_status = serializers.BooleanField(source='can_bid')  # 不能与原来的属性重名
 
     class Meta:
         model = Identify_code
@@ -120,7 +120,7 @@ class Identify_codeSerializer(serializers.ModelSerializer):
             'bid_name',
             'auction',
             'strategy_dick',
-            'can_bid'
+            'bid_status'
         ]
 
 class StrategySerializer(serializers.ModelSerializer):
