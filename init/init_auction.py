@@ -45,14 +45,16 @@ def create_auction(rows):
                 # Member.objects.update_or_create(defaults={'user':1}, others={'field1':1,'field2':1})
                 # 当存在user=1时，则更新，不存在则创建
                 #     obj, created = People.objects.update_or_create(...)
-                auction, created = Bid_auction.objects.update_or_create(defaults={'Bid_number': Bid_number},
-                                                                        description=description,
-                                                                        auction_name=auction_name,
-                                                                        ID_number=ID_number, Bid_number=Bid_number,
-                                                                        Bid_password=Bid_password, status=status,
-                                                                        count=count,
-                                                                        identify_code=Identify_code.objects.get(
-                                                                            identify_code=identify_code))
+                Bid_auction.objects.update_or_create(Bid_number=Bid_number,
+                                                     defaults={'description': description,
+                                                               'auction_name': auction_name,
+                                                               'ID_number': ID_number,
+                                                               'Bid_number': Bid_number,
+                                                               'Bid_password': Bid_password,
+                                                               'status': status,
+                                                               'count': count,
+                                                               'identify_code': Identify_code.objects.get(
+                                                                   identify_code=identify_code)})
     except:
         logging.exception("ERROR MESSAGE")
         # with transaction.atomic():

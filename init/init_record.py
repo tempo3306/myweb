@@ -16,14 +16,15 @@ def create_record(rows):
                 auction_bid_number = row['标书号']
                 hander_name = row['拍手']
                 date = row['日期']
-                try:
-                    record = Bid_record.objects.get(auction__Bid_number=auction_bid_number, date=date)
-                    record.hander = Bid_hander.objects.get(hander_name=hander_name)
-                    record.save()
-                except:
+                records = Bid_record.objects.filter(auction__Bid_number=auction_bid_number, date=date)
+                if records:
+                    records[0].hander = Bid_hander.objects.get(hander_name=hander_name)
+                    records[0].save()
+                else:
+                    hander = Bid_hander.objects.get(hander_name=hander_name)
+                    auction = Bid_auction.objects.get(Bid_number=auction_bid_number)
                     Bid_record.objects.create(
-                        default={'auction__Bid_number': auction_bid_number, 'date': date},
-                        hander=Bid_hander.objects.get(hander_name=hander_name)
+                        auction=auction, date=date, hander=hander
                     )
 
     except:
