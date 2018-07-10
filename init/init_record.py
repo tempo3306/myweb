@@ -9,22 +9,20 @@ import logging
 
 def create_record(rows):
     query_list = []
-    for row in rows:
-        auction_bid_number = row['标书号']
-        hander_name = row['拍手']
-        date = row['日期']
-
+    try:
         sid = transaction.savepoint()  # 开启SQL事务
-        try:
-            record = Bid_record(auction=Bid_auction.objects.get(Bid_number=auction_bid_number),
-                                hander=Bid_hander.objects.get(hander_name=hander_name),
-                                date=date)
-            query_list.append(record)
-        except:
-            logging.exception("ERROR")
-    with transaction.atomic():
-        Bid_record.objects.bulk_create(query_list)
+        with transaction.atomic():
+            for row in rows:
+                auction_bid_number = row['标书号']
+                hander_name = row['拍手']
+                date = row['日期']
+                record, created = Bid_record.objects.create_or_update(
+                    default={'auction': Bid_auction.objects.get(Bid_number=auction_bid_number), 'date': date},
+                    others={'hander': Bid_hander.objects.get(hander_name=hander_name)}
+                )
 
+    except:
+        logging.exception("ERROR")
 def init_record(file):
     rows = open_excel(file)
     create_record(rows)

@@ -34,9 +34,13 @@ strategy = {
 def change_strategy(row):
     temp_strategy = copy.deepcopy(strategy)
     type = row['类型']
+    # print(row)
+    print("fdsf", row['one_time1'])
     templist = [
         type,
-        float(row['one_time1']), int(row['one_price']), int(row['one_diff']), float(row['one_delay']),
+        float(row['one_time1']),
+        int(row['one_price']), int(row['one_diff']),
+        float(row['one_delay']),
         float(row['one_time2']), bool(row['force1']), bool(row['auto_price']),
         float(row['second_time1']), int(row['second_price']), int(row['second_diff']), float(row['second_delay']),
         float(row['second_time2']), bool(row['force1']), bool(row['auto_price']),
@@ -51,7 +55,6 @@ def change_strategy(row):
 
 def update_strategy(file):
     rows = open_excel(file)
-    print(rows)
     try:
         for row in rows:
             new_strategy = change_strategy(row)
