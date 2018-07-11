@@ -15,8 +15,7 @@ def clear_yanzhengma():
 
 def init_helong():
     import xlrd
-
-    excel = xlrd.open_workbook('yan.xlsx')
+    excel = xlrd.open_workbook('init/yan.xlsx')
     sheet = excel.sheet_by_index(0)
 
     answers = sheet.col_values(3)[1:]
@@ -34,7 +33,7 @@ def init_helong():
     Yanzhengma.objects.bulk_create(query_list)
 
 def init_51():
-    with open('1001.txt', 'rb') as file:
+    with open('init/1001.txt', 'rb') as file:
         qa = pickle.load(file)
     query_list = []
     for i in range(500):
@@ -47,7 +46,7 @@ def init_51():
     Yanzhengma.objects.bulk_create(query_list)
 
 def init_color0_300():
-    with open('color0_300.pkl', 'rb') as yfile:
+    with open('init/color0_300.pkl', 'rb') as yfile:
         name_qa = pickle.load(yfile)
         print(name_qa)
     query_list = []

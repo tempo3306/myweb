@@ -126,10 +126,10 @@ function Confirm() {
 
 
 function Test() {
-    total_question++;
     var useranswer = $('input').val();
     var result = Answer(useranswer);
-    if (total_question <= 10) {
+    if (total_question <= 9) {
+        total_question++;
         if (result) {
             total_right++;
         }
@@ -155,7 +155,7 @@ function Test() {
         $('#practicestatus').text('第' + total_question + '/10题');
 
     }
-    else if (total_question === 11) {
+    else if (total_question === 10) {
         //结束
         create_table(error_list);
         end_time = new Date().getTime();
@@ -165,6 +165,7 @@ function Test() {
         avarage_time = total_time / total_question;
         avarage_time = avarage_time.toFixed(2);
         accuracy = total_right / total_question * 100;
+        accuracy = accuracy.toFixed(2);
         var os = getOs();
         if (os == 'FF' || os == 'SF') { //FireFox、谷歌浏览器用这个
             var text = "正确率: " + accuracy + "%" + "\n" + "总用时: " + total_time + "秒" + "\n" + "平均时间: " + avarage_time + "秒"
@@ -218,11 +219,11 @@ function create_table(data) {
 
 
 function Examine() {
-    total_question++;
     var useranswer = $('input').val();
     var result = Answer(useranswer);
     $('#practicestatus').text('第' + total_question + '/50题');
-    if (total_question <= 50) {
+    if (total_question <= 49) {
+        total_question++;
         if (result) {
             total_right++;
         }
@@ -244,7 +245,7 @@ function Examine() {
         var a = document.getElementsByTagName("input");
         a[0].focus();
     }
-    else if (total_question === 51) {
+    else if (total_question === 50) {
         //结束
         create_table(error_list);
         end_time = new Date().getTime();
@@ -302,6 +303,8 @@ $(document).ready(function () {
 //mode 0
 //mode 1
 function Mode(num) {
+    error_list = [];
+
     switch (num) {
         case 0: {
             $("#rtable").css({'display': 'none'});

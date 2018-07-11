@@ -751,3 +751,12 @@ input[type=text]::-ms-clear {
     top: 40px;
     left: 32px;
 }
+
+#accuracy {
+    float: left;
+    font-size: 25px;
+}
+#testresult {
+    font-size: 25px;
+    color: red;
+}
