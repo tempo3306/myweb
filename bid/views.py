@@ -35,7 +35,6 @@ def yanzhengma(request, pk):
 def answer(request, pk):
     yanzhengma = Yanzhengma.objects.get(pk=pk)
     answer = yanzhengma.answer
-    answer = str(int(float(answer)))
     question = yanzhengma.question
     resp = {'question': question, 'answer': answer}
     return HttpResponse(json.dumps(resp), content_type="application/json")

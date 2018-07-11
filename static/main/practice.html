@@ -53,7 +53,7 @@
 
 <body>
 
-<div class="container" style="position: relative;margin:0 auto;left:20%;top:10%;">
+<div class="container" style="position: relative;margin:0 auto;left:10%;top:10%;">
 
     <div class='identify'>
         <span id="bt1" class="btn btn-success">练习模式</span>
@@ -72,6 +72,27 @@
     <p class="question" id="question"></p>
     <button class="confirm" id="confirm"></button>
     <button class="cancel" id="cancel"></button>
+</div>
+
+
+
+
+<div class="container" id="rtable" style="position: relative;margin:15px auto;left:0%;top:10%;display: None">
+    <div id="accuracy"></div>
+    <div id="testresult"></div>
+
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th style="text-align: center">校验码</th>
+            <th style="text-align: center">问题</th>
+            <th style="text-align: center">你的答案</th>
+            <th style="text-align: center">正确答案</th>
+        </tr>
+        </thead>
+        <tbody id="resulttable">
+        </tbody>
+    </table>
 </div>
 
 

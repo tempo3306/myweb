@@ -150,31 +150,33 @@ def init_yanzhengma():
     answers = sheet.col_values(3)[1:]
     questions = sheet.col_values(4)[1:]
 
-
     query_list = []
 
     for i in range(1000):
-        if len(str(int(answers[i]))) < 4:
-            # answer = '0' + str(int(answers[i]))
+        if sheet.cell(i, 3).ctype == 2:  ##导入进来 ctype 2会变成符点数
+            if isinstance(answers[i], float):
+                answers[i] = int(answers[i])
             print(answers[i])
-        if sheet[i][3].ctype == 2:  ##导入进来 ctype 2会变成符点数
-            answers[i] == int(answers[i])
-        query_list.append(Yanzhengma(picture='yan{0}.jpg'.format(i + 1),
-                                     question=str(questions[i]),
-                                     answer=str(answers[i]),
-                                     ))
-    Yanzhengma.objects.bulk_create(query_list)
+        yan = Yanzhengma.objects.get(id=i+1)
+        yan.answer = answers[i]
+        yan.save()
 
-    with open('1001.txt', 'rb') as file:
-        qa = pickle.load(file)
+        # query_list.append(Yanzhengma(picture='yan{0}.jpg'.format(i + 1),
+        #                              question=str(questions[i]),
+        #                              answer=str(answers[i]),
+        #                              ))
+    # Yanzhengma.objects.bulk_create(query_list)
 
-    query_list = []
-    for i in range(500):
-        query_list.append(Yanzhengma(picture='yan{0}.jpg'.format(i + 1001),
-                                     question=str(qa[i][1]),
-                                     answer=str(qa[i][0]),
-                                     ))
-    Yanzhengma.objects.bulk_create(query_list)
+    # with open('1001.txt', 'rb') as file:
+    #     qa = pickle.load(file)
+    #
+    # query_list = []
+    # for i in range(500):
+    #     query_list.append(Yanzhengma(picture='yan{0}.jpg'.format(i + 1001),
+    #                                  question=str(qa[i][1]),
+    #                                  answer=str(qa[i][0]),
+    #                                  ))
+    # Yanzhengma.objects.bulk_create(query_list)
 
 
 # 1001~1500
