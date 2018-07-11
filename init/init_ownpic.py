@@ -9,7 +9,7 @@ from bid.models import Yanzhengma
 import pickle
 
 def create_new_yanzhengma():
-    with open('color0_300.pkl', 'rb') as yfile:
+    with open('init/color0_300.pkl', 'rb') as yfile:
         name_qa = pickle.load(yfile)
         print(name_qa)
     query_list = []

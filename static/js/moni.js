@@ -445,12 +445,14 @@ function Answer(useranswer) {
 }
 
 //更新验证码及弹出窗口
-var id = Math.floor(Math.random() * 1500 + 1);
+var id = Math.floor(Math.random() * 3900 + 1);
 var path_yanzhengma = "/bid/yanzhengma/" + id;
 var path_answer = "/bid/answer/" + id;
 
 function GetYanzhengma() {
-    var id = Math.floor(Math.random() * 1500 + 1);
+    //1500以内
+    //1501~3900  own id
+    var id = Math.floor(Math.random() * 3900 + 1);
     var path_yanzhengma = "/bid/yanzhengma/" + id;
     var path_answer = "/bid/answer/" + id;
     $.get(path_answer, null, function (ret) {

@@ -31,6 +31,7 @@ def yanzhengma(request, pk):
     return render(request, 'bid/yanzhengma.html', context={'yan': yan})
 
 
+
 def answer(request, pk):
     yanzhengma = Yanzhengma.objects.get(pk=pk)
     answer = yanzhengma.answer

@@ -53,7 +53,7 @@ function Answer(useranswer) {
 
 
 //更新验证码及弹出窗口
-var id = Math.floor(Math.random() * 1500 + 1);
+var id = Math.floor(Math.random() * 3900 + 1);
 var path_yanzhengma = "/bid/yanzhengma/" + id;
 var path_answer = "/bid/answer/" + id;
 
@@ -61,7 +61,7 @@ var path_answer = "/bid/answer/" + id;
 //刷新功能
 function GetYanzhengma() {
     time1 = new Date().getTime();
-    var id = Math.floor(Math.random() * 1500 + 1);
+    var id = Math.floor(Math.random() * 3900 + 1);
     var path_yanzhengma = "/bid/yanzhengma/" + id;
     var path_answer = "/bid/answer/" + id;
     $.get(path_answer, null, function (ret) {
@@ -229,7 +229,10 @@ function Mode(num) {
             blue($('#bt1'));
             gray($('#bt2'));
             gray($('#bt3'));
-            mode = 0;
+            GetYanzhengma();  //刷新验证码
+            $('input').val("");
+            var a = document.getElementsByTagName("input");
+            a[0].focus();
         }
             break;
         case 1: {
