@@ -127,8 +127,8 @@ def init_variable():
     data['px_relative'] = 118  # 查找出来位置反算相对位置
     data['py_relative'] = 1
     ##计算时间位置
-    data['px_timerelative'] = 94
-    data['py_timerelative'] = 3
+    data['px_timerelative'] = 93
+    data['py_timerelative'] = 4
 
     ## 相对于最低成交价位置
     #   ## 0:加价  1：出价 2：提交  3：刷新   4 ：确认   5：价格输入框    6:验证码输入框     7：取消

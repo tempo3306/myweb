@@ -58,9 +58,9 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',  # 跨域
-    'django.middleware.cache.UpdateCacheMiddleware',          # 注意位置，在前   全站缓存
+    # 'django.middleware.cache.UpdateCacheMiddleware',          # 注意位置，在前   全站缓存
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.cache.FetchFromCacheMiddleware',       # 注意位置，在后
+    # 'django.middleware.cache.FetchFromCacheMiddleware',       # 注意位置，在后
     'django.middleware.csrf.CsrfViewMiddleware',  # 防跨站伪造请求
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
