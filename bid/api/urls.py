@@ -8,6 +8,9 @@ from django.conf.urls import url, include
 from rest_framework import routers
 from .views import *
 import bid.api.views as views
+
+app_name = 'api_bid'
+
 from django.views.decorators.csrf import csrf_exempt
 
 # consumer_router = routers.DefaultRouter()
