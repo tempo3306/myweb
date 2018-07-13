@@ -39,22 +39,29 @@ from django.views.decorators.csrf import csrf_exempt
 identify_code_serverside_router = routers.DefaultRouter()
 identify_code_serverside_router.register(r'', Identify_code_serversideViewSet)
 
-
 hander_list = Hander_serversideViewSet.as_view({'get': 'list', 'post': 'create'})
 hander_detail = Hander_serversideViewSet.as_view({'get': 'retrieve', 'patch': 'partial_update',
-                                                                'put': 'update', 'delete': 'destroy'})
+                                                  'put': 'update', 'delete': 'destroy'})
 
 auction_list = Auction_serversideViewSet.as_view({'get': 'list', 'post': 'create'})
 auction_detail = Auction_serversideViewSet.as_view({'get': 'retrieve', 'patch': 'partial_update',
-                                                                'put': 'update', 'delete': 'destroy'})
+                                                    'put': 'update', 'delete': 'destroy'})
 
 record_list = Record_serversideViewset.as_view({'get': 'list', 'post': 'create'})
 record_detail = Record_serversideViewset.as_view({'get': 'retrieve', 'patch': 'partial_update',
-                                                                'put': 'update', 'delete': 'destroy'})
+                                                  'put': 'update', 'delete': 'destroy'})
 
-
-
-
+manage_urls = [
+    url(r'^ic_manage/$', include(identify_code_serverside_router.urls), name='ic_mange'),
+    #  url(r'^ic_manage/$', identify_code_list),
+    # url(r'^ic_manage/(?P<pk>[0-9]+)/', identify_code_detail),
+    url(r'^hd_manage/$', hander_list),
+    url(r'^hd_manage/(?P<pk>[0-9]+)/', hander_detail),
+    url(r'^au_manage/$', auction_list),
+    url(r'^au_manage/(?P<pk>[0-9]+)/', auction_detail),
+    url(r'^rc_manage/$', record_list),
+    url(r'^rc_manage/(?P<pk>[0-9]+)/', record_detail),
+]
 
 urlpatterns = [
     ##登录
@@ -65,19 +72,10 @@ urlpatterns = [
     url('^bid_logout/$', views.bid_logout, name='bid_logout'),
     url('^bid_keeplogin/$', views.bid_keeplogin, name='bid_keeplogin'),
     ##管理操作
-    url(r'^ic_manage/$', include(identify_code_serverside_router.urls)),
-    #  url(r'^ic_manage/$', identify_code_list),
-    # url(r'^ic_manage/(?P<pk>[0-9]+)/', identify_code_detail),
-    url(r'^hd_manage/$', hander_list),
-    url(r'^hd_manage/(?P<pk>[0-9]+)/', hander_detail),
-    url(r'^au_manage/$', auction_list),
-    url(r'^au_manage/(?P<pk>[0-9]+)/', auction_detail),
-    url(r'^rc_manage/$', record_list),
-    url(r'^rc_manage/(?P<pk>[0-9]+)/', record_detail),
-
 
     # url('^identify_code_manage/$', include(identify_code_serverside_router.urls)),
     # url('^identify_code_manage', csrf_exempt(Identify_code_serversideViewSet.as_view({'get':'list', 'put': 'update',
     #
     #                     'patch': 'partial_update', 'delete': 'destroy'})),
+    url('^/$', include(manage_urls))
 ]

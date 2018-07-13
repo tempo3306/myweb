@@ -50,7 +50,7 @@ INSTALLED_APPS = [
     'django_extensions',
     'django_filters',
     'django_celery_results',
-    'wx_zhuoqiuzhibo',
+    'hupaiyihao',
 ]
 
 
@@ -243,6 +243,8 @@ REST_FRAMEWORK = {
         'rest_framework.parsers.JSONParser',
         'rest_framework.parsers.FormParser',
         'rest_framework.parsers.MultiPartParser'),
+    'TEST_REQUEST_DEFAULT_FORMAT': 'json'  ##测试默认返回json
+
 }
 ###JWT AUTH认证配置
 JWT_AUTH = {
