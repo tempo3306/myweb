@@ -6,7 +6,6 @@ from django.core.cache import caches
 
 from bid.models import Identify_code
 from tools.utils import random_str
-from hupaiyihao.models import HupaiyihaoUser
 
 def get_component():
     """
@@ -23,6 +22,7 @@ def get_component():
 
 ##创建 微信公众号用户
 def create_hupaiyihaouser(userid):
+    from hupaiyihao.models import HupaiyihaoUser
     identify_code = create_free_ic()
     HupaiyihaoUser.objects.create(identify_code=identify_code, free_identify_code=True, useropenid=userid)
     return identify_code.identify_code

@@ -103,17 +103,17 @@ def autoreply(request):
             ## 如果存在
                 if user:
                     ##判断是否获取过
-                    if user.free_identify_code:
+                    if user[0].free_identify_code:
                         ##已经获取过
                         reply.content = '您已经获取过激活码'
                     else:
                         identify_code = create_free_ic()
-                        user.free_identify_code = True
-                        user.identify_code = identify_code
-                        reply.content = f'激活码{identify_code.identify_code}'
+                        user[0].free_identify_code = True
+                        user[0].identify_code = identify_code
+                        reply.content = f'激活码: {identify_code.identify_code}'
                 else:
                     code = create_hupaiyihaouser(useropenid)
-                    reply.content = f'激活码{code}'
+                    reply.content = f'激活码: {code}'
                 # 转换成 XML
                 xml = reply.render()
                 return xml
@@ -135,6 +135,19 @@ def autoreply(request):
             # 转换成 XML
             xml = reply.render()
             return xml
+
+
+        #-----------------------------
+        ##事件
+        elif msg_type == 'event':
+            content = msg.content
+            from wechatpy.replies import TextReply
+            reply = TextReply(message=msg)
+            if msg.event == 'subscribe':
+                reply.content = '回复 激活码 获取免费激活码'
+
+
+
 
     except Exception as Argment:
         logger.exception("error")
