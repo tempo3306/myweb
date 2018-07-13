@@ -57,6 +57,7 @@ class Wechat(models.Model):
 
 
 class HupaiyihaoUser(models.Model):
-    username = models.CharField(max_length=20,  verbose_name="openid", unique=True)
+    useropenid = models.CharField(max_length=35,  verbose_name="openid", unique=True)
     free_identify_code = models.BooleanField(default=False)
-    identify_code = models.ForeignKey(Identify_code, on_delete=models.CASCADE, null=True, blank=True)
+    identify_code = models.ForeignKey(Identify_code, on_delete=models.CASCADE, null=True, blank=True,
+                                      related_name='hupaiyihaouser', unique=True)

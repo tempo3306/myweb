@@ -35,8 +35,8 @@ class Identify_code(models.Model):
     expired_date = models.DateField(default=datetime.date.today()+datetime.timedelta(days=30))  # 过期时间,激活开始计算相应的时间
     bid_name = models.CharField(max_length=10, default='沪牌一号')  # 标书姓名  one表示只有一次使用机会
     uuuid_type = models.CharField(max_length=15, default='diskid')
-    uuuid = models.CharField(max_length=40, default='none', blank=True)  ###激活码
-    last_uuuid = models.CharField(max_length=40, default='none', blank=True)  ###最近的一个激活码
+    uuuid = models.CharField(max_length=40, default='none', blank=True)  ###确认标识码
+    last_uuuid = models.CharField(max_length=40, default='none', blank=True)  ###最近的一个确认标识码
     # login_status = models.SmallIntegerField(default=0, blank=True)   ##登录状态 默认为0 代表未登录  代表登录
     strategy_dick = models.TextField(default=json.dumps(strategy), blank=True)  ##保存用户设置的策略
 

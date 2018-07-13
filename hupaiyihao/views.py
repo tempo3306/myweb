@@ -13,14 +13,14 @@ from wechatpy.utils import to_text
 from rest_framework.views import APIView
 from rest_framework import generics
 from rest_framework.response import Response
-from hupaiyihao.utils import get_component
+from hupaiyihao.utils import get_component, create_free_ic, create_hupaiyihaouser
 from hupaiyihao.models import Wechat
 from hupaiyihao import consts
 from hupaiyihao import caches as wechat_caches
 from hupaiyihao.tasks import process_wechat_query_auth_code_test
 from wechatpy import parse_message
 import logging
-
+from hupaiyihao.models import HupaiyihaoUser
 
 logger = logging.getLogger(__name__)
 
@@ -96,8 +96,24 @@ def autoreply(request):
                 # reply = TextReply(content='text reply', message=msg)
                 # 或者
                 reply = TextReply(message=msg)
-                reply.content = '查看详细排名' \
-                                '<a href="https://qiuplus.cn/zqzb/ranktable/">斯诺克排名 </a>'
+
+            ## 查看是否存在
+                useropenid = msg.source
+                user = HupaiyihaoUser.objects.filter(useropenid=useropenid)
+            ## 如果存在
+                if user:
+                    ##判断是否获取过
+                    if user.free_identify_code:
+                        ##已经获取过
+                        reply.content = '您已经获取过激活码'
+                    else:
+                        identify_code = create_free_ic()
+                        user.free_identify_code = True
+                        user.identify_code = identify_code
+                        reply.content = f'激活码{identify_code.identify_code}'
+                else:
+                    code = create_hupaiyihaouser(useropenid)
+                    reply.content = f'激活码{code}'
                 # 转换成 XML
                 xml = reply.render()
                 return xml

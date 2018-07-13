@@ -4,6 +4,9 @@ from wechatpy import WeChatComponent
 from django.conf import settings
 from django.core.cache import caches
 
+from bid.models import Identify_code
+from tools.utils import random_str
+from hupaiyihao.models import HupaiyihaoUser
 
 def get_component():
     """
@@ -17,3 +20,17 @@ def get_component():
         session=caches['wechat']
     )
     return component
+
+##创建 微信公众号用户
+def create_hupaiyihaouser(userid):
+    identify_code = create_free_ic()
+    HupaiyihaoUser.objects.create(identify_code=identify_code, free_identify_code=True, useropenid=userid)
+    return identify_code.identify_code
+
+
+
+##创建激活码
+def create_free_ic():
+    ic = random_str(randomlength=8)
+    identify_code = Identify_code.objects.create(identify_code=ic, bid_name='免费用户')
+    return identify_code
