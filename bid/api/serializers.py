@@ -40,16 +40,20 @@ class Bid_recordSerializer(serializers.ModelSerializer):
     auction_name = serializers.CharField(source='auction.auction_name')
     Bid_number = serializers.CharField(source='auction.Bid_number')
     hander_name = serializers.CharField(source='hander.hander_name')
+    hander_telephone = serializers.CharField(source='hander.telephone')
 
     class Meta:
         model = Bid_record
         fields = [
+            'id',
             'hander_name',
             'Bid_number',
             'auction_name',
             'date',
             'strategy_dick',
-            'result'
+            'result',
+            'firstprice',
+            'hander_telephone',
         ]
 
 

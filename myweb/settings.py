@@ -243,7 +243,7 @@ REST_FRAMEWORK = {
         'rest_framework.parsers.JSONParser',
         'rest_framework.parsers.FormParser',
         'rest_framework.parsers.MultiPartParser'),
-    'TEST_REQUEST_DEFAULT_FORMAT': 'json'  ##测试默认返回json
+    # 'TEST_REQUEST_DEFAULT_FORMAT': 'json'  ##测试默认返回json
 
 }
 ###JWT AUTH认证配置

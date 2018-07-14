@@ -136,26 +136,24 @@ def autoreply(request):
             xml = reply.render()
             return xml
 
-
         #-----------------------------
         ##事件
         elif msg_type == 'event':
-            content = msg.content
-            from wechatpy.replies import TextReply
-            reply = TextReply(message=msg)
-            if msg.event == 'subscribe':
-                reply.content = '回复 激活码 获取免费激活码'
-
-
-
+            xml = event_relpy(msg)
+            return xml
 
     except Exception as Argment:
         logger.exception("error")
         logger.error(Argment)
         return Argment
 
-
-
+def event_relpy(msg):
+    from wechatpy.replies import TextReply
+    reply = TextReply(message=msg)
+    if msg.event == 'subscribe':
+        reply.content = '回复 激活码 获取免费激活码'
+        xml = reply.render()
+        return xml
 
 
 class AuthEventProcessView(APIView):

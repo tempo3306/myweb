@@ -174,7 +174,7 @@ class Bid_hander(models.Model):
     basic_salary = models.FloatField(default=50)  # 底薪
     extra_bonus = models.FloatField(default=500)  # 奖金
     total_income = models.FloatField(default=0)  # 总收入
-
+    telephone = models.CharField(max_length=11, null=True, blank=True)
 
 
     class Meta:

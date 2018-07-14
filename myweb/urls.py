@@ -49,7 +49,7 @@ urlpatterns = [
     url('^hupaiyihao/', include('hupaiyihao.urls')),
 
     ##前端
-    url(r'manage/', TemplateView.as_view(template_name="index.html"))
+    url(r'^manage/', TemplateView.as_view(template_name="index.html"))
 ]
 
 if settings.DEBUG:

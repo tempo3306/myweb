@@ -25,3 +25,11 @@ VERIFY_TYPE_BASE_VERIFY = 3
 VERIFY_TYPE_3_1 = 4
 # 已资质认证通过、还未通过名称认证，但通过了腾讯微博认证
 VERIFY_TYPE_3_2 = 5
+
+
+
+###appid  secret
+
+APPID = 'wxf49962809e9326b8'
+SECRET = '7ffa250a0ff45bd8de4fc977f8453c14'
+

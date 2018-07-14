@@ -23,7 +23,6 @@ import time
 from tools.tasks import reset_identify_code
 from tools.utils import init_variable
 from tools.utils import random_str
-
 from django.core import serializers
 
 import logging
