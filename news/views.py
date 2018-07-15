@@ -25,3 +25,8 @@ def purchase_bid(request):
 ##软件教程
 def course(request):
     return render(request, 'news/course.html')
+
+
+##
+def rule(request):
+    return render(request, 'news/rules.html')

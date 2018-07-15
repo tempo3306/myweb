@@ -8,4 +8,6 @@ urlpatterns = [
     url(r'^purchase_software', views.purchase_software, name='purchase_software'),
     url(r'^purchase_bid', views.purchase_bid, name='purchase_bid'),
     url(r'^course', views.course, name='course'),
+    url(r'^course', views.course, name='course'),
+
 ]

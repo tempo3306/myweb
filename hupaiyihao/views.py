@@ -109,29 +109,30 @@ def autoreply(request):
                         user[0].free_identify_code = True
                         user[0].identify_code = identify_code
                         reply.content = f'''激活码: {code}
-                        <a href="https://share.weiyun.com/5xcVatG">软件微云下载地址</a>  密码：ncw58k
-                        <a href="https://pan.baidu.com/s/1Zvd16TYgJr7wiIKL41IcMg">百度网盘下载地址 </a>  密码: n9jy
-                        说明：所需文件均在同一共享文件夹内，无须网上下载。
-                         使用流程：
-                         1.请先下载Newlife5.3.rar，解压后打开Newlife5.3.exe，程序会自动安装，
-                         安装完成后会在桌面创建快捷方式并自动打开。
-                         2.如果EXE无法执行，需要下载 wrar560scp.exe安装.
-                         3.安装未完成后，如果出现找不到dll,需要下载系统对应版本的vcredist.exe
-                         4.仍有问题可以在公众号提问或者加微信18817556171询问。
-                        '''  # 转换成 XML
+<a href="https://share.weiyun.com/5xcVatG">软件微云下载地址</a>  密码：ncw58k
+<a href="https://pan.baidu.com/s/1Zvd16TYgJr7wiIKL41IcMg">百度网盘下载地址</a>  密码: n9jy
+说明：所需文件均在同一共享文件夹内，无须网上下载。
+使用流程：
+1.请先下载Newlife5.3.rar，解压后打开Newlife5.3.exe，程序会自动安装，
+安装完成后会在桌面创建快捷方式并自动打开。
+2.如果EXE无法执行，需要下载 wrar560scp.exe安装.
+3.安装未完成后，如果出现找不到dll,需要下载系统对应版本的vcredist.exe
+4.仍有问题可以在公众号提问或者加微信18817556171询问。
+                        '''
+                        # 转换成 XML
                         print(reply.content)
                 else:
                     code = create_hupaiyihaouser(useropenid)
                     reply.content = f'''激活码: {code}
-                    <a href="https://share.weiyun.com/5xcVatG">软件微云下载地址</a>  密码：ncw58k
-                    <a href="https://pan.baidu.com/s/1Zvd16TYgJr7wiIKL41IcMg">百度网盘下载地址 </a>  密码: n9jy
-                    说明：所需文件均在同一共享文件夹内，无须网上下载。
-                     使用流程：
-                     1.请先下载Newlife5.3.rar，解压后打开Newlife5.3.exe，程序会自动安装，
-                     安装完成后会在桌面创建快捷方式并自动打开。
-                     2.如果EXE无法执行，需要下载 wrar560scp.exe安装.
-                     3.安装未完成后，如果出现找不到dll,需要下载系统对应版本的vcredist.exe
-                     4.仍有问题可以在公众号提问或者加微信18817556171询问。
+<a href="https://share.weiyun.com/5xcVatG">软件微云下载地址</a>  密码：ncw58k
+<a href="https://pan.baidu.com/s/1Zvd16TYgJr7wiIKL41IcMg">百度网盘下载地址</a>  密码: n9jy
+说明：所需文件均在同一共享文件夹内，无须网上下载。
+使用流程：
+1.请先下载Newlife5.3.rar，解压后打开Newlife5.3.exe，程序会自动安装，
+安装完成后会在桌面创建快捷方式并自动打开。
+2.如果EXE无法执行，需要下载 wrar560scp.exe安装.
+3.安装未完成后，如果出现找不到dll,需要下载系统对应版本的vcredist.exe
+4.仍有问题可以在公众号提问或者加微信18817556171询问。
                     '''
                     # 转换成 XML
                 xml = reply.render()

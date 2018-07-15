@@ -173,8 +173,8 @@ function Test() {
             var text = "正确率: " + accuracy + "%" + "\r\n" + "总用时: " + total_time + "秒" + "\r\n" + "平均时间: " + avarage_time + "秒"
         }
         $('#accuracy').html(text);
-        if (accuracy >= 99 && avarage_time <= 3.5) {
-            var result = "恭喜你，通过考核！"
+        if (accuracy >= 99 && avarage_time <= 4.0) {
+            var result = "恭喜你，表现不错！"
         }
         else {
             var result = "还需要练习，继续加油"
@@ -262,8 +262,8 @@ function Examine() {
             var text = "正确率: " + accuracy + "%" + "\r\n" + "总用时: " + total_time + "秒" + "\r\n" + "平均时间: " + avarage_time + "秒"
         }
         $('#accuracy').html(text);
-        if (accuracy >= 99 && avarage_time <= 3.5) {
-            var result = "恭喜你，通过考核！"
+        if (accuracy >= 99 && avarage_time <= 4.0) {
+            var result = "恭喜你，通过拍手考核！"
         }
         else {
             var result = "还需要练习，继续加油"
