@@ -19,5 +19,5 @@ test/e2e/reports
 selenium-debug.log
 package-lock.json
 .DS_Store
-hp-mange_build.sh
+hp-manage_build.sh
 git_fetch.sh

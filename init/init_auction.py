@@ -38,6 +38,7 @@ def create_auction(rows):
                 Bid_number = row['标书号']  # 标书号
                 Bid_password = row['标书密码']  # 密码
                 status = row['状态']  # 标书状态
+                expired_date = row['过期时间']  # 标书状态
                 count = int(row['参拍次数'])  # 参拍次数
                 identify_code = 'h' + str(row['激活码'])  # 过期时间
                 sid = transaction.savepoint()  # 开启SQL事务
@@ -53,6 +54,7 @@ def create_auction(rows):
                                                                'Bid_password': Bid_password,
                                                                'status': status,
                                                                'count': count,
+                                                               'expired_date': expired_date,
                                                                'identify_code': Identify_code.objects.get(
                                                                    identify_code=identify_code)})
     except:

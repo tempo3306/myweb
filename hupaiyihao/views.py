@@ -24,7 +24,6 @@ from hupaiyihao.models import HupaiyihaoUser
 
 logger = logging.getLogger(__name__)
 
-
 from django.shortcuts import render
 
 # Create your views here.
@@ -65,7 +64,6 @@ class Weixin(APIView):
         except Exception as e:
             return HttpResponse("wrong")
 
-
     def post(self, request):
         othercontent = autoreply(request)
         print(othercontent)
@@ -97,10 +95,10 @@ def autoreply(request):
                 # 或者
                 reply = TextReply(message=msg)
 
-            ## 查看是否存在
+                ## 查看是否存在
                 useropenid = msg.source
                 user = HupaiyihaoUser.objects.filter(useropenid=useropenid)
-            ## 如果存在
+                ## 如果存在
                 if user:
                     ##判断是否获取过
                     if user[0].free_identify_code:
@@ -110,7 +108,21 @@ def autoreply(request):
                         identify_code = create_free_ic()
                         user[0].free_identify_code = True
                         user[0].identify_code = identify_code
-                        reply.content = f'激活码: {identify_code.identify_code}'
+                        reply.content = f'''
+                                        激活码: {identify_code.identify_code}
+                                        
+                                   <a href="https://pan.baidu.com/s/1Zvd16TYgJr7wiIKL41IcMg">软件下载地址 </a>
+                                        密码: n9jy
+                                        
+                                       说明：所需文件均在同一共享文件夹内，无须网上下载。
+                                       
+                                       使用流程：
+                                       1.请先下载Newlife5.3.rar，解压后打开Newlife5.3.exe，程序会自动安装，
+                                       安装完成后会在桌面创建快捷方式并自动打开。
+                                       2.如果EXE无法执行，需要下载 wrar560scp.exe安装.
+                                       3.安装未完成后，如果出现找不到dll,需要下载系统对应版本的vcredist.exe
+                                       4.仍有问题可以在公众号提问或者加微信18817556171询问。
+                                        '''
                 else:
                     code = create_hupaiyihaouser(useropenid)
                     reply.content = f'激活码: {code}'
@@ -136,7 +148,7 @@ def autoreply(request):
             xml = reply.render()
             return xml
 
-        #-----------------------------
+        # -----------------------------
         ##事件
         elif msg_type == 'event':
             xml = event_relpy(msg)
@@ -146,6 +158,7 @@ def autoreply(request):
         logger.exception("error")
         logger.error(Argment)
         return Argment
+
 
 def event_relpy(msg):
     from wechatpy.replies import TextReply
@@ -270,7 +283,6 @@ class ProcessServerEventView(APIView):
                 process_wechat_query_auth_code_test.apply_async(
                     (message['FromUserName'], query_auth_code), eta=now)
                 return Response('')
-
 
     def reply_message(self, message, content):
         """

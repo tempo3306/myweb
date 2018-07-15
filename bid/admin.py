@@ -8,12 +8,12 @@ class Bid_handerAdmin(admin.ModelAdmin):
     search_fields = ('hander_name',)
     ordering = ['hander_name']
 
-class Bid_actionAdmin(admin.ModelAdmin):
-    list_display = ('diff', 'refer_time', 'bid_time', 'delay_time', 'ahead_price', 'hander_id',
-                    'action_date', 'auction_id', 'action_result')
-    list_filter = ('action_date', 'auction_id', 'action_result')
-    search_fields = ('action_date', 'auction_id', 'action_result')
-    ordering = ['action_date', 'action_result']
+# class Bid_actionAdmin(admin.ModelAdmin):
+#     list_display = ('diff', 'refer_time', 'bid_time', 'delay_time', 'ahead_price', 'hander_id',
+#                     'action_date', 'auction_id', 'action_result')
+#     list_filter = ('action_date', 'auction_id', 'action_result')
+#     search_fields = ('action_date', 'auction_id', 'action_result')
+#     ordering = ['action_date', 'action_result']
 
 class Bid_auctionAdmin(admin.ModelAdmin):
     list_display = ('auction_name', 'ID_number', 'Bid_number', 'Bid_password', 'status',
@@ -33,7 +33,7 @@ class Bid_recordAdmin(admin.ModelAdmin):
 
 admin.site.register(Bid_hander, Bid_handerAdmin)
 admin.site.register(Bid_auction, Bid_auctionAdmin)
-admin.site.register(Bid_action, Bid_actionAdmin)
+# admin.site.register(Bid_action, Bid_actionAdmin)
 admin.site.register(Invite_code)
 admin.site.register(Identify_code)
 admin.site.register(Consumer_bid)
