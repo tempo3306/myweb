@@ -314,15 +314,15 @@ def query_record_by_args(params):
             Q(id__icontains=searchText) |
             Q(result__icontains=searchText) |
             Q(date__icontains=searchText))
-
-    count = queryset.count()
-    start = (pageNumber - 1) * pageSize
     if sortName == 'firstprice':
         queryset = queryset.filter(firstprice=True)
     elif sortName == '-firstprice':
         queryset = queryset.filter(firstprice=False)
     else:
-        queryset = queryset.order_by(sortName)[start:start + pageSize]
+        queryset = queryset.order_by(sortName)
+    count = queryset.count()
+    start = (pageNumber - 1) * pageSize
+    queryset = queryset[start:start + pageSize]
     return {
         'items': queryset,
         'count': count,
