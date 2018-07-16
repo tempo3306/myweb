@@ -58,12 +58,9 @@ class Bid_recordSerializer(serializers.ModelSerializer):
 
 
 class Bid_auctionSerializer(serializers.ModelSerializer):
-    auction_actions = serializers.PrimaryKeyRelatedField(many=True,
-                                        queryset=Bid_auction.objects.all()) #related_name
     class Meta:
         model = Bid_auction
         fields = [
-            'auction_actions',  #外键
             'id',
             'description',
             'auction_name',

@@ -120,6 +120,7 @@ class Auction_serversideViewSet(viewsets.ViewSet):
                 serializer = Bid_auctionSerializer(auctions['items'], many=True)
                 result = dict()
                 result['rows'] = serializer.data
+                print(auctions)
                 result['count'] = auctions['count']
                 return Response(result, status=status.HTTP_200_OK, template_name=None, content_type=None)
             else:
@@ -548,6 +549,8 @@ def get_guopaiurl(request):
         logger.exception("ERROR MESSAGE")
         return Response(status=status.HTTP_404_NOT_FOUND)
 
+
+##免费模拟登录
 @api_view(['GET'])
 def monitest(request):
     ip_address = request.META.get("REMOTE_ADDR", None)
@@ -569,6 +572,7 @@ def monitest(request):
     return Response(res, status=status.HTTP_200_OK, template_name=None, content_type=None)
 
 
+##登出
 @api_view(['GET'])
 def bid_logout(request):
     try:

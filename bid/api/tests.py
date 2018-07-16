@@ -13,7 +13,7 @@ from rest_framework import status
 
 
 class UserLogoutAPIViewTestCase(APITestCase):
-    url = reverse("api_bid:ic_mange")
+    url = reverse("api_bid: ic_mange")
 
     def setUp(self):
         self.username = "john"
@@ -30,5 +30,15 @@ class UserLogoutAPIViewTestCase(APITestCase):
         response = self.client.get(self.url, data=datas)
         csrftoken = response.cookies['csrftoken']
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(Account.objects.count(), 1)
-        self.assertEqual(Account.objects.get().name, 'DabApps')
+        self.assertEqual(User.objects.count(), 1)
+        self.assertEqual(User.objects.get().name, 'DabApps')
+
+class guopaiurlAPIViewTestCase(APITestCase):
+    get_guopaiurl = reverse("api_bid: get_guopaiurl")
+    monitest = reverse("api_bid: monitest")
+    get_remotetime = reverse("api_bid: get_remotetime")
+    bid_firstprice = reverse("api_bid: bid_firstprice")
+    bid_logout = reverse("api_bid: bid_logout")
+    bid_keeplogin = reverse("api_bid: bid_keeplogin")
+
+##101.87.221.219
