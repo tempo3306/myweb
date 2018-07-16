@@ -345,8 +345,6 @@ class Bid_action(models.Model):
 
 
 
-
-
 ##设置为undefined可以获取pageNumber，pageSize，searchText，sortName，sortOrder
 def query_action_by_args(params):
     pageSize = int(params.get('pageSize', None))  ##每页数量
