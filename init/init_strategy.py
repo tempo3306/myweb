@@ -28,6 +28,9 @@ strategy = {
     "strategy_type": "0", "enter_on": True}
 
 
+descriptions = {'0': '单枪', '1': '双枪', '2': '单枪动态', '3': '双枪动态'}
+
+
 # one_time1	one_price	one_diff	one_delay	one_time2	force1	auto_price	second_time1	second_price
 # second_diff	second_delay	second_time2	force2
 # price1	delay1	time1	price2	delay2	time2	price3	delay3	time3	finaltime
@@ -50,6 +53,7 @@ def change_strategy(row):
     ]
     temp_strategy[type] = templist
     temp_strategy["strategy_type"] = type
+    temp_strategy["strategy_description"] = descriptions[type]
     return temp_strategy
 
 

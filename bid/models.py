@@ -317,7 +317,12 @@ def query_record_by_args(params):
 
     count = queryset.count()
     start = (pageNumber - 1) * pageSize
-    queryset = queryset.order_by(sortName)[start:start + pageSize]
+    if sortName == 'firstprice':
+        queryset = queryset.filter(firstprice=True)
+    elif sortName == '-firstprice':
+        queryset = queryset.filter(firstprice=False)
+    else:
+        queryset = queryset.order_by(sortName)[start:start + pageSize]
     return {
         'items': queryset,
         'count': count,
