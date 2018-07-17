@@ -45,6 +45,14 @@ def yanzhengma_refresh(request):
     return render(request, "bid/yanzhengma.html", context={'yan': yan})
 
 
+def get_yanzhengma_count(request):
+    count = Yanzhengma.objects.all().count()
+    res = {'count': count}
+    return HttpResponse(json.dumps(res), content_type="application/json")
+
+
+
+
 def practice(request):
     return render(request, "bid/practice.html")
 

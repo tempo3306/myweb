@@ -68,6 +68,24 @@ def init_yan():
     init_51()
     init_color0_300()
 
+def init_circle():
+    with open('init/circle0_100.pkl', 'rb') as yfile:
+        name_qa = pickle.load(yfile)
+        print(name_qa)
+    query_list = []
+    lenth_name_qa = len(name_qa)
+
+    for i in range(lenth_name_qa):
+        lenth = len(name_qa[i][1])
+        for j in range(lenth):
+            print(name_qa[i][1][j][0])
+            query_list.append(Yanzhengma(picture=name_qa[i][0],
+                                         question=name_qa[i][1][j][0],
+                                         answer=name_qa[i][1][j][1],
+                                         ))
+    Yanzhengma.objects.bulk_create(query_list)
+
 
 if __name__ == '__main__':
-    init_yan()
+    # init_yan()
+    init_circle()

@@ -57,6 +57,18 @@ QUESIONS = {
     9: ['请输入第4到第6位图像校验码', (3, 6)]
 }
 
+circle_QUESTIONS = {
+    2: ['输入画圈的四位数字', ''],
+    3: ['请输入第1到第4位图像校验码', (0, 4)],
+    4: ['请输入第2到第5位图像校验码', (1, 5)],
+    5: ['请输入第3到第6位图像校验码', (2, 6)],
+    6: ['请输入第1到第3位图像校验码', (0, 3)],
+    7: ['请输入第2到第4位图像校验码', (1, 4)],
+    8: ['请输入第3到第5位图像校验码', (2, 5)],
+    9: ['请输入第4到第6位图像校验码', (3, 6)]
+}
+
+
 
 # '请输入红色圆形后3位数字校验码',
 
@@ -67,7 +79,7 @@ QUESIONS = {
 class Create_pic():
     def get_colorpic(self):
         qa_name = []
-        for i in range(1, 301):
+        for i in range(1, 3):
             colors, qa = get_num_color()
             pic = color_draw(colors)
             # ownpic = draw(charset=numstr, fg_color=RED_COLOR)
@@ -83,6 +95,29 @@ class Create_pic():
         print(len(qa_name))
         with open('color0_300.pkl', 'wb') as cofile:
             pickle.dump(qa_name, cofile)
+
+    def get_circlepic(self):
+        qa_name = []
+        for i in range(1, 101):
+            colors, charsets = get_noblue_colors()
+            print(colors)
+            pic = color_draw(colors)
+            # ownpic = draw(charset=numstr, fg_color=RED_COLOR)
+            # ownpic = transform(ownpic)
+            pic = rectangle(pic)
+            numlist = circle_list()
+            print('numlist', numlist)
+            pic = circle(pic, numlist)
+            qa = get_noblue_qa(numlist, charsets)
+            pic = addpoint(pic)
+            # pic = addline(pic)
+            name = save(pic, i, show=False)
+            qa_name.append((name, qa))
+        print(qa_name)
+        print(len(qa_name))
+        with open('circle0_100.pkl', 'wb') as cofile:
+            pickle.dump(qa_name, cofile)
+
 
 
 
@@ -151,6 +186,37 @@ def get_randcolor():
     return (r, g, b)
 
 
+# 生成随机非蓝色颜色
+def get_noblue():
+    r = random.randint(50, 255)
+    g = random.randint(0, 180)
+    b = 0
+    return (r, g, b)
+
+def get_noblue_colors():
+    randnum = get_randnum()
+    colorlist = []
+    for i in range(6):
+        colorlist.append(get_noblue())
+    return (list(zip(randnum, colorlist)), randnum)  # zip只能迭代一次
+
+def get_noblue_qa(numlist, charset):
+    q_a_a = []
+    # 画圈问题
+    question1 = circle_QUESTIONS[2][0]
+    templist = [charset[i] for i in numlist]
+    answer1 = ''.join(templist)
+    q_a_a.append((question1, answer1))
+    # 3-10 次序数字
+    for i in range(3, 10):
+        question = QUESIONS[i][0]
+        x, y = QUESIONS[i][1]
+        answer = charset[x: y]
+        q_a_a.append((question, answer))
+    return q_a_a
+
+
+
 def get_randstr(num=2):
     chars = string.ascii_letters
     random = Random()
@@ -169,9 +235,25 @@ def color_draw(colors, size=IMG_SIZE1):
     # print('f', list(colors))
     colors = list(colors)
     for char, color in colors:
+        draw.text((x + 16 * index, y), char, font=hold, fill=color)
+        index += 1
+    return pic
+
+def noblue_draw(colors, size=IMG_SIZE1):
+    pic = Image.new('RGB', size, BG_COLOR)  # 图片
+    draw = ImageDraw.Draw(pic)
+    hold = ImageFont.truetype(FONT_TYPE, SINGLE_SIZE)
+    x, y = POS1
+    index = 0
+    # print('f', list(colors))
+    colors = list(colors)
+    for char, color in colors:
         draw.text((x + 16 * index, y), char, font=hold, fill=COLOR_KEY[color])
         index += 1
     return pic
+
+
+
 
 
 def draw(charset='2011', size=IMG_SIZE1, fg_color=FG_COLOR, pos=POS1):
@@ -184,6 +266,10 @@ def draw(charset='2011', size=IMG_SIZE1, fg_color=FG_COLOR, pos=POS1):
     hold = ImageFont.truetype(FONT_TYPE, SINGLE_SIZE)
     draw.text(pos, charset, font=hold, fill=fg_color)  # FG_COLOR  字体颜色
     return pic
+
+
+
+
 
 
 def transform(pic, size=IMG_SIZE1):
@@ -247,14 +333,24 @@ def rectangle(pic, size=IMG_SIZE1):
 
 
 ##给数字加圆
-def circle(pic, size=IMG_SIZE1):
+def circle(pic, numlist,  size=IMG_SIZE1):
     img = np.asarray(pic)
     width, height = size
     x, y = POS1
     for i in range(6):
-        cv2.ellipse(img, (x + 5 + 17 * i, y + 10), (7, 10), 0, 0, 360, BLUE_COLOR, 0)
+        if i in numlist:
+            cv2.ellipse(img, (x + 8 + 16 * i, y + 13), (7, 13), 0, 0, 360, BLUE_COLOR, 2)
         # img = cv2.circle(img, (x + 12 * i, y + 10), 10, BLUE_COLOR, 1)  # 修改最后一个参数
     return Image.fromarray(np.uint8(img))
+
+##画圈的随机位置
+def circle_list():
+    nums = [i for i in range(6)]
+    nlist = random.sample(nums, 4)
+    nlist.sort()
+    return nlist
+
+
 
 
 def bottom_circle(pic, size=IMG_SIZE1):
@@ -262,7 +358,7 @@ def bottom_circle(pic, size=IMG_SIZE1):
     width, height = size
     x, y = POS1
     for i in range(6):
-        img = cv2.circle(img, (x + 6 + 17 * i, y + 23), 2, BLUE_COLOR, 1)  # 修改最后一个参数
+        img = cv2.circle(img, (x + 20 + 13 * i, y + 27), 2, BLUE_COLOR, 0)  # 修改最后一个参数
     return Image.fromarray(np.uint8(img))
 
 
@@ -270,8 +366,8 @@ def save(pic, num, show=False):
     """
     保存中间结果
     """
-    name = 'own%s.png' %num
-    pic.save(DIR + 'ownpic/own%s.png' % num)
+    name = 'circle%s.png' %num
+    pic.save(DIR + 'ownpic/circle%s.png' % num)
     if show:
         pic.show()
     return name
@@ -280,4 +376,4 @@ if __name__ == '__main__':
     # print(get_colors())
 
     C = Create_pic()
-    C.get_colorpic()
+    C.get_circlepic()

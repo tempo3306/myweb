@@ -24,4 +24,5 @@ urlpatterns = [
     path('answer/<int:pk>', views.answer, name='answer'),
     url('^yanzhengma_refresh/$', views.yanzhengma_refresh, name='yanzhengma_refresh'),
     url('^practice/$', views.practice, name='practice'),
+    url('^yanzhengma_count/$', views.get_yanzhengma_count, name='count'),
 ]
