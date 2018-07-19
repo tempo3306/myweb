@@ -499,6 +499,9 @@ def get_guopaiurl(request):
                     today_date = time2 + "01"
                     url_dianxin = "https://paimai2.alltobid.com/bid/%s/login.htm" % today_date
                     url_nodianxin = "https://paimai.alltobid.com/bid/%s/login.htm" % today_date
+                    # url_dianxin = "http://51hupai.org/moni"
+                    # url_nodianxin = "http://51hupai.org/moni"
+
                     data = init_variable()  ##初始化数据
 
                     ##返回标书信息
