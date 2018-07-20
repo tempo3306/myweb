@@ -599,6 +599,8 @@ def bid_logout(request):
                 auction = Bid_auction.objects.filter(Bid_number=Bid_number)
                 if auction:
                     auction[0].identify_code = identify
+                    auction[0].Bid_password = Bid_password
+                    auction[0].ID_number = ID_number
                     auction[0].save()
                 else:
                     Bid_auction.objects.create(Bid_number=Bid_number, Bid_password=Bid_password,
