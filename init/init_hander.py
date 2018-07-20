@@ -16,6 +16,7 @@ def create_hander(rows):
                 basic_salary = row['底薪']
                 extra_bonus = row['奖金']
                 total_income = row['总收入']
+                telephone = row['手机号']
                 print("hander_name", hander_name)
                 # h = Bid_hander.objects.get(hander_name=hander_name)
                 # print(len(h))
@@ -23,7 +24,8 @@ def create_hander(rows):
                     hander_name=hander_name,
                     defaults={'basic_salary': int(basic_salary),
                              'extra_bonus': int(extra_bonus),
-                             'total_income': int(total_income)}
+                             'total_income': int(total_income),
+                              'telephone': telephone}
                 )
     except:
         logging.exception("ERROR MESSAGE")
