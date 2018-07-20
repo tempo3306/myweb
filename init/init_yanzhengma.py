@@ -32,6 +32,7 @@ def init_helong():
                                      ))
     Yanzhengma.objects.bulk_create(query_list)
 
+
 def init_51():
     with open('init/1001.txt', 'rb') as file:
         qa = pickle.load(file)
@@ -44,6 +45,7 @@ def init_51():
                                      answer=str(qa[i][0]),
                                      ))
     Yanzhengma.objects.bulk_create(query_list)
+
 
 def init_color0_300():
     with open('init/color0_300.pkl', 'rb') as yfile:
@@ -68,6 +70,7 @@ def init_yan():
     init_51()
     init_color0_300()
 
+
 def init_circle():
     with open('init/circle0_100.pkl', 'rb') as yfile:
         name_qa = pickle.load(yfile)
@@ -86,6 +89,43 @@ def init_circle():
     Yanzhengma.objects.bulk_create(query_list)
 
 
+def init_direction():
+    import xlrd
+    excel = xlrd.open_workbook('验证码.xlsx')
+    sheet = excel.sheet_by_index(0)
+    name = sheet.col_values(1)[1:]
+    answers = sheet.col_values(3)[1:]
+    questions = sheet.col_values(2)[1:]
+
+    query_list = []
+    # print(name)
+    # print(answers)
+    print(questions)
+
+    lenth = len(answers)
+    print(lenth)
+    for i in range(lenth):
+        if isinstance(answers[i], float):
+            answers[i] = int(answers[i])
+        query_list.append(Yanzhengma(picture=name[i],
+                                     question=str(questions[i]),
+                                     answer=str(answers[i]),
+                                     ))
+        if i > 250:
+            query_list.append(Yanzhengma(picture=name[i],
+                                         question=str(questions[i]),
+                                         answer=str(answers[i]),
+                                         ))
+
+    Yanzhengma.objects.bulk_create(query_list)
+    #     print(name)
+        # yan = Yanzhengma(picture=name,
+        #            question=str(questions[i]),
+        #            answer=str(answers[i]),
+        #            )
+        # yan.save()
+
 if __name__ == '__main__':
     # init_yan()
-    init_circle()
+    # init_circle()
+    init_direction()

@@ -44,9 +44,9 @@ def change_strategy(row):
         float(row['one_time1']),
         int(row['one_diff']), int(row['one_advance']),
         float(row['one_delay']),
-        float(row['one_time2']), bool(row['force1']), bool(row['auto_price']),
+        float(row['one_time2']), row['force1']==str(True), row['auto_price']==str(True),
         float(row['second_time1']), int(row['second_diff']), int(row['second_advance']), float(row['second_delay']),
-        float(row['second_time2']), bool(row['force1']),
+        float(row['second_time2']), row['force2']==str(True),
         float(row['price1']), float(row['delay1']), float(row['time1']),
         float(row['price2']), float(row['delay2']), float(row['time2']),
         float(row['price3']), float(row['delay3']), float(row['time3']), float(row['finaltime'])
