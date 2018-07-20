@@ -57,7 +57,7 @@ function Answer(useranswer) {
 
 
 //更新验证码及弹出窗口
-var  count = 3900;
+var  count = 1000;
 var id = Math.floor(Math.random() * count + 1);
 var path_yanzhengma = "/bid/yanzhengma/" + id;
 var path_answer = "/bid/answer/" + id;

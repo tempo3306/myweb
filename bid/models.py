@@ -99,7 +99,8 @@ def query_identify_code_by_args(params):
     if searchText:
         queryset = queryset.filter(
             Q(id__icontains=searchText) |
-            Q(bid_name__icontains=searchText))
+            Q(bid_name__icontains=searchText) |
+            Q(identify_code__icontains=searchText))
 
     count = queryset.count()
     print("count=", count)
