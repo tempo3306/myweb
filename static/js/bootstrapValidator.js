@@ -2880,7 +2880,7 @@
          * - Valid: US0378331005, AU0000XVGZA3, GB0002634946
          * - Invalid: US0378331004, AA0000XVGZA3
          *
-         * @see http://en.wikipedia.org/wiki/International_Securities_Identifying_Number
+         * @see http://en.wikipedia.org/wiki/International_Securities_ Identifying_Number
          * @param {BootstrapValidator} validator The validator plugin instance
          * @param {jQuery} $field Field element
          * @param {Object} options Can consist of the following keys:

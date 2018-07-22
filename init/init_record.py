@@ -1,6 +1,6 @@
 import pickle
 from myweb.wsgi import *
-from bid.models import Bid_hander, Bid_auction, Identify_code, Bid_record
+from bid.models import Bid_hander, Bid_auction, Identify, Bid_record
 import xlrd
 from django.db import transaction
 from tools.file_operation import open_excel

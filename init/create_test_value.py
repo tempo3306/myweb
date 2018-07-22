@@ -6,7 +6,7 @@
 '''
 from myweb.wsgi import *
 from django.contrib.auth.models import User, Group
-from bid.models import Bid_hander, Bid_auction, Identify_code
+from bid.models import Bid_hander, Bid_auction, Identify
 from forums.models import Topic, Board, ForumUser
 from django.contrib.auth.models import Group, Permission
 
@@ -24,7 +24,7 @@ bid_name = models.CharField(max_length=10, default='one')  # 标书姓名  one�
 def generate_fake(count=100):
     from random import seed
     for i in range(count):
-        identify = Identify_code(identify_code=random_str(6), purchase_date="2018-5-22",
+        identify = Identify(identify_code=random_str(6), purchase_date="2018-5-22",
                                  expired_date="2018-9-22", bid_name=random_str(6))
 
         identify.save()

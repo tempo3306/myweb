@@ -11,7 +11,7 @@
 '''
 import pickle
 from myweb.wsgi import *
-from bid.models import Bid_hander, Bid_auction, Identify_code
+from bid.models import Bid_hander, Bid_auction, Identify
 import xlrd
 from django.db import transaction
 from tools.file_operation import open_excel
@@ -43,7 +43,7 @@ def deal(ids, auctions):
     for i in range(10):
         a = 10001 + i
         ic = f'hdxw{a}'
-        identify = Identify_code.objects.get(identify_code=ic)
+        identify = Identify.objects.get(identify_code=ic)
         Bid_number = bid_number[i]
         Bid_password = bid_password[i]
         ID_number = d1[i]

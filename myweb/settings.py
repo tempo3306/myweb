@@ -485,6 +485,11 @@ LOGGING = {
             'propagate': False,
             'level': 'DEBUG',
         },
+        'django.template': {
+            'handlers': ['file'],
+            'level': 'INFO',
+            'propagate': True,
+        },
         # 'api.views': {
         #     'handlers': ['console'],
         #     'propagate': False,

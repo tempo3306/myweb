@@ -9,7 +9,7 @@ from hupaiyihao.utils import get_component
 from hupaiyihao import consts
 from hupaiyihao import choices
 from hupaiyihao import managers
-from bid.models import Identify_code
+from bid.models import Identify
 
 model_logger = logging.getLogger('django.db.wechat')
 
@@ -59,5 +59,5 @@ class Wechat(models.Model):
 class HupaiyihaoUser(models.Model):
     useropenid = models.CharField(max_length=35,  verbose_name="openid", unique=True)
     free_identify_code = models.BooleanField(default=False)
-    identify_code = models.ForeignKey(Identify_code, on_delete=models.CASCADE, null=True, blank=True,
+    identify_code = models.ForeignKey(Identify, on_delete=models.CASCADE, null=True, blank=True,
                                       related_name='hupaiyihaouser', unique=True)

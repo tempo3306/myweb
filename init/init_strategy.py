@@ -1,6 +1,6 @@
 import pickle
 from myweb.wsgi import *
-from bid.models import Bid_hander, Bid_auction, Identify_code
+from bid.models import Bid_hander, Bid_auction, Identify
 import xlrd
 from django.db import transaction
 from tools.file_operation import open_excel
@@ -62,7 +62,7 @@ def update_strategy(file):
     try:
         for row in rows:
             new_strategy = change_strategy(row)
-            idenc = Identify_code.objects.get(auction__Bid_number=row['标书号'])
+            idenc = Identify.objects.get(auction__Bid_number=row['标书号'])
             idenc.strategy_dick = json.dumps(new_strategy)
             idenc.save()
     except:

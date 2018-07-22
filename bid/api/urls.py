@@ -19,7 +19,7 @@ from django.views.decorators.csrf import csrf_exempt
 # consumer_bid_router = routers.DefaultRouter()
 # consumer_bid_router.register(r'', Consumer_bidViewSet)
 # identify_code_router = routers.DefaultRouter()
-# identify_code_router.register(r'', Identify_codeViewSet)
+# identify_code_router.register(r'', IdentifyViewSet)
 # invite_code_router = routers.DefaultRouter()
 # invite_code_router.register(r'', Invite_codeViewSet)
 #
@@ -34,13 +34,13 @@ from django.views.decorators.csrf import csrf_exempt
 # auction_serverside_router.register(r'', Bid_auction_serversideViewSet)
 
 # identify_code_serverside_router = routers.DefaultRouter()
-# identify_code_serverside_router.register(r'', Identify_code_serversideViewSet)
+# identify_code_serverside_router.register(r'', Identify_serversideViewSet)
 
-# identify_code_list = Identify_code_serversideViewSet.as_view({'get': 'list', 'post': 'create'})
-# identify_code_detail = Identify_code_serversideViewSet.as_view({'get': 'retrieve', 'patch': 'partial_update',
+# identify_code_list = Identify_serversideViewSet.as_view({'get': 'list', 'post': 'create'})
+# identify_code_detail = Identify_serversideViewSet.as_view({'get': 'retrieve', 'patch': 'partial_update',
 #                                                                 'put': 'update', 'delete': 'destroy'})
 identify_code_serverside_router = routers.DefaultRouter()
-identify_code_serverside_router.register(r'', Identify_code_serversideViewSet)
+identify_code_serverside_router.register(r'', Identify_serversideViewSet)
 
 hander_list = Hander_serversideViewSet.as_view({'get': 'list', 'post': 'create'})
 hander_detail = Hander_serversideViewSet.as_view({'get': 'retrieve', 'patch': 'partial_update',
@@ -69,7 +69,7 @@ record_detail = Record_serversideViewset.as_view({'get': 'retrieve', 'patch': 'p
 urlpatterns = [
     ##登录
     url('^get_guopaiurl/$', views.get_guopaiurl, name='get_guopaiurl'),
-    url('^monitest/$', views.monitest, name='monitest'),
+    # url('^monitest/$', views.monitest, name='monitest'),
     url('^get_remotetime/$', views.get_remotetime, name='get_remotetime'),
     url('^bid_firstprice/$', views.bid_firstprice, name='bid_firstprice'),
     url('^bid_logout/$', views.bid_logout, name='bid_logout'),
@@ -77,7 +77,7 @@ urlpatterns = [
     ##管理操作
 
     # url('^identify_code_manage/$', include(identify_code_serverside_router.urls)),
-    # url('^identify_code_manage', csrf_exempt(Identify_code_serversideViewSet.as_view({'get':'list', 'put': 'update',
+    # url('^identify_code_manage', csrf_exempt( Identify_code_serversideViewSet.as_view({'get':'list', 'put': 'update',
     #
     #                     'patch': 'partial_update', 'delete': 'destroy'})),
     url(r'^ic_manage/', include(identify_code_serverside_router.urls), name='ic_mange'),

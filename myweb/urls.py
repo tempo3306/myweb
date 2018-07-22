@@ -41,7 +41,7 @@ urlpatterns = [
     url('', include('news.urls')),  # new
     url('^forums/', include('forums.urls')),
     url('^api/user/', include('account.api.urls')),
-    url('^api/bid/', include('bid.api.urls', namespace='api_bid'), ),
+    url('^api/bid/', include('bid.api.urls', namespace='api_bid')),
     url(r'^api-token-auth/', obtain_jwt_token),  #获取token
     url(r'^api-token-refresh/', refresh_jwt_token), #刷新token
     url(r'^api-token-verify/', verify_jwt_token), #确认token

@@ -29,7 +29,7 @@ strategy = {
 import json
 
 
-class Identify_code(models.Model):
+class  Identify(models.Model):
     identify_code = models.CharField(max_length=10, unique=True)  # 激活码   用标书号代替
     purchase_date = models.DateField(default=datetime.date.today())
     expired_date = models.DateField(default=datetime.date.today()+datetime.timedelta(days=28))  # 过期时间,激活开始计算相应的时间
@@ -94,7 +94,7 @@ def query_identify_code_by_args(params):
     # sortOrder = str(params.get('sortOrder'))
     # django orm '-' -> desc
 
-    queryset = Identify_code.objects.all()
+    queryset = Identify.objects.all()
     # total = queryset.count()
     if searchText:
         queryset = queryset.filter(
@@ -153,7 +153,7 @@ class Consumer_bid(models.Model):
     telephone = models.CharField(max_length=11, unique=True, default='', null=True, blank=True)
     email = models.EmailField(blank=True, null=True)
     # 外键
-    identify_code = models.ForeignKey(Identify_code, on_delete=models.CASCADE, related_name='consumer_bids',
+    identify_code = models.ForeignKey( Identify, on_delete=models.CASCADE, related_name='consumer_bids',
                                       null=True, blank=True)
 
     def __str__(self):
@@ -230,7 +230,7 @@ class Bid_auction(models.Model):
     count = models.IntegerField(default=0)  # 参拍次数
     expired_date = models.DateField(default=datetime.datetime.now() + datetime.timedelta(days=120))  # 过期时间
     ##绑定的激活码
-    identify_code = models.ForeignKey(Identify_code, on_delete=models.CASCADE, related_name='auction',
+    identify_code = models.ForeignKey(Identify, on_delete=models.CASCADE, related_name='auction',
                                       blank=True, null=True, unique=True)
 
     def __str__(self):

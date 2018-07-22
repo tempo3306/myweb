@@ -1354,10 +1354,10 @@
         this.core.s = $.extend({}, defaults, this.core.s);
         this.interval = false;
 
-        // Identify if slide happened from autoplay
+        //  Identify if slide happened from autoplay
         this.fromAuto = true;
 
-        // Identify if autoplay canceled from touch/drag
+        //  Identify if autoplay canceled from touch/drag
         this.canceledOnTouch = false;
 
         // save fourceautoplay value

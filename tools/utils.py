@@ -70,9 +70,9 @@ def send_control_email(email, send_type="register", **kwargs):
         if send_status:
             pass
     elif send_type == "send_once_identify_code":
-        from bid.models import Identify_code
+        from bid.models import  Identify
         identify_code = random_str(randomlength=6)  ##生成6位数的随机验证码
-        Identify_code.objects.create(identify_code, )
+        Identify.objects.create(identify_code, )
 
 
 ##上传文件控制
@@ -147,21 +147,22 @@ def init_variable():
     data['timebase_str'] = nowtime[0]
     data['target_time'] = nowtime[1]
     data['final_time'] = nowtime[2]
-
+    data['auto_yanzhengma_time'] = nowtime[3]
     return data
 
 
 '''
 target_time 11:30:1 策略还原的时间戳
 final_time  11:29:56.5 智能出价的戴上时间
+auto_yanzhengma_time   11:29:10~11:29:20  自动查看验证码跳出时间
 '''
-
-
 def get_timebase():
     currenttime = time.time()
     timebase_str = time.strftime("%Y-%m-%d", time.localtime(currenttime))
     target_str = "{0} 11:30:1".format(timebase_str)
     finaltime_str = "{0} 11:29:56".format(timebase_str)
+    auto_yanzhengma_time_str = "{0} 11:29:10".format(timebase_str)
     target_time = time.mktime(time.strptime(target_str, "%Y-%m-%d %H:%M:%S"))  ##时间戳
     final_time = time.mktime(time.strptime(finaltime_str, "%Y-%m-%d %H:%M:%S")) + 0.5  ##时间戳
-    return (timebase_str, target_time, final_time)
+    auto_yanzhengma_time = time.mktime(time.strptime(auto_yanzhengma_time_str, "%Y-%m-%d %H:%M:%S"))
+    return (timebase_str, target_time, final_time, auto_yanzhengma_time)

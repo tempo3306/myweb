@@ -6549,7 +6549,7 @@
 	 *  @param {object} oSettings dataTables settings object
 	 *  @param {string} sStore Name of the array storage for the callbacks in oSettings
 	 *  @param {function} fn Function to be called back
-	 *  @param {string} sName Identifying name for the callback (i.e. a label)
+	 *  @param {string} sName  Identifying name for the callback (i.e. a label)
 	 *  @memberof DataTable#oApi
 	 */
 	function _fnCallbackReg( oSettings, sStore, fn, sName )

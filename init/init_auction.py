@@ -1,6 +1,6 @@
 import pickle
 from myweb.wsgi import *
-from bid.models import Bid_hander, Bid_auction, Identify_code
+from bid.models import Bid_hander, Bid_auction, Identify
 import xlrd
 from django.db import transaction
 from tools.file_operation import open_excel
@@ -27,7 +27,7 @@ def create_auction(rows):
     # 用标书号创建激活码
     for row in rows:
         print(row['激活码'])
-        Identify_code.objects.get_or_create(identify_code='h' + str(row['标书号']))  ## h 开头表示拍手
+        Identify.objects.get_or_create(identify_code='h' + str(row['标书号']))  ## h 开头表示拍手
     try:
         with transaction.atomic():
             for row in rows:
@@ -55,7 +55,7 @@ def create_auction(rows):
                                                                'status': status,
                                                                'count': count,
                                                                'expired_date': expired_date,
-                                                               'identify_code': Identify_code.objects.get(
+                                                               'identify_code': Identify.objects.get(
                                                                    identify_code=identify_code)})
     except:
         logging.exception("ERROR MESSAGE")
@@ -95,13 +95,13 @@ def create_identify_code(rows):
         for row in rows:
             identify_code = row['激活码']  # 描述来源
             sid = transaction.savepoint()  # 开启SQL事务
-            iden = Identify_code(identify_code=identify_code)
+            iden = Identify(identify_code=identify_code)
             query_list.append(iden)
     except:
         logging.exception("ERROR")
         print("error")
     with transaction.atomic():
-        Identify_code.objects.bulk_create(query_list)
+        Identify.objects.bulk_create(query_list)
 
 
 def init_auction(file):

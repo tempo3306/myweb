@@ -264,9 +264,9 @@ class Action_serversideViewSet(viewsets.ViewSet):
             return Response(status=status.HTTP_404_NOT_FOUND)
 
 
-class Identify_code_serversideViewSet(viewsets.ViewSet):
-    queryset = Identify_code.objects.all()
-    # serializer_class = Identify_codeSerializer
+class Identify_serversideViewSet(viewsets.ViewSet):
+    queryset = Identify.objects.all()
+    # serializer_class = IdentifySerializer
     permission_classes = (permissions.IsAuthenticated,)
 
     #
@@ -274,7 +274,7 @@ class Identify_code_serversideViewSet(viewsets.ViewSet):
         try:
             data = request.query_params
             identify_codes = query_identify_code_by_args(data)  # 带参数查询
-            serializer = Identify_codeSerializer(identify_codes['items'], many=True)
+            serializer = IdentifySerializer(identify_codes['items'], many=True)
             result = dict()
             result['rows'] = serializer.data
             result['count'] = identify_codes['count']
@@ -284,14 +284,14 @@ class Identify_code_serversideViewSet(viewsets.ViewSet):
             return Response(status=status.HTTP_404_NOT_FOUND, template_name=None, content_type=None)
 
     def retrieve(self, request, pk=None):
-        queryset = Identify_code.objects.all()
+        queryset = Identify.objects.all()
         identify_code = get_object_or_404(queryset, pk=pk)
-        serializer = Identify_codeSerializer(identify_code)
+        serializer = IdentifySerializer(identify_code)
         return Response(serializer.data)
 
     def destroy(self, request, pk=None):
         try:
-            identify_code = Identify_code.objects.get(pk=pk)
+            identify_code = Identify.objects.get(pk=pk)
             identify_code.delete()
             return Response(status=status.HTTP_200_OK)
         except:
@@ -300,7 +300,7 @@ class Identify_code_serversideViewSet(viewsets.ViewSet):
     def update(self, request, pk=None):
         try:
             data = request.data
-            identify_code = Identify_code.objects.get(pk=pk)
+            identify_code = Identify.objects.get(pk=pk)
             purchase_date = data['purchase_date_str']  # 购买时间
             expired_date = data['expired_date_str']  # 过期时间
             bid_name = data['bid_name']  # 标书姓名
@@ -323,7 +323,7 @@ class Identify_code_serversideViewSet(viewsets.ViewSet):
             print(data['strategy'])
             strategy = data['strategy']
 
-            identify_code = Identify_code.objects.get(pk=pk)
+            identify_code = Identify.objects.get(pk=pk)
             purchase_date = data['purchase_date_str']  # 购买时间
             expired_date = data['expired_date_str']  # 过期时间
             bid_name = data['bid_name']  # 标书姓名
@@ -354,7 +354,7 @@ class Identify_code_serversideViewSet(viewsets.ViewSet):
         try:
             data = request.data
             identify_code = random_str(6)
-            ic = Identify_code(identify_code=identify_code, expired_date=data['expired_date'],
+            ic = Identify(identify_code=identify_code, expired_date=data['expired_date'],
                                purchase_date=data['purchase_date'],
                                bid_name=data['bid_name'])
             auction = Bid_auction.objects.get(pk=data['auction_name'])
@@ -482,7 +482,7 @@ def get_guopaiurl(request):
         type = request.GET['type']
         if type == 'identify_code':
             identify_code = request.GET['identify_code']
-            identify = get_object_or_404(Identify_code, identify_code=identify_code)
+            identify = get_object_or_404( Identify, identify_code=identify_code)
             if identify.can_bid:
                 diskid = request.GET['diskid']
                 uuuid = identify.uuuid
@@ -554,25 +554,39 @@ def get_guopaiurl(request):
 
 
 ##免费模拟登录
-@api_view(['GET'])
-def monitest(request):
-    ip_address = request.META.get("REMOTE_ADDR", None)
-    version = request.GET.get('version', None)
-    debug = request.GET.get('debug', None)
-    time1 = time.localtime(time.time())
-    time2 = time.strftime("%Y%m%d", time1)
-    today_date = time2 + "01"
-    url_dianxin = "https://paimai2.alltobid.com/bid/%s/login.htm" % today_date
-    url_nodianxin = "https://paimai.alltobid.com/bid/%s/login.htm" % today_date
-    data = init_variable()  ##初始化数据
-    res = {'result': 'moni success',
-           'url_dianxin': url_dianxin,
-           'url_nodianxin': url_nodianxin,
-           'ip_address': ip_address,
-           'data': data,
-           'test': False,
-           }
-    return Response(res, status=status.HTTP_200_OK, template_name=None, content_type=None)
+# @api_view(['GET'])
+# def monitest(request):
+#     ip_address = request.META.get("REMOTE_ADDR", None)
+#     version = request.GET.get('version', None)
+#     debug = request.GET.get('debug', None)
+#     time1 = time.localtime(time.time())
+#     time2 = time.strftime("%Y%m%d", time1)
+#     today_date = time2 + "01"
+#     url_dianxin = "https://paimai2.alltobid.com/bid/%s/login.htm" % today_date
+#     url_nodianxin = "https://paimai.alltobid.com/bid/%s/login.htm" % today_date
+#     data = init_variable()  ##初始化数据
+#     res = {'result': 'moni success',
+#            'url_dianxin': url_dianxin,
+#            'url_nodianxin': url_nodianxin,
+#            'ip_address': ip_address,
+#            'data': data,
+#            'test': False,
+#            }
+#     return Response(res, status=status.HTTP_200_OK, template_name=None, content_type=None)
+
+
+'''
+[pid: 28162|app: 0|req: 6372/25180] 124.192.220.251 () {38 vars in 2473 bytes} 
+[Sat Jul 21 11:17:11 2018] GET /api/bid/bid_logout/?type=Null&identify_code=0&diskid=Null&strategy_dick=%7B%220%22:%20[1,%       
+2040.0,%20500,%200,%200.5,%2048,%20true,%20true,%2050,%20700,%20100,%200.5,%2056,%20true,%200,%200,%2054,%20100,%200.6,%2055,%20200,%200.5,%2056,%2056.5],
+%20%221%22:%20[1,%2040.0,%20500,%200,%200.5,%20       48,%20true,%20true,%2050,%20700,%20100,%200.5,%2056,%20true,%200,%200,%2054,%20100,%200.6,%2055,%20200,
+%200.5,%2056,%2056.5],%20%222%22:%20[1,%2040.0,%20500,%200,%200.5,%2048,%20true,%20true,%2050,%207       00,%20100,%200.5,%2056,%20true,%200,%200,%2054,%20100,
+%200.6,%2055,%20200,%200.5,%2056,%2056.5],%20%223%22:%20[1,%2040.0,%20500,%200,%200.5,%2048,%20true,%20true,%2050,%20700,%20100,%200.5,%2056,%20tru       
+e,%200,%200,%2054,%20100,%200.6,%2055,%20200,%200.5,%2056,%2056.5],%20%224%22:%20[4,%2048.0,%20700],%20%22yanzhengma_scale%22:%20true,%20%22strategy_description
+%22:%20%22%5Cu5355%5Cu67aa%20%2040.0%5Cu7       9d2%5Cu52a0500%20%5Cu51fa%5Cu4ef7%22,%20%22strategy_type%22:%20%220%22,%20%22enter_on%22:%20true%7D&account=null => 
+generated 0 bytes in 1 msecs (HTTP/1.1 404) 4 headers in 117 bytes (3 switches on cor       e 99)
+
+'''
 
 
 ##登出
@@ -582,7 +596,7 @@ def bid_logout(request):
         type = request.GET['type']
         if type == 'identify_code':
             identify_code = request.GET['identify_code']
-            identify = get_object_or_404(Identify_code, identify_code=identify_code)
+            identify = get_object_or_404( Identify, identify_code=identify_code)
             identify.uuuid = 'none'
             identify.strategy_dick = request.GET['strategy_dick']
             ##保存 标书信息
@@ -623,7 +637,7 @@ def bid_keeplogin(request):
         type = request.GET['type']
         if type == 'identify_code':
             identify_code = request.GET['identify_code']
-            identify = get_object_or_404(Identify_code, identify_code=identify_code)
+            identify = get_object_or_404( Identify, identify_code=identify_code)
             diskid = request.GET['diskid']
             uuuid = identify.uuuid
             if diskid == uuuid:

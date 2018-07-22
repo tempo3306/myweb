@@ -99,7 +99,7 @@ class ConsumerSerializer(serializers.ModelSerializer):
 
 
 
-class Identify_codeSerializer(serializers.ModelSerializer):
+class IdentifySerializer(serializers.ModelSerializer):
     auction = Bid_auctionSerializer(many=True)
 
     # canbid = serializers.CharField(source='can_bid', read_only=True)
@@ -112,7 +112,7 @@ class Identify_codeSerializer(serializers.ModelSerializer):
     bid_status = serializers.BooleanField(source='can_bid')  # 不能与原来的属性重名
 
     class Meta:
-        model = Identify_code
+        model = Identify
         fields = [
             'id',
             'identify_code',
