@@ -140,7 +140,8 @@ def init_variable():
     data['confirm_area_relative'] = [505 - 80, 68 - 50, 505 + 80, 68 + 50]
     data['yan_confirm_area_relative'] = [305 - 80, 68 - 20, 405 + 80, 68 + 50]
     data['Pos_controlframe_relative'] = [192 - 344, 514 - 183]
-    data['Pos_yanzhengma_relative'] = [-277, - 65, - 97, + 45]  # 验证码所在位置
+    data['Pos_yanzhengma_relative'] = [-277, - 65, - 67, + 45]  # 验证码所在位置
+    data['Pos_question_relative'] = [-275, -65, - 27, -41]  # 答案所在位置
     data['Pos_yanzhengmaframe_relative'] = [297, - 283]  # 验证码框放置位置
     ##返回正确的时间
     nowtime = get_timebase()

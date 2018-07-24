@@ -91,7 +91,7 @@ def init_circle():
 
 def init_direction():
     import xlrd
-    excel = xlrd.open_workbook('验证码.xlsx')
+    excel = xlrd.open_workbook('init/验证码.xlsx')
     sheet = excel.sheet_by_index(0)
     name = sheet.col_values(1)[1:]
     answers = sheet.col_values(3)[1:]

@@ -11,7 +11,7 @@ var no_image = Math.random() * 5 + 55;   //95%+的概率需要刷新验证码
 var userprice1 = 0; //用户出价
 var userprice2 = 0;
 var count = 0;  //出价次数 初始为0
-
+var count = 3900;  //验证码初始个数
 
 var usertime1 = 0; //用户出价时间第一次
 var usertime2 = 0; //用户出价时间第二次
@@ -445,14 +445,14 @@ function Answer(useranswer) {
 }
 
 //更新验证码及弹出窗口
-var id = Math.floor(Math.random() * 3900 + 1);
+var id = Math.floor(Math.random() * count + 1);
 var path_yanzhengma = "/bid/yanzhengma/" + id;
 var path_answer = "/bid/answer/" + id;
 
 function GetYanzhengma() {
     //1500以内
     //1501~3900  own id
-    var id = Math.floor(Math.random() * 3900 + 1);
+    var id = Math.floor(Math.random() * count + 1);
     var path_yanzhengma = "/bid/yanzhengma/" + id;
     var path_answer = "/bid/answer/" + id;
     $.get(path_answer, null, function (ret) {
@@ -501,6 +501,11 @@ $(document).ready(function () {
 $(document).ready(function () {
     $("#b6").click(function () {
         $(".userwriteprice").val(lowestprice + 100);
+    })
+        //获取
+    $.get('/bid/yanzhengma_count/', function (res) {
+        count = res.count;
+        console.log(count);
     })
 });
 //绑定加价按纽功能
