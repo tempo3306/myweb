@@ -12,6 +12,7 @@ import re
 import pickle
 # import sys
 # sys.setrecursionlimit(10000)
+import collections
 
 EMAIL_FROM = '810909753@qq.com'
 
@@ -54,12 +55,11 @@ def parse_res(res):
     # labels = ['代拍费', '买单费', '标书量', '投标情况']
     labels = ['daipaifei', 'maidanfei', 'biaoshuliang', 'toubiaoqingkuang']
     for li in lis:
-        bid = {}
+        bid = collections.OrderedDict()
         name = li.find('span', 'name')
         bid['name'] = name.string
         bots = li.find_all('span', 'bot')  ##找到代拍费
         for index, bot in enumerate(bots):
-            print(bot.string)
             label = labels[index]
             bid[label] = bot.string
             if label == 'toubiaoqingkuang':
@@ -123,7 +123,6 @@ User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (
     res = requests.get(url, headers)
     cookie = res.headers['Set-Cookie']
 
-    print(res.cookies)
 
     xsrf = res.cookies['XSRF-TOKEN']
     session = res.cookies['laravel_session']
