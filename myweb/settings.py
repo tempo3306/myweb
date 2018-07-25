@@ -49,7 +49,9 @@ INSTALLED_APPS = [
     'django_extensions',
     'django_filters',
     'django_celery_results',
+    'django_celery_beat',
     'hupaiyihao',
+
 ]
 
 
@@ -175,7 +177,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 ##设置时区和语言
 LANGUAGE_CODE = 'zh-Hans'
-TIME_ZONE = 'Asia/Shanghai'
+# TIME_ZONE = 'Asia/Shanghai'
 
 USE_I18N = True
 
@@ -351,8 +353,11 @@ CELERY_RESULT_BACKEND = 'django-cache'
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
-CELERY_TIMEZONE = 'Africa/Nairobi'
+# CELERY_TIMEZONE = 'Asia/Shanghai'
 BROKER_TRANSPORT_OPTIONS = {'visibility_timeout': 3600}  # 1 hour.超时
+CELERY_TIMEZONE = 'UTC'
+CELERY_ENABLE_UTC = True
+CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'  # 定时任务
 
 # import djcelery
 # djcelery.setup_loader()

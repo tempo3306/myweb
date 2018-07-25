@@ -4,8 +4,10 @@ from celery import task, Task
 from .utils import send_control_email
 from bid.models import Identify
 from celery.schedules import crontab
-from myweb import celery_app
+from myweb import celery_app as app
 from tools.getdata.get_daipai import daipaihui_newdata
+from datetime import timedelta
+
 
 @task
 def confirm_email(email):
@@ -47,4 +49,31 @@ class CallbackTask(Task):
 
 
 
+#
+# @app.on_after_configure.connect
+# def setup_periodic_tasks(sender, **kwargs):
+#     from celery.schedules import crontab
+#     from tools.getdata.get_daipai import daipaihui_newdata
+#     # Calls test('hello') every 10 seconds.
+#     # sender.add_periodic_task(10.0, test.s('hello'), name='add every 10')
+#     #
+#     # # Calls test('world') every 30 seconds
+#     # sender.add_periodic_task(30.0, test.s('world'), expires=10)
+#     sender.add_periodic_task(10.0, test.s('hello'), name='add every 10')
+#
+#     # Executes every Monday morning at 7:30 a.m.
+#     sender.add_periodic_task(
+#         crontab( minute='*/1'),
+#         daipaihui_newdata.s(),
+#     )
+
+from celery.schedules import crontab
+app.conf.beat_schedule = {
+    'add-every-30-seconds': {
+        'task': 'tools.getdata.get_daipai.daipaihui_newdata',
+        'schedule': 1200.0,
+        # 'args': (16, 16)
+    },
+}
+app.conf.timezone = 'UTC'
 
