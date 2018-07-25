@@ -9,6 +9,8 @@ from celery import task, Task
 from myweb.wsgi import *
 import json
 import re
+import pickle
+
 
 EMAIL_FROM = '810909753@qq.com'
 
@@ -88,7 +90,16 @@ def daipaihui_newdata():
     url = "http://www.daipaihui.com/tasklist/ajaxtask?page=1&view=ajax"
     res = get_res(url, headers)
     data = parse_res(res)
-    send_control_email(data)
+    import pickle
+    try:
+        with open('daipai.pkl', 'rb') as daipai:
+            raw_data = pickle.load(daipai)
+            if raw_data != data:
+                send_control_email(data)
+    except:
+        with open('daipai.pkl', 'wb') as daipai:
+            pickle.dump(data, daipai)
+            send_control_email(data)
 
 
 def get_headers():

@@ -68,12 +68,14 @@ class CallbackTask(Task):
 #     )
 
 from celery.schedules import crontab
+app.conf.timezone = 'Asia/Shanghai'
+
 app.conf.beat_schedule = {
     'add-every-30-seconds': {
         'task': 'tools.getdata.get_daipai.daipaihui_newdata',
-        'schedule': crontab( minute='*/15'),
+        # 'schedule': crontab( minute='*/15'),
+        'schedule': 15,
         # 'args': (16, 16)
     },
 }
-# app.conf.timezone = 'UTC'
 

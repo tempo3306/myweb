@@ -373,6 +373,9 @@ CELERY_SEND_TASK_ERROR_EMAILS = True
 # CELERY_TIMEZONE = ‘Asia/Shanghai‘
 
 
+TIME_ZONE = 'Asia/Shanghai'
+USE_TZ = False
+
 ##∂
 ##--------------------------------------------------
 ##配置邮箱
