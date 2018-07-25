@@ -83,7 +83,8 @@ def send_control_email(data, **kwargs):
 
 
 @task
-def daipaihui_newdata(headers):
+def daipaihui_newdata():
+    headers = get_headers()
     url = "http://www.daipaihui.com/tasklist/ajaxtask?page=1&view=ajax"
     res = get_res(url, headers)
     data = parse_res(res)
@@ -126,5 +127,4 @@ User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (
 
 if __name__ == '__main__':
     # daipaihui_newdata()
-    headers = get_headers()
-    daipaihui_newdata(headers)
+    daipaihui_newdata()
