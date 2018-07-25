@@ -355,7 +355,6 @@ CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 # CELERY_TIMEZONE = 'Asia/Shanghai'
 BROKER_TRANSPORT_OPTIONS = {'visibility_timeout': 3600}  # 1 hour.超时
-CELERY_TIMEZONE = 'UTC'
 CELERY_ENABLE_UTC = True
 CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'  # 定时任务
 CELERY_IGNORE_RESULT = True

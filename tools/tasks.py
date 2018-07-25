@@ -73,8 +73,8 @@ app.conf.timezone = 'Asia/Shanghai'
 app.conf.beat_schedule = {
     'add-every-30-seconds': {
         'task': 'tools.getdata.get_daipai.daipaihui_newdata',
-        # 'schedule': crontab( minute='*/15'),
-        'schedule': 15,
+        'schedule': crontab( minute='*/3'),
+        # 'schedule': 30,
         # 'args': (16, 16)
     },
 }
