@@ -683,7 +683,7 @@ textarea.userwriteprice {
     width: 113px;
     height: 50px;
     position: absolute;
-    top: 168px;
+    top: 170px;
     left: 64px;
 }
 
@@ -716,7 +716,7 @@ textarea.userwriteprice {
 p.question {
     position: absolute;
     font-size: 16px;
-    top: 118px;
+    top: 116px;
     left: 31px;
     color: #050505;
     font-family: "宋体";

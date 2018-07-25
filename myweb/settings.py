@@ -42,7 +42,6 @@ INSTALLED_APPS = [
 
     'bid',
     'images',
-    'bbsapp',
     'forums',  # 论坛
     'account',
     'news',
@@ -374,7 +373,7 @@ EMAIL_BACKEND = 'django_smtp_ssl.SSLEmailBackend'
 EMAIL_HOST = "smtp.qq.com"  # 服务器
 EMAIL_PORT = 465  # 一般情况下都为25
 EMAIL_HOST_USER = "810909753@qq.com"  # 账号
-EMAIL_HOST_PASSWORD = "tveiryfnsgxibfia"  # 密码
+EMAIL_HOST_PASSWORD = "gfiskvlfsnuabbed"  # 密码
 EMAIL_SUBJECT_PREFIX = u'沪牌一号'  ##为邮件Subject-line前缀,默认是'[django]'
 EMAIL_USE_TLS = True
 EMAIL_FROM = "810909753@qq.com"  # 邮箱来自

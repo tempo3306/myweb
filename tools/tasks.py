@@ -3,7 +3,9 @@ from celery import shared_task
 from celery import task, Task
 from .utils import send_control_email
 from bid.models import Identify
-
+from celery.schedules import crontab
+from myweb import celery_app
+from tools.getdata.get_daipai import daipaihui_newdata
 
 @task
 def confirm_email(email):
@@ -30,7 +32,7 @@ def reset_identify_code(identify_code):
         import time
         time.sleep(60 * 5)  ##登录或keep 5分钟后将软件重置
         identify = Identify.objects.get(identify_code=identify_code)
-        identify.uuuid = 'none'
+        identify.uuuid  = 'none'
         identify.save()
     except:
         pass
@@ -43,3 +45,20 @@ class CallbackTask(Task):
     def on_failure(self, exc, task_id, args, kwargs, einfo):
         pass
 
+
+
+
+
+@celery_app.on_after_configure.connect
+def setup_periodic_tasks(sender, **kwargs):
+    # Calls test('hello') every 10 seconds.
+    # sender.add_periodic_task(10.0, test.s('hello'), name='add every 10')
+    #
+    # # Calls test('world') every 30 seconds
+    # sender.add_periodic_task(30.0, test.s('world'), expires=10)
+
+    # Executes every Monday morning at 7:30 a.m.
+    sender.add_periodic_task(
+        crontab( minute='*/30'),
+        daipaihui_newdata
+    )

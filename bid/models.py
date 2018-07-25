@@ -25,7 +25,7 @@ strategy = {
           56.5],
     "yanzhengma_scale": True,
     "strategy_description": "单枪  50秒加700截止55秒提前100",
-    "strategy_type": "0", "enter_on": True}
+    "strategy_type": "0", "auto_yanzhengma_on": True}
 import json
 
 
@@ -44,7 +44,7 @@ class  Identify(models.Model):
     def can_bid(self):
         ##计算是否过期
         import datetime
-        today = datetime.date.today()
+        today = datetimzze.date.today()
         time_difference = (self.expired_date - today).days
         if time_difference >= 0:
             return True

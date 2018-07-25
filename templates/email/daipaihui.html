@@ -1,0 +1,18 @@
+<table>
+    <tr>
+        <th>老板</th>
+        <th>代拍费</th>
+        <th>买单费</th>
+        <th>标书量</th>
+        <th>投标情况</th>
+    </tr>
+    {% for item in data %}
+        <tr>
+            <td>{{ item.name }}</td>
+            <td>{{ item.daipaifei }}</td>
+            <td>{{ item.maidanfei }}</td>
+            <td>{{ item.biaoshuliang }}</td>
+            <td>{{ item.toubiaoqingkuang }}</td>
+        </tr>
+    {% endfor %}
+</table>
