@@ -10,8 +10,8 @@ from myweb.wsgi import *
 import json
 import re
 import pickle
-import sys
-sys.setrecursionlimit(10000)
+# import sys
+# sys.setrecursionlimit(10000)
 
 EMAIL_FROM = '810909753@qq.com'
 
@@ -95,7 +95,9 @@ def daipaihui_newdata():
     try:
         with open('daipai.pkl', 'rb') as daipai:
             raw_data = pickle.load(daipai)
-            if raw_data != data:
+            j_raw_data = json.dumps(raw_data)
+            j_data = json.dumps(data)
+            if j_raw_data != j_data:
                 send_control_email(data)
     except:
         with open('daipai.pkl', 'wb') as daipai:
