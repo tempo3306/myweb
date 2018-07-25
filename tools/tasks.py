@@ -71,9 +71,9 @@ from celery.schedules import crontab
 app.conf.beat_schedule = {
     'add-every-30-seconds': {
         'task': 'tools.getdata.get_daipai.daipaihui_newdata',
-        'schedule': 1200.0,
+        'schedule': crontab( minute='*/15'),
         # 'args': (16, 16)
     },
 }
-app.conf.timezone = 'UTC'
+# app.conf.timezone = 'UTC'
 
