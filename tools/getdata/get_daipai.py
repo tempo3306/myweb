@@ -99,6 +99,9 @@ def daipaihui_newdata():
             j_data = json.dumps(data)
             if j_raw_data != j_data:
                 send_control_email(data)
+                with open('daipai.pkl', 'wb') as daipai:
+                    pickle.dump(data, daipai)
+                    send_control_email(data)
     except:
         with open('daipai.pkl', 'wb') as daipai:
             pickle.dump(data, daipai)
