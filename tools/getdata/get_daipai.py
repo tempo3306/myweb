@@ -10,8 +10,8 @@ from myweb.wsgi import *
 import json
 import re
 import pickle
-# import sys
-# sys.setrecursionlimit(10000)
+import sys
+sys.setrecursionlimit(100000)
 import collections
 
 EMAIL_FROM = '810909753@qq.com'

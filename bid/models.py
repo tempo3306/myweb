@@ -44,7 +44,7 @@ class  Identify(models.Model):
     def can_bid(self):
         ##计算是否过期
         import datetime
-        today = datetimzze.date.today()
+        today = datetime.date.today()
         time_difference = (self.expired_date - today).days
         if time_difference >= 0:
             return True

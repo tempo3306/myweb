@@ -346,7 +346,7 @@ CRISPY_TEMPLATE_PACK = 'bootstrap3'
 
 ##--------------------------------------------------
 ##celery
-BROKER_URL = 'redis://localhost:6379'
+CELERY_BROKER_URL = 'amqp://localhost'
 CELERY_RESULT_BACKEND = 'django-cache'
 # BROKER_URL= 'amqp://guest@localhost//'
 # CELERY_RESULT_BACKEND = 'amqp://guest@localhost//'
