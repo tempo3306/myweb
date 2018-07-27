@@ -79,3 +79,14 @@ app.conf.beat_schedule = {
     },
 }
 
+
+'''
+##重试
+@app.task(bind=True, default_retry_delay=300, max_retries=5)
+def my_task_A():
+    try:
+        print("doing stuff here...")
+    except SomeNetworkException as e:
+        print("maybe do some clenup here....")
+        self.retry(e)
+'''

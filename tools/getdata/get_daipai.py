@@ -9,14 +9,40 @@ from celery import task, Task
 from myweb.wsgi import *
 import json
 import re
-import pickle
-import sys
-sys.setrecursionlimit(100000)
 import collections
 from myweb import celery_app
 import copy
-
 from celery.utils.log import get_task_logger
+import pymongo
+
+
+
+def update_daipai(client, data: dict) -> bool:
+    try:
+        print(data)
+        db = client.daipaihui
+        db.drop_collection('daipai') #清空
+        db.daipai.insert_one(data)
+        print(data)
+        print('ok')
+        return True
+    except Exception as e:
+        print(e)
+        return False
+    finally:
+        client.close()
+
+def get_daipai(client) -> dict:
+    try:
+        db = client.daipaihui
+        data = db.daipai.find_one()
+        print(data)
+        print(type(data))
+        return data['data']
+    except:
+        return {}
+
+
 
 logger = get_task_logger(__name__)
 
@@ -62,10 +88,12 @@ def parse_res(res):
     # labels = ['代拍费', '买单费', '标书量', '投标情况']
     labels = ['daipaifei', 'maidanfei', 'biaoshuliang', 'toubiaoqingkuang']
     for li in lis:
-        bid = collections.OrderedDict()
+        print(len(lis))
+        bid = {}
         name = li.find('span', 'name')
         bid['name'] = name.string
         bots = li.find_all('span', 'bot')  ##找到代拍费
+        print(len(bots))
         for index, bot in enumerate(bots):
             label = labels[index]
             bid[label] = bot.string
@@ -73,7 +101,7 @@ def parse_res(res):
                 try:
                     bid[label] = int(bid[label])
                     bids2.append(bid) #带人数的
-                    temp = copy.deepcopy(bid)
+                    temp = copy.copy(bid)
                     del temp[label]
                     bids.append(temp)
                 except:
@@ -100,26 +128,18 @@ def daipaihui_newdata():
     headers = get_headers()
     url = "http://www.daipaihui.com/tasklist/ajaxtask?page=1&view=ajax"
     res = get_res(url, headers)
-    data, data2 = parse_res(res)
-    import pickle
+    data, data2 = parse_res(res)  ##data2带投标人数
+    client = pymongo.MongoClient(host='localhost', port=27017)
     try:
-        with open('daipai.pkl', 'rb') as daipai:
-            raw_data = pickle.load(daipai)
-            j_raw_data = json.dumps(raw_data)
-            j_data = json.dumps(data)
-            if j_raw_data != j_data:
-                send_control_email(data)
-                with open('daipai.pkl', 'wb') as daipai:
-                    pickle.dump(data, daipai)
-                    print("TRY")
-                    import time
-                    logger.info("启动于：", time.time)
-                    send_control_email(data2) ##发邮件带人数
-    except:
-        with open('daipai.pkl', 'wb') as daipai:
-            print("EXCEPT")
-            pickle.dump(data, daipai)
+        raw_data = get_daipai(client)
+        if data == raw_data:
+            pass
+        else:
             send_control_email(data2)
+            update_daipai(client, {'data': data})
+    except:
+        update_daipai(client, {'data': data})
+        send_control_email(data2)
 
 
 def get_headers():
