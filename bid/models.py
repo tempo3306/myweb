@@ -399,3 +399,10 @@ class Yanzhengma(models.Model):
     # class Meta:
     #     unique_together = ('album', 'order')
     #     ordering = ['order']
+
+# from django.db import transaction
+#
+# @transaction.commit_on_success
+# def create_article(request):
+#     article = Article.objects.create()
+#     expand_abbreviations.delay(article.pk)

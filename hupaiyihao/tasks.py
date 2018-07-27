@@ -7,7 +7,9 @@ from celery.utils.log import get_task_logger
 from myweb import celery_app
 from hupaiyihao.models import Wechat
 from hupaiyihao.utils import get_component
+from celery.utils.log import get_task_logger
 
+logger = get_task_logger(__name__)
 
 @celery_app.task
 def process_wechat_query_auth_code_test(FromUserName, query_auth_code):

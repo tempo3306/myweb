@@ -14,6 +14,11 @@ import sys
 sys.setrecursionlimit(100000)
 import collections
 from myweb import celery_app
+import copy
+
+from celery.utils.log import get_task_logger
+
+logger = get_task_logger(__name__)
 
 EMAIL_FROM = '810909753@qq.com'
 
@@ -68,11 +73,12 @@ def parse_res(res):
                 try:
                     bid[label] = int(bid[label])
                     bids2.append(bid) #带人数的
-                    del bid[label]
-                    bids.append(bid)
+                    temp = copy.deepcopy(bid)
+                    del temp[label]
+                    bids.append(temp)
                 except:
                     pass
-    print(bids)
+    print(bids, bids2)
     return (bids, bids2)
 
 
@@ -105,9 +111,13 @@ def daipaihui_newdata():
                 send_control_email(data)
                 with open('daipai.pkl', 'wb') as daipai:
                     pickle.dump(data, daipai)
+                    print("TRY")
+                    import time
+                    logger.info("启动于：", time.time)
                     send_control_email(data2) ##发邮件带人数
     except:
         with open('daipai.pkl', 'wb') as daipai:
+            print("EXCEPT")
             pickle.dump(data, daipai)
             send_control_email(data2)
 
