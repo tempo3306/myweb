@@ -13,6 +13,7 @@ import pickle
 import sys
 sys.setrecursionlimit(100000)
 import collections
+from myweb import celery_app
 
 EMAIL_FROM = '810909753@qq.com'
 
@@ -52,6 +53,7 @@ def parse_res(res):
     lis = ul.find_all('li')
 
     bids = []
+    bids2 = []
     # labels = ['代拍费', '买单费', '标书量', '投标情况']
     labels = ['daipaifei', 'maidanfei', 'biaoshuliang', 'toubiaoqingkuang']
     for li in lis:
@@ -65,11 +67,13 @@ def parse_res(res):
             if label == 'toubiaoqingkuang':
                 try:
                     bid[label] = int(bid[label])
+                    bids2.append(bid) #带人数的
+                    del bid[label]
                     bids.append(bid)
                 except:
                     pass
     print(bids)
-    return bids
+    return (bids, bids2)
 
 
 # 发送邮件
@@ -85,12 +89,12 @@ def send_control_email(data, **kwargs):
     msg.send()
 
 
-@task
+@celery_app.task(ignore_result=True)
 def daipaihui_newdata():
     headers = get_headers()
     url = "http://www.daipaihui.com/tasklist/ajaxtask?page=1&view=ajax"
     res = get_res(url, headers)
-    data = parse_res(res)
+    data, data2 = parse_res(res)
     import pickle
     try:
         with open('daipai.pkl', 'rb') as daipai:
@@ -101,11 +105,11 @@ def daipaihui_newdata():
                 send_control_email(data)
                 with open('daipai.pkl', 'wb') as daipai:
                     pickle.dump(data, daipai)
-                    send_control_email(data)
+                    send_control_email(data2) ##发邮件带人数
     except:
         with open('daipai.pkl', 'wb') as daipai:
             pickle.dump(data, daipai)
-            send_control_email(data)
+            send_control_email(data2)
 
 
 def get_headers():
